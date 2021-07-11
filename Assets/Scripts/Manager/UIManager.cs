@@ -6,5 +6,8 @@ using DG.Tweening;
 
 public class UIManager : MonoSingleton<UIManager>
 {
-    
+    private void Awake()
+    {
+        
+    }
 }

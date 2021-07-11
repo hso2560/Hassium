@@ -4,5 +4,18 @@ using UnityEngine;
 
 public class PlayerScript : MonoBehaviour
 {
-    
+    private void Start()
+    {
+        
+    }
+
+    private void Update()
+    {
+        
+    }
+
+    private void FixedUpdate()
+    {
+        
+    }
 }
