@@ -5,6 +5,7 @@ using System;
 using System.IO;
 using System.Text;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class GameManager : MonoSingleton<GameManager>
 {
