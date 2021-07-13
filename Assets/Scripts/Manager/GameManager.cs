@@ -21,6 +21,7 @@ public class GameManager : MonoSingleton<GameManager>
         filePath = string.Concat(Application.persistentDataPath, "/", saveFileName_1);
         saveData = new SaveData();
         Load();
+        CreatePool();
     }
 
     private void Save()
@@ -48,6 +49,11 @@ public class GameManager : MonoSingleton<GameManager>
     {
 
     }
+
+    private void CreatePool()
+    {
+
+    }    
 
     private void Update()
     {
