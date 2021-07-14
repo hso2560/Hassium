@@ -17,7 +17,8 @@ public class MonoSingleton<T> : MonoBehaviour where T:MonoBehaviour
                     
                     if(instance==null)
                     {
-                        instance = new GameObject(typeof(T).ToString(), typeof(T)).AddComponent<T>();
+                        instance = new GameObject(typeof(T).ToString(), typeof(T)).GetComponent<T>();
+                        //instance = new GameObject(typeof(T).ToString(), typeof(T)).AddComponent<T>();  이렇게 하면 T 스크립트가 오브젝트에 두 개 붙음
                     }
                 }
                 return instance; 
@@ -25,8 +26,11 @@ public class MonoSingleton<T> : MonoBehaviour where T:MonoBehaviour
         }
     }
 
-    /*private void Awake()
+    private void Awake()
     {
         DontDestroyOnLoad(gameObject);
-    }*/
+
+        T[] ts = FindObjectsOfType<T>();
+        if (ts.Length > 1) Destroy(gameObject);
+    }
 }

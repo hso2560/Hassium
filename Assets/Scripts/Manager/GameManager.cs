@@ -15,6 +15,8 @@ public class GameManager : MonoSingleton<GameManager>
     private readonly string saveFileName_1 = "SaveFile01";
 
     private static object lockObj = new object();
+    public delegate void LoadingFunc();
+    public event LoadingFunc LoadingFuncEvent;
 
     private void Awake()
     {
@@ -49,11 +51,27 @@ public class GameManager : MonoSingleton<GameManager>
     {
 
     }
-
+    
     private void CreatePool()
     {
+       
+    }   
+    
+    public void Loading(int index=0)
+    {
 
-    }    
+        if (LoadingFuncEvent != null)
+        {
+            LoadingFuncEvent.Invoke();
+
+            foreach (LoadingFunc lf in LoadingFuncEvent.GetInvocationList())
+            {
+                LoadingFuncEvent -= lf;
+            }
+        }
+
+        UIManager.Instance.LoadingFade(true, index);
+    }
 
     private void Update()
     {
