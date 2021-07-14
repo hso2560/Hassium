@@ -33,11 +33,15 @@ public class PlayerScript : MonoBehaviour
 
     public bool isStamina0;  //스테미나가 0인지 체크
     public Transform center;  //플레이어 오브젝트에서의 중심 부분
-    public Transform body;  //플레이어의 실제 형태(모델)가 있는 오브젝트
+    public Transform playerModel;  //플레이어의 실제 형태(모델)가 있는 오브젝트
+    public LayerMask whatIsGround;
+
+    private int speedFloat;
 
     private void Start()
     {
         InitData();
+        joystickCtrl = FindObjectOfType<JoystickControl>();
     }
 
     private void InitData()
@@ -45,45 +49,105 @@ public class PlayerScript : MonoBehaviour
         gameObject.AddComponent<AudioListener>();
         hp = maxHp;
         stamina = maxStamina;
+
+        speedFloat = Animator.StringToHash("moveSpeed");
     }
 
     private void Update()
     {
-        
+        StaminaRecovery();
+        Rotate();
+
+        _Input();
+    }
+
+    void _Input()
+    {
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            Jump();
+        }
     }
 
     private void FixedUpdate()
     {
-        
+        Move();
+        GroundHit();
+        CheckObj();
+        rigid.angularVelocity = Vector3.zero;
     }
 
     private void Move()
     {
-        
+        if(!isJumping)
+        {
+            moveDir.x = joystickCtrl.isTouch ? (joystickCtrl.dirVec.x * (joystickCtrl.isRun ? runSpeed : speed)) : 0;
+            moveDir.z = joystickCtrl.isTouch ? (joystickCtrl.dirVec.y * (joystickCtrl.isRun ? runSpeed : speed)) : 0;
+        }
+
+        worldDir = transform.TransformDirection(moveDir);
+        Vector3 force = new Vector3(worldDir.x - rigid.velocity.x, -gravity, worldDir.z - rigid.velocity.z);
+        rigid.AddForce(force, ForceMode.VelocityChange);
+
+        ani.SetFloat(speedFloat,joystickCtrl.isTouch?(joystickCtrl.isRun?runSpeed:speed):0);
+        playerModel.position = transform.position;
+
+        StaminaCheck();
     }
     private void Rotate()
     {
-        
+        if (!joystickCtrl.isTouch) return;
+
+        float angle = Mathf.Atan2(worldDir.x, worldDir.z) * Mathf.Rad2Deg;
+
+        playerModel.rotation = Quaternion.Slerp(playerModel.rotation, Quaternion.Euler(0, angle, 0), Time.deltaTime * rotateSpeed);
     }
 
     private void StaminaCheck()
     {
-
+        if (ani.GetFloat(speedFloat) >= runSpeed)
+        {
+            stamina -= staminaDownSpeed * Time.deltaTime;
+            if (stamina <= 0)
+            {
+                stamina = 0;
+                isStamina0 = true;
+                joystickCtrl.isRun = false;
+            }
+        }
     }
 
     private void StaminaRecovery()
     {
+        if(stamina<maxStamina && !joystickCtrl.isRun)
+        {
+            stamina += staminaRecoverySpeed * Time.deltaTime;
 
+            if (isStamina0 && stamina >= needStaminaMin) isStamina0 = false;
+            if (stamina >= maxStamina) stamina = maxStamina;
+        }
     }
 
     public void Jump()
     {
-
+        if(!isJumping)
+        {
+            //점프 애니메이션
+            rigid.velocity = Vector3.up * jumpPower;
+        }
     }
 
     private void GroundHit()
     {
-
+        Debug.DrawRay(center.position, Vector3.down * groundRayDist, Color.blue);
+        if(Physics.Raycast(center.position, Vector3.down, groundRayDist, whatIsGround))
+        {
+            isJumping = false;
+        }
+        else
+        {
+            isJumping = true;
+        }
     }
 
     private void CheckObj()
