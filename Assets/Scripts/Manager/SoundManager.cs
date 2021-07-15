@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum SoundEffectType
@@ -6,9 +7,9 @@ public enum SoundEffectType
     FADEOUT=1
 }
 
-public class SoundManager : MonoSingleton<SoundManager>
+public class SoundManager : MonoSingleton<SoundManager>, ISceneDataLoad
 {
-    public AudioClip[] gameSoundEffects;  //SoundEffectType의 int값에 맞춰서 배열에 넣어준다.
+    public List<AudioClip> gameSoundEffectList; 
     private GameManager manager;
 
     private void Start()
@@ -23,6 +24,14 @@ public class SoundManager : MonoSingleton<SoundManager>
         if (op.masterSoundSize <= 0 || op.soundEffectSize <= 0) return;
 
         SoundPrefab sp = PoolManager.GetItem<SoundPrefab>();
-        sp.SoundPlay(gameSoundEffects[(int)set]);
+        sp.SoundPlay(gameSoundEffectList[(int)set]);
+    }
+
+    public void ManagerDataLoad(GameObject sceneObjs)
+    {
+        SoundManager[] managers = FindObjectsOfType<SoundManager>();
+        if (managers.Length > 1) Destroy(gameObject);
+
+        this.sceneObjs = sceneObjs.GetComponent<SceneObjects>();
     }
 }

@@ -24,7 +24,14 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private float staminaRecoverySpeed;  //스테미나 회복 속도
     [SerializeField] private float interactionRadius = 3.5f;  //오브젝트와 상호작용 가능한 범위
 
-    [SerializeField] private int id;
+    [SerializeField] private short id;
+    public short Id { get { return id; } }
+    [SerializeField] private string charName;
+    [SerializeField] private short level;
+    [SerializeField] private int str;
+    [SerializeField] private int def;
+    [SerializeField] private int exp;
+    [SerializeField] private string resoName;
 
     private Vector3 moveDir, worldDir;  //움직임 방향, 움직임 월드 방향
     private int hp;
@@ -35,21 +42,19 @@ public class PlayerScript : MonoBehaviour
     public Transform center;  //플레이어 오브젝트에서의 중심 부분
     public Transform playerModel;  //플레이어의 실제 형태(모델)가 있는 오브젝트
     public LayerMask whatIsGround;
-
+    public GameObject parent;
     private int speedFloat;
+
+    private GameCharacter gameChar;
 
     private void Start()
     {
         InitData();
-        joystickCtrl = FindObjectOfType<JoystickControl>();
     }
 
     private void InitData()
     {
         gameObject.AddComponent<AudioListener>();
-        hp = maxHp;
-        stamina = maxStamina;
-
         speedFloat = Animator.StringToHash("moveSpeed");
     }
 
@@ -119,7 +124,7 @@ public class PlayerScript : MonoBehaviour
 
     private void StaminaRecovery()
     {
-        if(stamina<maxStamina && !joystickCtrl.isRun)
+        if(stamina<maxStamina && (!joystickCtrl.isRun || moveDir==Vector3.zero))
         {
             stamina += staminaRecoverySpeed * Time.deltaTime;
 
@@ -139,7 +144,7 @@ public class PlayerScript : MonoBehaviour
 
     private void GroundHit()
     {
-        Debug.DrawRay(center.position, Vector3.down * groundRayDist, Color.blue);
+        //Debug.DrawRay(center.position, Vector3.down * groundRayDist, Color.blue);
         if(Physics.Raycast(center.position, Vector3.down, groundRayDist, whatIsGround))
         {
             isJumping = false;
@@ -153,5 +158,43 @@ public class PlayerScript : MonoBehaviour
     private void CheckObj()
     {
 
+    }
+
+    public void SetData(JoystickControl jc, Vector3 pos, Quaternion rot)
+    {
+        gameChar = GameManager.Instance.savedData.userInfo.currentChar;
+
+        maxHp = gameChar.maxHp;
+        hp = gameChar.hp;
+        maxStamina = gameChar.maxStamina;
+        stamina = gameChar.stamina;
+        level = gameChar.level;
+        exp = gameChar.exp;
+        str = gameChar.str;
+        def = gameChar.def;
+        runSpeed = gameChar.runSpeed;
+        jumpPower = gameChar.jumpPower;
+        staminaRecoverySpeed = gameChar.staminaRecoverySpeed;
+
+        joystickCtrl = jc;
+
+        transform.position = pos;
+        transform.rotation = rot;
+    }
+
+    public void Save()
+    {
+        gameChar = new GameCharacter(id, str, def, maxHp, maxStamina, runSpeed, jumpPower, staminaRecoverySpeed, charName, resoName);
+        gameChar.exp = exp;
+        gameChar.level = level;
+        gameChar.stamina = stamina;
+        gameChar.hp = hp;
+        GameManager.Instance.savedData.userInfo.currentChar = gameChar;
+        GameManager.Instance.idToMyPlayer[id] = this;
+    }
+
+    public void AddInfo()
+    {
+        GameManager.Instance.savedData.userInfo.characters.Add(new GameCharacter(id, str, def, maxHp, maxStamina, runSpeed, jumpPower, staminaRecoverySpeed, charName, resoName));
     }
 }
