@@ -22,6 +22,7 @@ public class UserInfo
 {
     public bool isFirstStart = true;
     public string curCharResoName="DefaultPlayer1";
+    public long money;
 
     public List<GameCharacter> characters = new List<GameCharacter>();
     public GameCharacter currentChar;

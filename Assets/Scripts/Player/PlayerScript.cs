@@ -26,12 +26,12 @@ public class PlayerScript : MonoBehaviour
 
     [SerializeField] private short id;
     public short Id { get { return id; } }
-    [SerializeField] private string charName;
+    [SerializeField] private string charName;  //캐릭터 이름
     [SerializeField] private short level;
     [SerializeField] private int str;
     [SerializeField] private int def;
     [SerializeField] private int exp;
-    [SerializeField] private string resoName;
+    [SerializeField] private string resoName;  //Resources폴더에서 꺼낼 때의 파일 이름(부모)
 
     private Vector3 moveDir, worldDir;  //움직임 방향, 움직임 월드 방향
     private int hp;
@@ -43,9 +43,9 @@ public class PlayerScript : MonoBehaviour
     public Transform playerModel;  //플레이어의 실제 형태(모델)가 있는 오브젝트
     public LayerMask whatIsGround;
     public GameObject parent;
-    private int speedFloat;
+    private int speedFloat;  //움직임 애니메이션 처리할 애니메이션 이름의 아이디
 
-    private GameCharacter gameChar;
+    public GameCharacter gameChar;
 
     private void Start()
     {
@@ -66,7 +66,7 @@ public class PlayerScript : MonoBehaviour
         _Input();
     }
 
-    void _Input()
+    void _Input()  //컴퓨터용
     {
         if(Input.GetKeyDown(KeyCode.Space))
         {
@@ -106,9 +106,10 @@ public class PlayerScript : MonoBehaviour
         float angle = Mathf.Atan2(worldDir.x, worldDir.z) * Mathf.Rad2Deg;
 
         playerModel.rotation = Quaternion.Slerp(playerModel.rotation, Quaternion.Euler(0, angle, 0), Time.deltaTime * rotateSpeed);
+        
     }
 
-    private void StaminaCheck()
+    private void StaminaCheck()  //스테미나 0이하인지 체크와 스테미나 감소 처리
     {
         if (ani.GetFloat(speedFloat) >= runSpeed)
         {
@@ -122,7 +123,7 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
-    private void StaminaRecovery()
+    private void StaminaRecovery()  //스테미나 회복
     {
         if(stamina<maxStamina && (!joystickCtrl.isRun || moveDir==Vector3.zero))
         {
@@ -137,12 +138,12 @@ public class PlayerScript : MonoBehaviour
     {
         if(!isJumping)
         {
-            //점프 애니메이션
+            //점프 애니메이션 
             rigid.velocity = Vector3.up * jumpPower;
         }
     }
 
-    private void GroundHit()
+    private void GroundHit()  //땅을 밟고 있는지 체크
     {
         //Debug.DrawRay(center.position, Vector3.down * groundRayDist, Color.blue);
         if(Physics.Raycast(center.position, Vector3.down, groundRayDist, whatIsGround))
@@ -155,17 +156,17 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
-    private void CheckObj()
+    private void CheckObj()  //주변에 상호작용 가능한 옵젝 있는지 체크하고 처리
     {
 
     }
 
-    public void SetData(JoystickControl jc, Vector3 pos, Quaternion rot)
+    public void SetData(JoystickControl jc, Vector3 pos, Quaternion rot)  //플레이어 스폰되거나 교체될 때마다 실행
     {
         gameChar = GameManager.Instance.savedData.userInfo.currentChar;
 
-        maxHp = gameChar.maxHp;
-        hp = gameChar.hp;
+        //이 부분에서 오류가 남
+        /*hp = gameChar.hp;
         maxStamina = gameChar.maxStamina;
         stamina = gameChar.stamina;
         level = gameChar.level;
@@ -174,15 +175,16 @@ public class PlayerScript : MonoBehaviour
         def = gameChar.def;
         runSpeed = gameChar.runSpeed;
         jumpPower = gameChar.jumpPower;
-        staminaRecoverySpeed = gameChar.staminaRecoverySpeed;
+        staminaRecoverySpeed = gameChar.staminaRecoverySpeed;*/
 
         joystickCtrl = jc;
+        joystickCtrl.player = this;
 
         transform.position = pos;
         transform.rotation = rot;
     }
 
-    public void Save()
+    public void Save()  //플레이어 능력치 정보 저장
     {
         gameChar = new GameCharacter(id, str, def, maxHp, maxStamina, runSpeed, jumpPower, staminaRecoverySpeed, charName, resoName);
         gameChar.exp = exp;
@@ -193,8 +195,7 @@ public class PlayerScript : MonoBehaviour
         GameManager.Instance.idToMyPlayer[id] = this;
     }
 
-    public void AddInfo()
-    {
-        GameManager.Instance.savedData.userInfo.characters.Add(new GameCharacter(id, str, def, maxHp, maxStamina, runSpeed, jumpPower, staminaRecoverySpeed, charName, resoName));
-    }
+    public void AddInfo()  //플레이어 추가
+      => GameManager.Instance.savedData.userInfo.characters.Add(new GameCharacter(id, str, def, maxHp, maxStamina, runSpeed, jumpPower, staminaRecoverySpeed, charName, resoName));
+    
 }

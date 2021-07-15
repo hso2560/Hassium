@@ -15,11 +15,12 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
     private readonly string saveFileName_1 = "SaveFile01";
 
     public delegate void LoadingFunc();
-    public event LoadingFunc LoadingFuncEvent;
+    public event LoadingFunc LoadingFuncEvent;  //로딩, 확인버튼 등으로 어떤 함수를 처리할 때 여기에 넣어서 씀
 
     private PlayerScript player;
     public PlayerScript PlayerSc { get { return player; } }
     public Dictionary<short, PlayerScript> idToMyPlayer;
+    public List<GameObject> myPlayerList = new List<GameObject>();  //소환이 한 번이라도 된 캐릭터들의 오브젝트 리스트
 
     private void Awake()
     {
@@ -41,7 +42,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
         }
     }
 
-    public void SaveData()
+    public void SaveData()  //데이터를 저장
     {
         player.Save();
         saveData.userInfo.curCharResoName = saveData.userInfo.currentChar.charResoName;
@@ -55,17 +56,17 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
             }
         }
     }
-    public void Save()
+    public void Save()  //실제로 파일에 데이터를 저장한다
     {
         SaveData();
 
         savedJson = JsonUtility.ToJson(saveData);
         byte[] bytes = Encoding.UTF8.GetBytes(savedJson);
         string code = Convert.ToBase64String(bytes);
-        //File.WriteAllText(filePath, code);
+        File.WriteAllText(filePath, code);
     }
 
-    private void Load()
+    private void Load()  //불러오기
     {
         if(File.Exists(filePath))
         {
@@ -77,8 +78,8 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
 
         SetData();
     }
-
-    private void SetData()
+     
+    private void SetData()  //불러온 데이터로 세팅하기
     {
         if(saveData.userInfo.isFirstStart)
         {
@@ -89,28 +90,83 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
         }
     }
 
-    public void AddCharacter(string path)
+    #region 캐릭터
+    public void AddCharacter(string path) //캐릭터 추가
     {
         PlayerScript ps = Resources.Load<GameObject>("Player/" + path).transform.GetChild(1).GetComponent<PlayerScript>();
         ps.AddInfo();
         idToMyPlayer.Add(ps.Id, ps);
     }
 
-    public void ChangeCharacter(short id)
+    public void ChangeCharacter(short id)  //캐릭터 변경
     {
         if (id == player.Id || !idToMyPlayer.ContainsKey(id)) return;
-
         Save();
 
+        GameCharacter gc = GetCharData(id);
+        if(gc==null)
+        {
+            return;
+        }
+        else
+        {
+            saveData.userInfo.currentChar = gc;
+        }
+        saveData.userInfo.curCharResoName = gc.charResoName;
 
+        player.parent.gameObject.SetActive(false);
+
+        int num = IsExistCharac(id);
+
+        if(num!=-10)
+        {
+            ActiveCharacter(num);
+        }
+        else
+        {
+            SpawnPlayer();
+        }
     }
-    
-    private void CreatePool()
+
+    public GameCharacter GetCharData(short id)  //아이디를 통해서 세이브된 데이터에서 캐릭터 데이터 불러오기
+    {
+        for(int i=0; i<saveData.userInfo.characters.Count; ++i)
+        {
+            if(saveData.userInfo.characters[i].id==id)
+            {
+                return saveData.userInfo.characters[i];
+            }
+        }
+        return null;
+    }
+
+    public int IsExistCharac(short id)  //해당 아이디의 캐릭터가 이미 한 번 소환된 적이 있는지 (-10이면 없다는 거)
+    {
+        PlayerScript ps;
+        for(int i=0; i<myPlayerList.Count; ++i)
+        {
+            ps = myPlayerList[i].GetComponent<PlayerScript>();
+            if (ps.Id == id)
+            {
+                return i;
+            }
+        }
+        return -10;
+    }
+    private void ActiveCharacter(int idx)  //비활성화된 캐릭터를 활성화한다.
+    {
+        player = myPlayerList[idx].GetComponent<PlayerScript>();
+        player.parent.SetActive(true);
+        player.SetData(sceneObjs.joystickCtrl, saveData.userInfo.currentPos, saveData.userInfo.currentRot);
+    }
+    #endregion
+
+    private void CreatePool()  //풀링 필요한 오브젝트들 소환
     {
         
     }   
     
-    public void Loading(int index=0)
+    public void Loading(int index=0)  //로딩중에 일을 처리함
     {
 
         if (LoadingFuncEvent != null)
@@ -139,6 +195,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
                              Vector3.zero, Quaternion.identity).transform.GetChild(1).GetComponent<PlayerScript>();
 
         player.SetData(sceneObjs.joystickCtrl, info.currentPos, info.currentRot);
+        myPlayerList.Add(player.gameObject);
     }
 
     private void OnApplicationQuit()

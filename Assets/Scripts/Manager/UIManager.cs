@@ -16,7 +16,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
         noColor = new Color(0, 0, 0, 0);
     }
 
-    public void LoadingFade(bool isFadeIn, int index=0)
+    public void LoadingFade(bool isFadeIn, int index=0)  //페이드인 페이드아웃
     {
         Sequence seq = DOTween.Sequence();
         LoadingImg.gameObject.SetActive(true);
@@ -45,8 +45,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
         {
             LoadingImg = this.sceneObjs.gameImgs[0];
             gameEases = new List<Ease>(this.sceneObjs.gameEases);
-
-            LoadingFade(true, 0);
         }
+        LoadingFade(true, 0);
     }
 }
