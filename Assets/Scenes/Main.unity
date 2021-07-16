@@ -202,7 +202,7 @@ MonoBehaviour:
   poolTrm: {fileID: 1932186163}
   gameImgs:
   - {fileID: 1364919779}
-  gameEases: 01000000
+  gameEases: 14000000
   joystickCtrl: {fileID: 1788705722}
 --- !u!1 &580992661
 GameObject:
@@ -794,7 +794,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_TargetDisplay: 0
 --- !u!224 &1685347306
 RectTransform:

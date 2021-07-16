@@ -25,7 +25,7 @@ public class UserInfo
     public long money;
 
     public List<GameCharacter> characters = new List<GameCharacter>();
-    public GameCharacter currentChar;
+    public GameCharacter currentChar = new GameCharacter();
 
     public Vector3 currentPos=new Vector3(-3,-5,32);  //임시로 기본위치는 이렇게 함
     public Quaternion currentRot;
@@ -53,6 +53,10 @@ public class GameCharacter
     public string charName;
     public string charResoName;
 
+    public GameCharacter()
+    {
+
+    }
     public GameCharacter(short id, int str, int def, int maxHp, float maxStam, float speed, float jump, float stamRecSpeed, string name, string resoName)
     {
         level = 1;

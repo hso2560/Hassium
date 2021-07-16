@@ -10,16 +10,10 @@ public enum SoundEffectType
 public class SoundManager : MonoSingleton<SoundManager>, ISceneDataLoad
 {
     public List<AudioClip> gameSoundEffectList; 
-    private GameManager manager;
-
-    private void Start()
-    {
-        manager = GameManager.Instance;
-    }
 
     public void PlaySoundEffect(SoundEffectType set)
     {
-        Option op = manager.savedData.option;
+        Option op = GameManager.Instance.savedData.option;
 
         if (op.masterSoundSize <= 0 || op.soundEffectSize <= 0) return;
 
@@ -34,4 +28,6 @@ public class SoundManager : MonoSingleton<SoundManager>, ISceneDataLoad
 
         this.sceneObjs = sceneObjs.GetComponent<SceneObjects>();
     }
+
+    
 }

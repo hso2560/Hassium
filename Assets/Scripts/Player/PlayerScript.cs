@@ -56,6 +56,7 @@ public class PlayerScript : MonoBehaviour
     {
         gameObject.AddComponent<AudioListener>();
         speedFloat = Animator.StringToHash("moveSpeed");
+        gameChar = new GameCharacter();
     }
 
     private void Update()
@@ -165,8 +166,8 @@ public class PlayerScript : MonoBehaviour
     {
         gameChar = GameManager.Instance.savedData.userInfo.currentChar;
 
-        //이 부분에서 오류가 남
-        /*hp = gameChar.hp;
+        maxHp = gameChar.maxHp;
+        hp = gameChar.hp;
         maxStamina = gameChar.maxStamina;
         stamina = gameChar.stamina;
         level = gameChar.level;
@@ -175,7 +176,7 @@ public class PlayerScript : MonoBehaviour
         def = gameChar.def;
         runSpeed = gameChar.runSpeed;
         jumpPower = gameChar.jumpPower;
-        staminaRecoverySpeed = gameChar.staminaRecoverySpeed;*/
+        staminaRecoverySpeed = gameChar.staminaRecoverySpeed;
 
         joystickCtrl = jc;
         joystickCtrl.player = this;

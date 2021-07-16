@@ -21,7 +21,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
         Sequence seq = DOTween.Sequence();
         LoadingImg.gameObject.SetActive(true);
 
-        seq.Append(LoadingImg.DOFade(isFadeIn ? 0 : 1, 0.6f).SetEase(gameEases[index]));
+        seq.Append(LoadingImg.DOColor(isFadeIn ? noColor : Color.black, 1).SetEase(gameEases[index]));
         seq.AppendCallback(() =>
         {
             if(isFadeIn)
@@ -41,11 +41,8 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
 
         this.sceneObjs = sceneObjs.GetComponent<SceneObjects>();
 
-        if(this.sceneObjs.ScType==SceneType.MAIN)
-        {
-            LoadingImg = this.sceneObjs.gameImgs[0];
-            gameEases = new List<Ease>(this.sceneObjs.gameEases);
-        }
+        LoadingImg = this.sceneObjs.gameImgs[0];
+        gameEases = new List<Ease>(this.sceneObjs.gameEases);
         LoadingFade(true, 0);
     }
 }

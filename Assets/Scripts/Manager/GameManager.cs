@@ -6,6 +6,7 @@ using System.IO;
 using System.Text;
 using UnityEngine.UI;
 using DG.Tweening;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
 {
@@ -28,7 +29,6 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
         saveData = new SaveData();
         Load();
         CreatePool();
-        InitData();
     }
 
     private void InitData()
@@ -42,8 +42,11 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
         }
     }
 
+    #region 저장/로드
     public void SaveData()  //데이터를 저장
     {
+        if (sceneObjs.ScType != SceneType.MAIN) return;
+
         player.Save();
         saveData.userInfo.curCharResoName = saveData.userInfo.currentChar.charResoName;
         saveData.userInfo.currentPos = player.transform.position;
@@ -85,10 +88,31 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
         {
             PlayerScript ps = Resources.Load<GameObject>("Player/" + saveData.userInfo.curCharResoName).transform.GetChild(1).GetComponent<PlayerScript>();
             ps.AddInfo();
+            saveData.userInfo.currentChar = saveData.userInfo.characters[0];
 
             saveData.userInfo.isFirstStart = false;
         }
     }
+
+    private void ResetData(short n) // 0: All, 1: UserInfo, 2: Option
+    {
+        switch(n)
+        {
+            case 0:
+                saveData = new SaveData();
+                break;
+            case 1:
+                saveData.userInfo = new UserInfo();
+                break;
+            case 2:
+                saveData.option = new Option();
+                break;
+        }
+
+        Save();
+    }
+
+    #endregion
 
     #region 캐릭터
     public void AddCharacter(string path) //캐릭터 추가
@@ -184,7 +208,8 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
 
     private void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.P))
+            SceneChange("Main");
     }
 
     public void SpawnPlayer()
@@ -217,6 +242,14 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
         }
     }
 
+    public void SceneChange(string name)
+    {
+        Save();
+        //풀 삭제(사운드 등)
+
+        SceneManager.LoadScene(name);
+    }
+
     public void ManagerDataLoad(GameObject sceneObjs)
     {
         GameManager[] managers = FindObjectsOfType<GameManager>();
@@ -226,6 +259,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
 
         if (this.sceneObjs.ScType == SceneType.MAIN)
         {
+            InitData();
             SpawnPlayer();
         }
     }

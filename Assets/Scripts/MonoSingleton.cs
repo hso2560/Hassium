@@ -1,5 +1,6 @@
 using UnityEngine;
 
+//DontDestroy해두고 씬 이동하면 파괴되지 않고 유지되므로 아무것도 안 건든다면 씬이 새로 로드되고 Awake, Start, OnEnable 호출 X
 public class MonoSingleton<T> : MonoBehaviour where T:MonoBehaviour
 {
     private static T instance = null;
