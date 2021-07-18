@@ -20169,9 +20169,9 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.23914671
-  m_Height: 1.8373263
+  m_Height: 1.8026121
   m_Direction: 1
-  m_Center: {x: 0.009776354, y: 0.8817364, z: -0.0361619}
+  m_Center: {x: 0.009776354, y: 0.8990935, z: -0.0361619}
 --- !u!54 &6344671277650875630
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -20205,12 +20205,12 @@ MonoBehaviour:
   col: {fileID: 6344671277650875631}
   speed: 3.8
   runSpeed: 15
-  jumpPower: 12
-  gravity: 0.7
+  jumpPower: 12.5
+  gravity: 0.5
   maxHp: 1000
   maxStamina: 60
   staminaDownSpeed: 7
-  groundRayDist: 1.5
+  groundRayDist: 1.37
   rotateSpeed: 7
   needStaminaMin: 6
   staminaRecoverySpeed: 5.5
@@ -20222,6 +20222,10 @@ MonoBehaviour:
   def: 20
   exp: 0
   resoName: DefaultPlayer1
+  hp: 0
+  stamina: 0
+  isDie: 0
+  isJumping: 0
   isStamina0: 0
   center: {fileID: 6344671277473782069}
   playerModel: {fileID: 5357712060568717319}

@@ -23,9 +23,9 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
     public Dictionary<short, PlayerScript> idToMyPlayer;
     public List<GameObject> myPlayerList = new List<GameObject>();  //소환이 한 번이라도 된 캐릭터들의 오브젝트 리스트
 
-    public CameraMove camMove;
+    [HideInInspector] public CameraMove camMove;
 
-    private void Awake()
+    private void Awake()  //문제점(2): 화면을 터치중에 움직임 UI 누르면 카메라 회전이 비틀어짐. 카메라 콜라이더 없어서 벽을 뚫음.
     {
         filePath = string.Concat(Application.persistentDataPath, "/", saveFileName_1);
         saveData = new SaveData();

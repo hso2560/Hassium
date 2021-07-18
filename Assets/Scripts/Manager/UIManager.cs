@@ -6,8 +6,8 @@ using DG.Tweening;
 
 public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
 {
-    public List<Ease> gameEases;
-    public Image LoadingImg;
+    [HideInInspector] public List<Ease> gameEases;
+    [HideInInspector] public Image LoadingImg;
 
     private Color noColor;
 

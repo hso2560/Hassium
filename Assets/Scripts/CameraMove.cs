@@ -4,9 +4,9 @@ using UnityEngine.EventSystems;
 
 public class CameraMove : MonoBehaviour
 {
-    public Transform target;
-    public Transform rotTarget;
-    public PlayerScript player;
+    [HideInInspector] public Transform target;
+    [HideInInspector] public Transform rotTarget;
+    [HideInInspector] public PlayerScript player;
     public JoystickControl joystick;
 
     public float xSpeed = 220f, ySpeed = 100f;

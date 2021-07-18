@@ -34,20 +34,21 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private string resoName;  //Resources폴더에서 꺼낼 때의 파일 이름(부모)
 
     private Vector3 moveDir, worldDir;  //움직임 방향, 움직임 월드 방향
-    private int hp;
-    private float stamina;
-    private bool isDie, isJumping;
-
-    public bool isStamina0;  //스테미나가 0인지 체크
+    [SerializeField] private int hp;
+    [SerializeField] private float stamina;
+    [HideInInspector] public bool isDie, isJumping;
+    
+    [HideInInspector] public bool isStamina0;  //스테미나가 0인지 체크
     public Transform center;  //플레이어 오브젝트에서의 중심 부분
     public Transform playerModel;  //플레이어의 실제 형태(모델)가 있는 오브젝트
     public LayerMask whatIsGround;
     public GameObject parent;
     private int speedFloat;  //움직임 애니메이션 처리할 애니메이션 이름의 아이디
+    private int jumpTrigger, landingTrigger;
 
     public GameCharacter gameChar;
 
-    private void Start()
+    private void Start() //문제점(2): 점프 애니메이션이 위치까지 가져와지면서 움직임이 어색함. 점프하다가 가끔씩 맛나가고 점프가 짧게 실행되고 끊김.
     {
         InitData();
     }
@@ -56,6 +57,8 @@ public class PlayerScript : MonoBehaviour
     {
         gameObject.AddComponent<AudioListener>();
         speedFloat = Animator.StringToHash("moveSpeed");
+        jumpTrigger = Animator.StringToHash("jump");
+        landingTrigger = Animator.StringToHash("landing");
         gameChar = new GameCharacter();
     }
 
@@ -112,7 +115,7 @@ public class PlayerScript : MonoBehaviour
 
     private void StaminaCheck()  //스테미나 0이하인지 체크와 스테미나 감소 처리
     {
-        if (ani.GetFloat(speedFloat) >= runSpeed)
+        if (ani.GetFloat(speedFloat) >= runSpeed && !isJumping)
         {
             stamina -= staminaDownSpeed * Time.deltaTime;
             if (stamina <= 0)
@@ -139,7 +142,7 @@ public class PlayerScript : MonoBehaviour
     {
         if(!isJumping)
         {
-            //점프 애니메이션 
+            ani.SetTrigger(jumpTrigger);
             rigid.velocity = Vector3.up * jumpPower;
         }
     }
@@ -149,7 +152,11 @@ public class PlayerScript : MonoBehaviour
         //Debug.DrawRay(center.position, Vector3.down * groundRayDist, Color.blue);
         if(Physics.Raycast(center.position, Vector3.down, groundRayDist, whatIsGround))
         {
-            isJumping = false;
+            if (isJumping)
+            {
+                isJumping = false;
+                ani.SetTrigger(landingTrigger);
+            }
         }
         else
         {
