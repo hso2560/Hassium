@@ -20165,7 +20165,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6344671277650875628}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 7fe3926ef75ee934d923027322f2bd21, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.23914671
@@ -20229,6 +20229,21 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1984
   parent: {fileID: 6344671277620335180}
+  gameChar:
+    id: 0
+    level: 0
+    exp: 0
+    str: 0
+    def: 0
+    hp: 0
+    maxHp: 0
+    stamina: 0
+    maxStamina: 0
+    runSpeed: 0
+    jumpPower: 0
+    staminaRecoverySpeed: 0
+    charName: 
+    charResoName: 
 --- !u!1 &6360995184640944468
 GameObject:
   m_ObjectHideFlags: 0

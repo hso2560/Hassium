@@ -19,7 +19,7 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private float staminaDownSpeed=7f;  //스테미나 감소 속도
     
     [SerializeField] private float groundRayDist=3f;  //플레이어가 땅위를 밟고 있는지 체크하는 레이의 길이
-    [SerializeField] private float rotateSpeed = 3.5f;
+    public float rotateSpeed = 3.5f;
     [SerializeField] private float needStaminaMin;  //스테미나 바닥난 후에 다시 런하기 위해서 필요한 최소 스테미나
     [SerializeField] private float staminaRecoverySpeed;  //스테미나 회복 속도
     [SerializeField] private float interactionRadius = 3.5f;  //오브젝트와 상호작용 가능한 범위

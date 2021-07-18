@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+//using Cinemachine;
 
 public enum SceneType
 {
@@ -20,11 +21,23 @@ public class SceneObjects : MonoBehaviour  //해당 씬마다 필요한 오브젝트들을 모�
     public Ease[] gameEases;
 
     public JoystickControl joystickCtrl;
+    //public CinemachineVirtualCamera thirdPCam;
+    public CameraMove camMove;
 
     private void Awake()
     {
+        //Screen.SetResolution(1920, 1080, true);
+
         GameManager.Instance.ManagerDataLoad(gameObject);
         UIManager.Instance.ManagerDataLoad(gameObject);
         SoundManager.Instance.ManagerDataLoad(gameObject);
+
+        //Application.runInBackground = true;
+        //Screen.sleepTimeout = SleepTimeout.NeverSleep;
+    }
+
+    public void TestBtn(int i)  //Test Code
+    {
+        GameManager.Instance.ResetData((short)i);
     }
 }

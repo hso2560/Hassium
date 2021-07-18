@@ -23,6 +23,8 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
     public Dictionary<short, PlayerScript> idToMyPlayer;
     public List<GameObject> myPlayerList = new List<GameObject>();  //소환이 한 번이라도 된 캐릭터들의 오브젝트 리스트
 
+    public CameraMove camMove;
+
     private void Awake()
     {
         filePath = string.Concat(Application.persistentDataPath, "/", saveFileName_1);
@@ -40,6 +42,8 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
             PlayerScript ps= Resources.Load<GameObject>("Player/" + saveData.userInfo.characters[i].charResoName).transform.GetChild(1).GetComponent<PlayerScript>();
             idToMyPlayer.Add(saveData.userInfo.characters[i].id, ps);
         }
+
+        camMove = sceneObjs.camMove;
     }
 
     #region 저장/로드
@@ -82,7 +86,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
         SetData();
     }
      
-    private void SetData()  //불러온 데이터로 세팅하기
+    public void SetData()  //불러온 데이터로 세팅하기
     {
         if(saveData.userInfo.isFirstStart)
         {
@@ -94,7 +98,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
         }
     }
 
-    private void ResetData(short n) // 0: All, 1: UserInfo, 2: Option
+    public void ResetData(short n) // 0: All, 1: UserInfo, 2: Option
     {
         switch(n)
         {
@@ -106,6 +110,11 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
                 break;
             case 2:
                 saveData.option = new Option();
+                break;
+
+
+            case 11:
+                player.transform.position= new Vector3(-3, -5, 32);  //Test
                 break;
         }
 
@@ -182,6 +191,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
         player = myPlayerList[idx].GetComponent<PlayerScript>();
         player.parent.SetActive(true);
         player.SetData(sceneObjs.joystickCtrl, saveData.userInfo.currentPos, saveData.userInfo.currentRot);
+        SetPlayer();
     }
     #endregion
 
@@ -208,8 +218,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.P))
-            SceneChange("Main");
+        
     }
 
     public void SpawnPlayer()
@@ -221,6 +230,17 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
 
         player.SetData(sceneObjs.joystickCtrl, info.currentPos, info.currentRot);
         myPlayerList.Add(player.gameObject);
+
+        //sceneObjs.thirdPCam.Follow = player.center;
+        //sceneObjs.thirdPCam.LookAt = player.center;
+        SetPlayer();
+    }
+
+    public void SetPlayer()
+    {
+        camMove.target = player.center;
+        camMove.rotTarget = player.transform;
+        camMove.player = player;
     }
 
     private void OnApplicationQuit()
