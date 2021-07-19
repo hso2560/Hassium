@@ -41,6 +41,7 @@ public class PlayerScript : MonoBehaviour
     [HideInInspector] public bool isStamina0;  //스테미나가 0인지 체크
     public Transform center;  //플레이어 오브젝트에서의 중심 부분
     public Transform playerModel;  //플레이어의 실제 형태(모델)가 있는 오브젝트
+    public Transform footCenter;
     public LayerMask whatIsGround;
     public GameObject parent;
     private int speedFloat;  //움직임 애니메이션 처리할 애니메이션 이름의 아이디
@@ -48,7 +49,7 @@ public class PlayerScript : MonoBehaviour
 
     public GameCharacter gameChar;
 
-    private void Start() //문제점(2): 점프 애니메이션이 위치까지 가져와지면서 움직임이 어색함. 점프하다가 가끔씩 맛나가고 점프가 짧게 실행되고 끊김.
+    private void Start() //문제점(2): 점프 애니메이션이 위치까지 가져와지면서 움직임이 어색함. 착지 애니메이션 때문에 점프하다가 가끔씩 맛나가고 점프가 짧게 실행되고 끊김.
     {
         InitData();
     }
@@ -149,8 +150,8 @@ public class PlayerScript : MonoBehaviour
 
     private void GroundHit()  //땅을 밟고 있는지 체크
     {
-        //Debug.DrawRay(center.position, Vector3.down * groundRayDist, Color.blue);
-        if(Physics.Raycast(center.position, Vector3.down, groundRayDist, whatIsGround))
+        Debug.DrawRay(footCenter.position, Vector3.down * groundRayDist, Color.blue);
+        if(Physics.Raycast(footCenter.position, Vector3.down, groundRayDist, whatIsGround))
         {
             if (isJumping)
             {
@@ -166,10 +167,10 @@ public class PlayerScript : MonoBehaviour
 
     private void CheckObj()  //주변에 상호작용 가능한 옵젝 있는지 체크하고 처리
     {
-
+        
     }
 
-    public void SetData(JoystickControl jc, Vector3 pos, Quaternion rot)  //플레이어 스폰되거나 교체될 때마다 실행
+    public void SetData(JoystickControl jc, Vector3 pos, Quaternion rot, Quaternion modelRot)  //플레이어 스폰되거나 교체될 때마다 실행
     {
         gameChar = GameManager.Instance.savedData.userInfo.currentChar;
 
@@ -190,6 +191,7 @@ public class PlayerScript : MonoBehaviour
 
         transform.position = pos;
         transform.rotation = rot;
+        playerModel.rotation = modelRot;
     }
 
     public void Save()  //플레이어 능력치 정보 저장

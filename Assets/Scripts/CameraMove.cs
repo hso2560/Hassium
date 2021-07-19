@@ -31,7 +31,7 @@ public class CameraMove : MonoBehaviour
         return Mathf.Clamp(angle, min, max);
     }
 
-    private void Start()
+    private void Start()  
     {
         Vector3 angles = transform.eulerAngles;
         x = angles.y;
@@ -59,7 +59,7 @@ public class CameraMove : MonoBehaviour
         {
             Touch t = Input.GetTouch(i);
 
-            if (EventSystem.current.IsPointerOverGameObject(t.fingerId) && t.fingerId!=rightFingerId) return;
+            if (EventSystem.current.IsPointerOverGameObject(t.fingerId) && t.fingerId!=rightFingerId) continue;
              
             switch (t.phase)
             {

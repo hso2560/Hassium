@@ -29,6 +29,7 @@ public class UserInfo
 
     public Vector3 currentPos=new Vector3(-3,-5,32);  //임시로 기본위치는 이렇게 함
     public Quaternion currentRot;
+    public Quaternion curModelRot;
 }
 
 [Serializable]

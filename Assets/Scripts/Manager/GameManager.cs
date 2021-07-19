@@ -49,17 +49,19 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
     #region 저장/로드
     public void SaveData()  //데이터를 저장
     {
-        if (sceneObjs.ScType != SceneType.MAIN) return;
-
-        player.Save();
-        saveData.userInfo.curCharResoName = saveData.userInfo.currentChar.charResoName;
-        saveData.userInfo.currentPos = player.transform.position;
-        saveData.userInfo.currentRot = player.transform.rotation;
-        for(int i=0; i< saveData.userInfo.characters.Count; i++)
+        if (sceneObjs.ScType == SceneType.MAIN)
         {
-            if(player.Id == saveData.userInfo.characters[i].id)
+            player.Save();
+            saveData.userInfo.curCharResoName = saveData.userInfo.currentChar.charResoName;
+            saveData.userInfo.currentPos = player.transform.position;
+            saveData.userInfo.currentRot = player.transform.rotation;
+            saveData.userInfo.curModelRot = player.playerModel.rotation;
+            for (int i = 0; i < saveData.userInfo.characters.Count; i++)
             {
-                saveData.userInfo.characters[i] = saveData.userInfo.currentChar;
+                if (player.Id == saveData.userInfo.characters[i].id)
+                {
+                    saveData.userInfo.characters[i] = saveData.userInfo.currentChar;
+                }
             }
         }
     }
@@ -190,7 +192,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
     {
         player = myPlayerList[idx].GetComponent<PlayerScript>();
         player.parent.SetActive(true);
-        player.SetData(sceneObjs.joystickCtrl, saveData.userInfo.currentPos, saveData.userInfo.currentRot);
+        player.SetData(sceneObjs.joystickCtrl, saveData.userInfo.currentPos, saveData.userInfo.currentRot, saveData.userInfo.curModelRot);
         SetPlayer();
     }
     #endregion
@@ -228,7 +230,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
         player = Instantiate(Resources.Load<GameObject>("Player/" + info.curCharResoName),
                              Vector3.zero, Quaternion.identity).transform.GetChild(1).GetComponent<PlayerScript>();
 
-        player.SetData(sceneObjs.joystickCtrl, info.currentPos, info.currentRot);
+        player.SetData(sceneObjs.joystickCtrl, info.currentPos, info.currentRot, info.curModelRot);
         myPlayerList.Add(player.gameObject);
 
         //sceneObjs.thirdPCam.Follow = player.center;
