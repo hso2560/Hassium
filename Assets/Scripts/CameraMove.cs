@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -10,15 +9,18 @@ public class CameraMove : MonoBehaviour
     public JoystickControl joystick;
 
     public float xSpeed = 220f, ySpeed = 100f;
-    public float x, y;
+    [HideInInspector] public float x, y;
     public float yMinLimit = -20f, yMaxLimit = 80f;
 
     public Vector3 Offset;
     private Vector3 position;
     private Quaternion rotation;
 
-    private float halfScreenWidth;
-    private int rightFingerId;
+    private int rotFingerId;
+
+    private float screenWidth, screenHeight;
+
+    private Vector3 firstPoint, secondPoint;
 
     private float ClampAngle(float angle, float min, float max)
     {
@@ -37,8 +39,10 @@ public class CameraMove : MonoBehaviour
         x = angles.y;
         y = angles.x;
 
-        halfScreenWidth = Screen.width / 2;
-        rightFingerId = -1;
+        screenWidth = Screen.width;
+        screenHeight = Screen.height;
+
+        rotFingerId = -1;
     }
 
     private void Update()
@@ -59,49 +63,54 @@ public class CameraMove : MonoBehaviour
         {
             Touch t = Input.GetTouch(i);
 
-            if (EventSystem.current.IsPointerOverGameObject(t.fingerId) && t.fingerId!=rightFingerId) continue;
+            if (EventSystem.current.IsPointerOverGameObject(t.fingerId) && t.fingerId!=rotFingerId) continue;
              
             switch (t.phase)
             {
                 case TouchPhase.Began:
-                    rightFingerId = t.fingerId;
+                    if (rotFingerId == -1)
+                    {
+                        rotFingerId = t.fingerId;
+                        firstPoint = t.position;
+                    }
                     break;
 
                 case TouchPhase.Moved:
-                    if (t.fingerId == rightFingerId)
+                    if (t.fingerId == rotFingerId)
                     {
-                        Move();
+                        Move(t);
                     }
                     break;
 
                 case TouchPhase.Stationary:
-                    if(t.fingerId==rightFingerId)
+                    if(t.fingerId==rotFingerId)
                     {
-                        Move();
+                        Move(t);
                     }
                     break;
 
                 case TouchPhase.Ended:
-                    if(t.fingerId==rightFingerId)
+                    if(t.fingerId==rotFingerId)
                     {
-                        rightFingerId = -1;
+                        rotFingerId = -1;
                     }
                     break;
 
                 case TouchPhase.Canceled:
-                    if (t.fingerId == rightFingerId)
+                    if (t.fingerId == rotFingerId)
                     {
-                        rightFingerId = -1;
-                    }
+                        rotFingerId = -1;
+                    } 
                     break;
             }
         }
     }
 
-    private void Move()
+    private void Move(Touch t)
     {
-        x += Input.GetAxis("Mouse X") * xSpeed * 0.015f;
-        y -= Input.GetAxis("Mouse Y") * ySpeed * 0.015f;
+        secondPoint = t.position;
+        x += (secondPoint.x - firstPoint.x) * 180 / screenWidth;
+        y -= (secondPoint.y - firstPoint.y) * 90 / screenHeight;
         y = ClampAngle(y, yMinLimit, yMaxLimit);
 
         rotation = Quaternion.Euler(y, x, 0);
@@ -109,11 +118,21 @@ public class CameraMove : MonoBehaviour
 
         transform.position = position;
         transform.rotation = rotation;
+
+        /*x += Input.GetAxis("Mouse X") * xSpeed * 0.015f;
+        y -= Input.GetAxis("Mouse Y") * ySpeed * 0.015f;
+        y = ClampAngle(y, yMinLimit, yMaxLimit);
+        
+        rotation = Quaternion.Euler(y, x, 0);
+        position = rotation * Offset + target.position;
+
+        transform.position = position;
+        transform.rotation = rotation;*/
     }
 
     private void PlayerRotation()
     {
-        if (joystick.isTouch)
+        if (joystick.isTouch && !player.isJumping)
         {
             rotTarget.rotation = Quaternion.Slerp(rotTarget.rotation, Quaternion.Euler(0, x, 0), Time.deltaTime * player.rotateSpeed);
         }

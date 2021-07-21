@@ -20226,6 +20226,7 @@ GameObject:
   - component: {fileID: 6344671277650875631}
   - component: {fileID: 6344671277650875630}
   - component: {fileID: 6344671277650875616}
+  - component: {fileID: 2417443667121399709}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -20292,6 +20293,7 @@ MonoBehaviour:
   rigid: {fileID: 6344671277650875630}
   ani: {fileID: 2070044421662675581}
   col: {fileID: 6344671277650875631}
+  skill: {fileID: 0}
   speed: 3.8
   runSpeed: 15
   jumpPower: 12.5
@@ -20338,6 +20340,32 @@ MonoBehaviour:
     staminaRecoverySpeed: 0
     charName: 
     charResoName: 
+--- !u!114 &2417443667121399709
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6344671277650875628}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baabbe9e72d8ea849bc47ebde51bb8b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skillType: 0
+  isFirstSkillUseTreat: 1
+  player: {fileID: 0}
+  isUsedSkill: 0
+  isUsingSkill: 0
+  skillContnTime: 10
+  coolTime: 45
+  skillOffTime: 0
+  skillRechargeTime: 0
+  runSpeed: 5
+  jumpPower: 4
+  staminaRecoverySpeed: 10
+  str: 1.5
+  def: 2
 --- !u!1 &6360995184640944468
 GameObject:
   m_ObjectHideFlags: 0

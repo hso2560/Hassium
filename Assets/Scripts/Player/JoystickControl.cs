@@ -12,6 +12,7 @@ public class JoystickControl : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     private Image bgImg, joystickImg;
 
     public Button jumpBtn;
+    public Button skillBtn;
     private CanvasGroup jumpBtnCvsGroup;
 
     public PlayerScript player;
@@ -22,6 +23,11 @@ public class JoystickControl : MonoBehaviour, IPointerDownHandler, IPointerUpHan
 
     [HideInInspector] public bool isTouch = false;
     [HideInInspector] public bool isRun;
+
+    public EventTrigger trigger;
+
+    public EventTrigger.Entry entry1 = new EventTrigger.Entry();
+    public EventTrigger.Entry entry2 = new EventTrigger.Entry();
 
     private void Awake()
     {
@@ -34,6 +40,12 @@ public class JoystickControl : MonoBehaviour, IPointerDownHandler, IPointerUpHan
         joystickBefore = joystickImg.color;
 
         jumpBtnCvsGroup = jumpBtn.GetComponent<CanvasGroup>();
+
+        /*trigger = skillBtn.GetComponent<EventTrigger>();
+        entry1.eventID = EventTriggerType.PointerDown;
+        entry1.callback = new EventTrigger.TriggerEvent();
+        entry2.eventID = EventTriggerType.PointerUp;
+        entry2.callback = new EventTrigger.TriggerEvent();*/
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -92,5 +104,17 @@ public class JoystickControl : MonoBehaviour, IPointerDownHandler, IPointerUpHan
         jumpBtnCvsGroup.blocksRaycasts = !jumpCheck ? true : false;
         jumpBtnCvsGroup.interactable = !jumpCheck ? true : false;
 
+    }
+
+    public void ClearSkillBtn()
+    {
+        skillBtn.onClick.RemoveAllListeners();
+        trigger.triggers.RemoveRange(0, 2);
+    }
+
+    public void SkillBtnTriggerAdd()
+    {
+        trigger.triggers.Add(entry1);
+        trigger.triggers.Add(entry2);
     }
 }

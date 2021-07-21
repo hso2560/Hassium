@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerScript : MonoBehaviour
@@ -7,12 +5,13 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] Rigidbody rigid;
     [SerializeField] Animator ani;
     public Collider col;
+    public Skill skill;
 
-    private JoystickControl joystickCtrl;
+    [HideInInspector] public JoystickControl joystickCtrl;
 
     [SerializeField] private float speed = 8.5f;
-    [SerializeField] private float runSpeed = 17.8f;
-    [SerializeField] private float jumpPower = 10f;
+    public float runSpeed = 17.8f;
+    public float jumpPower = 10f;
     [SerializeField] private float gravity = 9.8f;
     [SerializeField] private int maxHp;
     [SerializeField] private float maxStamina;
@@ -21,21 +20,21 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private float groundRayDist=3f;  //플레이어가 땅위를 밟고 있는지 체크하는 레이의 길이
     public float rotateSpeed = 3.5f;
     [SerializeField] private float needStaminaMin;  //스테미나 바닥난 후에 다시 런하기 위해서 필요한 최소 스테미나
-    [SerializeField] private float staminaRecoverySpeed;  //스테미나 회복 속도
+    public float staminaRecoverySpeed;  //스테미나 회복 속도
     [SerializeField] private float interactionRadius = 3.5f;  //오브젝트와 상호작용 가능한 범위
 
     [SerializeField] private short id;
     public short Id { get { return id; } }
     [SerializeField] private string charName;  //캐릭터 이름
     [SerializeField] private short level;
-    [SerializeField] private int str;
-    [SerializeField] private int def;
+    public int str;
+    public int def;
     [SerializeField] private int exp;
     [SerializeField] private string resoName;  //Resources폴더에서 꺼낼 때의 파일 이름(부모)
 
     private Vector3 moveDir, worldDir;  //움직임 방향, 움직임 월드 방향
-    [SerializeField] private int hp;
-    [SerializeField] private float stamina;
+    [SerializeField] public int hp;
+    [SerializeField] public float stamina;
     [HideInInspector] public bool isDie, isJumping;
     
     [HideInInspector] public bool isStamina0;  //스테미나가 0인지 체크
@@ -48,20 +47,39 @@ public class PlayerScript : MonoBehaviour
     private int jumpTrigger, landingTrigger;
 
     public GameCharacter gameChar;
-
+                                            
     private void Start() //문제점(2): 점프 애니메이션이 위치까지 가져와지면서 움직임이 어색함. 착지 애니메이션 때문에 점프하다가 가끔씩 맛나가고 점프가 짧게 실행되고 끊김.
-    {
+    {                               // --> 땅 체크 레이가 발에서 나가는 것으로 반해결.             --> 제자리 점프일 때만 그래서 어색. => fixed duration을 줘서 반해결
         InitData();
     }
 
     private void InitData()
     {
         gameObject.AddComponent<AudioListener>();
+        skill = GetComponent<Skill>();
         speedFloat = Animator.StringToHash("moveSpeed");
         jumpTrigger = Animator.StringToHash("jump");
         landingTrigger = Animator.StringToHash("landing");
         gameChar = new GameCharacter();
     }
+
+    /*private void GiveSkill()
+    {
+        switch(skill)
+        {
+            case PSkillType.REINFORCE:
+                gameObject.AddComponent<ReinforceSkill>();
+                break;
+
+            case PSkillType.TIME:
+                gameObject.AddComponent<TimeSkill>();
+                break;
+
+            case PSkillType.ROPE:
+                gameObject.AddComponent<RopeSkill>();
+                break;
+        }
+    }*/
 
     private void Update()
     {
@@ -106,7 +124,7 @@ public class PlayerScript : MonoBehaviour
     }
     private void Rotate()
     {
-        if (!joystickCtrl.isTouch) return;
+        if (!joystickCtrl.isTouch || isJumping) return;
 
         float angle = Mathf.Atan2(worldDir.x, worldDir.z) * Mathf.Rad2Deg;
 
@@ -192,6 +210,8 @@ public class PlayerScript : MonoBehaviour
         transform.position = pos;
         transform.rotation = rot;
         playerModel.rotation = modelRot;
+
+        //skill.SetData();
     }
 
     public void Save()  //플레이어 능력치 정보 저장
