@@ -78,14 +78,14 @@ public class CameraMove : MonoBehaviour
                 case TouchPhase.Moved:
                     if (t.fingerId == rotFingerId)
                     {
-                        Move(t);
+                        Move(t,true);
                     }
                     break;
 
                 case TouchPhase.Stationary:
                     if(t.fingerId==rotFingerId)
                     {
-                        Move(t);
+                        Move(t,false);
                     }
                     break;
 
@@ -106,12 +106,16 @@ public class CameraMove : MonoBehaviour
         }
     }
 
-    private void Move(Touch t)
+    private void Move(Touch t, bool isFingerMoved=true)
     {
-        secondPoint = t.position;
-        x += (secondPoint.x - firstPoint.x) * 180 / screenWidth;
-        y -= (secondPoint.y - firstPoint.y) * 90 / screenHeight;
-        y = ClampAngle(y, yMinLimit, yMaxLimit);
+        if (isFingerMoved)
+        {
+            secondPoint = t.position;
+            x += (secondPoint.x - firstPoint.x) * xSpeed / screenWidth;
+            y -= (secondPoint.y - firstPoint.y) * ySpeed / screenHeight;
+            y = ClampAngle(y, yMinLimit, yMaxLimit);
+            firstPoint = secondPoint;
+        }
 
         rotation = Quaternion.Euler(y, x, 0);
         position = rotation * Offset + target.position;

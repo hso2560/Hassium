@@ -764,12 +764,12 @@ MonoBehaviour:
   rotTarget: {fileID: 0}
   player: {fileID: 0}
   joystick: {fileID: 1788705722}
-  xSpeed: 220
-  ySpeed: 100
+  xSpeed: 200
+  ySpeed: 80
   x: 0
   y: 0
   yMinLimit: -20
-  yMaxLimit: 80
+  yMaxLimit: 70
   Offset: {x: 0, y: 0.5, z: -4}
 --- !u!1 &989013455
 GameObject:
@@ -1736,10 +1736,22 @@ MonoBehaviour:
   bgAfter: {r: 0.7294118, g: 0.7294118, b: 0.7294118, a: 1}
   joystickAfter: {r: 1, g: 1, b: 1, a: 0.8117647}
   jumpBtn: {fileID: 1115769554}
+  skillBtn: {fileID: 0}
   player: {fileID: 0}
   dirVec: {x: 0, y: 0}
   isTouch: 0
   isRun: 0
+  trigger: {fileID: 0}
+  entry1:
+    eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+  entry2:
+    eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
 --- !u!1 &1836287052
 GameObject:
   m_ObjectHideFlags: 0
