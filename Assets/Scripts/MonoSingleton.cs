@@ -6,7 +6,8 @@ public class MonoSingleton<T> : MonoBehaviour where T:MonoBehaviour
     private static T instance = null;
     private static object lockObj = new object();
 
-    public SceneObjects sceneObjs;
+    [HideInInspector] public SceneObjects sceneObjs;
+    [HideInInspector] public bool isReady = false;
 
     public static T Instance
     {

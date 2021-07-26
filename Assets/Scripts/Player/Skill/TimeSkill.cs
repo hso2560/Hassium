@@ -12,16 +12,13 @@ public class TimeSkill : Skill
     private void Start()
     {
         player = GetComponent<PlayerScript>();
-        skillManager = GameManager.Instance.skillManager;
 
         prevInfos = new List<PrevInfo>();
         rewindCnt = (int)skillContnTime * 60;
-        player.joystickCtrl.entry1.callback.AddListener((data) => UseSkill());
-        player.joystickCtrl.entry2.callback.AddListener((data) => OffSkill());
 
         base.Init(isFirstSkillUseTreat);
 
-        skillManager.playerSkills.Add(this);
+        SkillManager.Instance.playerSkills.Add(this);
     }
 
     public override void UseSkill()
@@ -97,5 +94,7 @@ public class TimeSkill : Skill
         player.joystickCtrl.ClearSkillBtn();
 
         player.joystickCtrl.SkillBtnTriggerAdd();
+        player.joystickCtrl.entry1.callback.AddListener((data) => UseSkill());
+        player.joystickCtrl.entry2.callback.AddListener((data) => OffSkill());
     }
 }

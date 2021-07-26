@@ -14,7 +14,7 @@ public abstract class Skill : MonoBehaviour
 
     [HideInInspector] public float skillOffTime, skillRechargeTime;
 
-    protected SkillManager skillManager;
+    //protected SkillManager skillManager;
 
     public abstract void UseSkill();
     public abstract void OffSkill();

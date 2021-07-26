@@ -4,4 +4,10 @@ using UnityEngine;
 public interface ISceneDataLoad
 {
     public void ManagerDataLoad(GameObject sceneObjs);
+
+    public bool GetReadyState
+    {
+        get;
+        set;
+    }
 }

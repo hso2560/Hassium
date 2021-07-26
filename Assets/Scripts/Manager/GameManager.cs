@@ -20,11 +20,12 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
 
     private PlayerScript player;
     public PlayerScript PlayerSc { get { return player; } }
+
+    public bool GetReadyState { get { return isReady; } set { isReady = value; } }
+
     public Dictionary<short, PlayerScript> idToMyPlayer;
-    public List<GameObject> myPlayerList = new List<GameObject>();  //소환이 한 번이라도 된 캐릭터들의 오브젝트 리스트
 
     [HideInInspector] public CameraMove camMove;
-    [HideInInspector] public SkillManager skillManager;
 
     public string GetFilePath(string fileName) => string.Concat(Application.persistentDataPath, "/", fileName);
 
@@ -39,14 +40,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
     private void InitData()
     {
         idToMyPlayer = new Dictionary<short, PlayerScript>();
-        
-        for(int i=0; i<saveData.userInfo.characters.Count; i++)
-        {
-            PlayerScript ps= Resources.Load<GameObject>("Player/" + saveData.userInfo.characters[i].charResoName).transform.GetChild(1).GetComponent<PlayerScript>();
-            idToMyPlayer.Add(saveData.userInfo.characters[i].id, ps);
-        }
 
-        skillManager = sceneObjs.skillManager;
         camMove = sceneObjs.camMove;
     }
 
@@ -134,14 +128,32 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
     #region 캐릭터
     public void AddCharacter(string path) //캐릭터 추가
     {
-        PlayerScript ps = Resources.Load<GameObject>("Player/" + path).transform.GetChild(1).GetComponent<PlayerScript>();
+        PlayerScript ps;
+        try
+        {
+            ps = Resources.Load<GameObject>("Player/" + path).transform.GetChild(1).GetComponent<PlayerScript>();
+        }
+        catch
+        {
+            return;
+        }
+
+        if (IsExistCharac(ps.Id))
+        {
+            return;
+        }
+
         ps.AddInfo();
-        idToMyPlayer.Add(ps.Id, ps);
+
+        PlayerScript _ps = Instantiate(Resources.Load<GameObject>("Player/" + path),
+                                         Vector3.zero, Quaternion.identity).transform.GetChild(1).GetComponent<PlayerScript>();
+        idToMyPlayer.Add(_ps.Id, _ps);
+        _ps.parent.SetActive(false);
     }
 
     public void ChangeCharacter(short id)  //캐릭터 변경
     {
-        if (id == player.Id || !idToMyPlayer.ContainsKey(id)) return;
+        if (id == player.Id || !IsExistCharac(id)) return;
         Save();
 
         GameCharacter gc = GetCharData(id);
@@ -149,24 +161,12 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
         {
             return;
         }
-        else
-        {
-            saveData.userInfo.currentChar = gc;
-        }
+        saveData.userInfo.currentChar = gc;
         saveData.userInfo.curCharResoName = gc.charResoName;
 
-        player.parent.gameObject.SetActive(false);
+        player.parent.SetActive(false);
 
-        int num = IsExistCharac(id);
-
-        if(num!=-10)
-        {
-            ActiveCharacter(num);
-        }
-        else
-        {
-            SpawnPlayer();
-        }
+        ActiveCharacter(id);
     }
 
     public GameCharacter GetCharData(short id)  //아이디를 통해서 세이브된 데이터에서 캐릭터 데이터 불러오기
@@ -181,22 +181,13 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
         return null;
     }
 
-    public int IsExistCharac(short id)  //해당 아이디의 캐릭터가 이미 한 번 소환된 적이 있는지 (-10이면 없다는 거)
+    public bool IsExistCharac(short id)  
     {
-        PlayerScript ps;
-        for(int i=0; i<myPlayerList.Count; ++i)
-        {
-            ps = myPlayerList[i].GetComponent<PlayerScript>();
-            if (ps.Id == id)
-            {
-                return i;
-            }
-        }
-        return -10;
+        return idToMyPlayer.ContainsKey(id);
     }
-    private void ActiveCharacter(int idx)  //비활성화된 캐릭터를 활성화한다.
+    private void ActiveCharacter(short idx)  //비활성화된 캐릭터를 활성화한다.
     {
-        player = myPlayerList[idx].GetComponent<PlayerScript>();
+        player = idToMyPlayer[idx].gameObject.GetComponent<PlayerScript>();
         player.parent.SetActive(true);
         player.SetData(sceneObjs.joystickCtrl, saveData.userInfo.currentPos, saveData.userInfo.currentRot, saveData.userInfo.curModelRot);
         SetPlayer();
@@ -210,7 +201,6 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
     
     public void Loading(int index=0)  //로딩중에 일을 처리함
     {
-
         if (LoadingFuncEvent != null)
         {
             LoadingFuncEvent.Invoke();
@@ -224,24 +214,21 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
         UIManager.Instance.LoadingFade(true, index);
     }
 
-    private void Update()
+    public void SpawnPlayer()  //처음에 보유중인 모든 캐릭들 소환 후 비활성화
     {
+        for(int i=0; i<saveData.userInfo.characters.Count; i++)
+        {
+            PlayerScript ps= Instantiate(Resources.Load<GameObject>("Player/" + saveData.userInfo.characters[i].charResoName),
+                                         Vector3.zero, Quaternion.identity).transform.GetChild(1).GetComponent<PlayerScript>();
+
+            idToMyPlayer.Add(ps.Id, ps);
+            ps.parent.SetActive(false);
+        }
+
+        ActiveCharacter(saveData.userInfo.currentChar.id);
         
-    }
-
-    public void SpawnPlayer()
-    {
-        UserInfo info = saveData.userInfo;
-
-        player = Instantiate(Resources.Load<GameObject>("Player/" + info.curCharResoName),
-                             Vector3.zero, Quaternion.identity).transform.GetChild(1).GetComponent<PlayerScript>();
-
-        player.SetData(sceneObjs.joystickCtrl, info.currentPos, info.currentRot, info.curModelRot);
-        myPlayerList.Add(player.gameObject);
-
         //sceneObjs.thirdPCam.Follow = player.center;
         //sceneObjs.thirdPCam.LookAt = player.center;
-        SetPlayer();
     }
 
     public void SetPlayer()
@@ -249,6 +236,22 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
         camMove.target = player.center;
         camMove.rotTarget = player.transform;
         camMove.player = player;
+    }
+
+    private void Update()  //Resources/Player 에서 현재 DefaultPlayer2는 테스트 프리팹이므로 나중에 지울것
+    {
+        if(Input.GetKeyDown(KeyCode.Alpha9))  //Test Code
+        {
+            ChangeCharacter(20);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha8))  //Test Code
+        {
+            ChangeCharacter(10);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha7))  //Test Code
+        {
+            AddCharacter("DefaultPlayer2");
+        }
     }
 
     private void OnApplicationQuit()
@@ -273,6 +276,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
     public void SceneChange(string name)
     {
         Save();
+        sceneObjs.AllReadyFalse();
         //풀 삭제(사운드 등)
 
         SceneManager.LoadScene(name);
@@ -287,9 +291,10 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
 
         if (this.sceneObjs.ScType == SceneType.MAIN)
         {
-
             InitData();
             SpawnPlayer();
         }
+
+        isReady = true;
     }
 }

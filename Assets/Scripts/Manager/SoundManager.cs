@@ -9,7 +9,9 @@ public enum SoundEffectType
 
 public class SoundManager : MonoSingleton<SoundManager>, ISceneDataLoad
 {
-    public List<AudioClip> gameSoundEffectList; 
+    public List<AudioClip> gameSoundEffectList;
+
+    public bool GetReadyState { get { return isReady; } set { isReady = value; } }
 
     public void PlaySoundEffect(SoundEffectType set)
     {
@@ -27,6 +29,8 @@ public class SoundManager : MonoSingleton<SoundManager>, ISceneDataLoad
         if (managers.Length > 1) Destroy(gameObject);
 
         this.sceneObjs = sceneObjs.GetComponent<SceneObjects>();
+
+        isReady = true;
     }
 
     

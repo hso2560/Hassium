@@ -216,6 +216,7 @@ public class PlayerScript : MonoBehaviour
 
     public void Save()  //플레이어 능력치 정보 저장
     {
+        //skill.OffSkill();
         gameChar = new GameCharacter(id, str, def, maxHp, maxStamina, runSpeed, jumpPower, staminaRecoverySpeed, charName, resoName);
         gameChar.exp = exp;
         gameChar.level = level;

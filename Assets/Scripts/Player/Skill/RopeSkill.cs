@@ -7,11 +7,10 @@ public class RopeSkill : Skill
     private void Start()
     {
         player = GetComponent<PlayerScript>();
-        skillManager = GameManager.Instance.skillManager;
 
         base.Init(isFirstSkillUseTreat);
 
-        skillManager.playerSkills.Add(this);
+        SkillManager.Instance.playerSkills.Add(this);
     }
 
     public override void UseSkill()

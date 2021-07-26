@@ -11,6 +11,8 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
 
     private Color noColor;
 
+    public bool GetReadyState { get { return isReady; } set { isReady = value; } }
+
     private void Awake()
     {
         noColor = new Color(0, 0, 0, 0);
@@ -43,6 +45,8 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
 
         LoadingImg = this.sceneObjs.gameImgs[0];
         gameEases = new List<Ease>(this.sceneObjs.gameEases);
-        LoadingFade(true, 0);
+
+        isReady = true;
+        //LoadingFade(true, 0);
     }
 }

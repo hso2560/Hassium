@@ -2,21 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SkillManager : MonoBehaviour
+public class SkillManager : MonoSingleton<SkillManager>, ISceneDataLoad
 {
     public List<Skill> playerSkills = new List<Skill>();
     //private TimeSpan ts;
-    private WaitForSeconds ws = new WaitForSeconds(1);
-    private int i, j;
+    private WaitForSeconds ws = new WaitForSeconds(0.5f);
 
-    private void Start()
-    {
-        //StartCoroutine(SkillUseManage());
-        //StartCoroutine(SkillCoolManage());
-    }
+    private bool isCoWorking = false;
+    private IEnumerator skillCo1, skillCo2;
+
+    public bool GetReadyState { get { return isReady; } set { isReady = value; } }
 
     private IEnumerator SkillUseManage()
     {
+        int i;
+
         while(true)
         {
             yield return ws;
@@ -36,20 +36,46 @@ public class SkillManager : MonoBehaviour
 
     private IEnumerator SkillCoolManage()
     {
-        while(true)
+        int j;
+
+        while (true)
         {
             yield return ws;
 
             for(j=0; j<playerSkills.Count; j++)
             {
-                if(playerSkills[i].isUsedSkill)
+                if(playerSkills[j].isUsedSkill)
                 {
-                    if(playerSkills[i].skillRechargeTime<Time.time)
+                    if(playerSkills[j].skillRechargeTime<Time.time)
                     {
-                        playerSkills[i].isUsedSkill = false;
+                        playerSkills[j].isUsedSkill = false;
                     }
                 }
             }
         }
+    }
+
+    public void ManagerDataLoad(GameObject sceneObjs)
+    {
+        SkillManager[] managers = FindObjectsOfType<SkillManager>();
+        if (managers.Length > 1) Destroy(gameObject);
+
+        this.sceneObjs = sceneObjs.GetComponent<SceneObjects>();
+
+        if (this.sceneObjs.ScType == SceneType.MAIN)
+        {
+            if (!isCoWorking)
+            {
+                skillCo1 = SkillUseManage();
+                skillCo2 = SkillCoolManage();
+
+                StartCoroutine(skillCo1);
+                StartCoroutine(skillCo2);
+
+                isCoWorking = true;
+            }
+        }
+
+        isReady = true;
     }
 }
