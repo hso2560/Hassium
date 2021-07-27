@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerScript : MonoBehaviour
 {
-    [SerializeField] Rigidbody rigid;
+    public Rigidbody rigid;
     [SerializeField] Animator ani;
     public Collider col;
     public Skill skill;
@@ -47,6 +47,7 @@ public class PlayerScript : MonoBehaviour
     private int jumpTrigger, landingTrigger;
 
     public GameCharacter gameChar;
+    [HideInInspector] public bool isMovable = true;
                                             
     private void Start() //문제점(2): 점프 애니메이션이 위치까지 가져와지면서 움직임이 어색함. 착지 애니메이션 때문에 점프하다가 가끔씩 맛나가고 점프가 짧게 실행되고 끊김.
     {                               // --> 땅 체크 레이가 발에서 나가는 것으로 반해결.             --> 제자리 점프일 때만 그래서 어색. => fixed duration을 줘서 반해결
@@ -107,6 +108,8 @@ public class PlayerScript : MonoBehaviour
 
     private void Move()
     {
+        if (!isMovable) return;
+
         if(!isJumping)
         {
             moveDir.x = joystickCtrl.isTouch ? (joystickCtrl.dirVec.x * (joystickCtrl.isRun ? runSpeed : speed)) : 0;
@@ -124,7 +127,7 @@ public class PlayerScript : MonoBehaviour
     }
     private void Rotate()
     {
-        if (!joystickCtrl.isTouch || isJumping) return;
+        if (!joystickCtrl.isTouch || isJumping || !isMovable) return;
 
         float angle = Mathf.Atan2(worldDir.x, worldDir.z) * Mathf.Rad2Deg;
 

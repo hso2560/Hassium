@@ -4,6 +4,7 @@ public abstract class Skill : MonoBehaviour
 {
     public PSkillType skillType;
     public bool isFirstSkillUseTreat;
+    public bool isResetIfChangeChar;
 
     [HideInInspector] public PlayerScript player;
 
