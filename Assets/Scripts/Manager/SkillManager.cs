@@ -13,6 +13,14 @@ public class SkillManager : MonoSingleton<SkillManager>, ISceneDataLoad
 
     public bool GetReadyState { get { return isReady; } set { isReady = value; } }
 
+    private void Start()
+    {
+        for(int n=0; n<GameManager.Instance.playerList.Count; ++n)
+        {
+            playerSkills.Add(GameManager.Instance.playerList[n].skill);
+        }
+    }
+
     private IEnumerator SkillUseManage()
     {
         int i;

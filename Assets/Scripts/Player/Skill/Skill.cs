@@ -2,13 +2,16 @@ using UnityEngine;
 
 public abstract class Skill : MonoBehaviour
 {
-    public PSkillType skillType;
+    
     public bool isFirstSkillUseTreat;
     public bool isResetIfChangeChar;
+    public bool isHoldSkill;
+
+    public Sprite skillBtnImg;
 
     [HideInInspector] public PlayerScript player;
 
-    [HideInInspector] public bool isUsedSkill, isUsingSkill;
+    public bool isUsedSkill, isUsingSkill;
 
     public float skillContnTime;
     public float coolTime;

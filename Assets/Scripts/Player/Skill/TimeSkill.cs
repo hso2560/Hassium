@@ -7,24 +7,22 @@ public class TimeSkill : Skill
     [HideInInspector] public bool isRewind = false;
     private int rewindCnt;
     private PrevInfo prInfo;
-    
 
-    private void Start()
+    private void Awake()
     {
         player = GetComponent<PlayerScript>();
-
         prevInfos = new List<PrevInfo>();
         rewindCnt = (int)skillContnTime * 60;
 
         base.Init(isFirstSkillUseTreat);
-
-        SkillManager.Instance.playerSkills.Add(this);
     }
 
     public override void UseSkill()
     {
         if(!isUsedSkill && !isUsingSkill)
         {
+            player.isMovable = false;
+
             isUsingSkill = true;
             skillOffTime = Time.time + skillContnTime;
 
@@ -36,6 +34,7 @@ public class TimeSkill : Skill
     {
         if (isUsingSkill)
         {
+            player.isMovable = true;
             isRewind = false;
 
             isUsingSkill = false;
@@ -48,7 +47,7 @@ public class TimeSkill : Skill
 
     private void Record()
     {
-        prevInfos.Add(new PrevInfo(player.transform.position,player.playerModel.rotation,player.transform.rotation,player.hp,player.stamina));
+        prevInfos.Add(new PrevInfo(transform.position,player.playerModel.rotation,transform.rotation,player.hp,player.stamina));
 
         if(prevInfos.Count>=rewindCnt)
         {
@@ -62,9 +61,10 @@ public class TimeSkill : Skill
         {
             prInfo = prevInfos[prevInfos.Count - 1];
 
-            player.transform.position = prInfo.position;
+            transform.position = prInfo.position;
+            player.playerModel.position = transform.position;
             player.playerModel.rotation = prInfo.modelRotation;
-            player.transform.rotation = prInfo.rotation;
+            transform.rotation = prInfo.rotation;
             player.hp = prInfo.hp;
             player.stamina = prInfo.stamina;
 
@@ -91,10 +91,11 @@ public class TimeSkill : Skill
     {
         prevInfos.Clear();
 
-        player.joystickCtrl.ClearSkillBtn();
+        //player.joystickCtrl.ClearSkillBtn();
 
-        player.joystickCtrl.SkillBtnTriggerAdd();
-        player.joystickCtrl.entry1.callback.AddListener((data) => UseSkill());
-        player.joystickCtrl.entry2.callback.AddListener((data) => OffSkill());
+        //player.joystickCtrl.entry1.callback.AddListener((data) => UseSkill());
+        //player.joystickCtrl.entry2.callback.AddListener((data) => OffSkill());
+
+        //player.joystickCtrl.SkillBtnTriggerAdd();
     }
 }

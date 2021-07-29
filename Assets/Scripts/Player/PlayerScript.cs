@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class PlayerScript : MonoBehaviour
 {
+    public PSkillType skillType;
     public Rigidbody rigid;
     [SerializeField] Animator ani;
     public Collider col;
@@ -23,14 +24,14 @@ public class PlayerScript : MonoBehaviour
     public float staminaRecoverySpeed;  //스테미나 회복 속도
     [SerializeField] private float interactionRadius = 3.5f;  //오브젝트와 상호작용 가능한 범위
 
-    [SerializeField] private short id;
+    [Header("고유 값")] [SerializeField] private short id;
     public short Id { get { return id; } }
-    [SerializeField] private string charName;  //캐릭터 이름
+    [Header("고유 값")] [SerializeField] private string charName;  //캐릭터 이름
     [SerializeField] private short level;
     public int str;
     public int def;
     [SerializeField] private int exp;
-    [SerializeField] private string resoName;  //Resources폴더에서 꺼낼 때의 파일 이름(부모)
+    [Header("고유 값")] [SerializeField] private string resoName;  //Resources폴더에서 꺼낼 때의 파일 이름(부모)
 
     private Vector3 moveDir, worldDir;  //움직임 방향, 움직임 월드 방향
     [SerializeField] public int hp;
@@ -41,7 +42,7 @@ public class PlayerScript : MonoBehaviour
     public Transform center;  //플레이어 오브젝트에서의 중심 부분
     public Transform playerModel;  //플레이어의 실제 형태(모델)가 있는 오브젝트
     public Transform footCenter;
-    public LayerMask whatIsGround;
+    public LayerMask whatIsGround, whatIsObj;
     public GameObject parent;
     private int speedFloat;  //움직임 애니메이션 처리할 애니메이션 이름의 아이디
     private int jumpTrigger, landingTrigger;
@@ -162,7 +163,7 @@ public class PlayerScript : MonoBehaviour
 
     public void Jump()
     {
-        if(!isJumping)
+        if(!isJumping && isMovable)
         {
             ani.SetTrigger(jumpTrigger);
             rigid.velocity = Vector3.up * jumpPower;
@@ -188,7 +189,24 @@ public class PlayerScript : MonoBehaviour
 
     private void CheckObj()  //주변에 상호작용 가능한 옵젝 있는지 체크하고 처리
     {
-        
+        Collider[] cols = Physics.OverlapSphere(transform.position, interactionRadius, whatIsObj);
+        if(cols.Length>0)
+        {
+            for(int i=0; i<cols.Length; i++)
+            {
+                ObjData objData = cols[i].GetComponent<ObjData>();
+
+                if(objData!=null)
+                {
+
+                }
+            }
+
+        }
+        else
+        {
+
+        }
     }
 
     public void SetData(JoystickControl jc, Vector3 pos, Quaternion rot, Quaternion modelRot)  //플레이어 스폰되거나 교체될 때마다 실행
@@ -214,12 +232,13 @@ public class PlayerScript : MonoBehaviour
         transform.rotation = rot;
         playerModel.rotation = modelRot;
 
-        //skill.SetData();
+        skill.SetData();
+        joystickCtrl.skillBtn.image.sprite = skill.skillBtnImg;
+        joystickCtrl.isHoldSkill = skill.isHoldSkill;
     }
 
     public void Save()  //플레이어 능력치 정보 저장
     {
-        //skill.OffSkill();
         gameChar = new GameCharacter(id, str, def, maxHp, maxStamina, runSpeed, jumpPower, staminaRecoverySpeed, charName, resoName);
         gameChar.exp = exp;
         gameChar.level = level;

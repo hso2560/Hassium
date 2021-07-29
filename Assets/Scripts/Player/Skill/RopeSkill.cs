@@ -9,12 +9,14 @@ public class RopeSkill : Skill
     [SerializeField] private LayerMask whatIsGrappleable;  //Wall
     [SerializeField] private Transform ropeStartPoint;
     [SerializeField] private float maxDist=70f;
-    private SpringJoint joint;
+    //private SpringJoint joint;
 
-    [SerializeField] private float spring=4.5f;
-    [SerializeField] private float damper = 7f;
-    [SerializeField] private float massScale = 4.5f;
+    //[SerializeField] private float spring=4.5f;
+    //[SerializeField] private float damper = 7f;
+    //[SerializeField] private float massScale = 4.5f;
 
+    private GameObject aim;
+    private Transform cam;
     private bool isMoving;
     private Vector3 dirVec;
     private float moveSpeed;
@@ -22,24 +24,34 @@ public class RopeSkill : Skill
     [SerializeField] private float acceleration;
     [SerializeField] private float gravity;
 
-    private void Start()
+    private void Awake()
     {
         player = GetComponent<PlayerScript>();
 
         base.Init(isFirstSkillUseTreat);
+    }
 
-        SkillManager.Instance.playerSkills.Add(this);
+    private void Start()
+    {
+        cam = GameManager.Instance.camMove.transform;
+        aim = UIManager.Instance.crosshairImg.gameObject;
     }
 
     public override void UseSkill()
     {
+        if (!aim.activeSelf)
+        {
+            aim.SetActive(true);
+            return;
+        }
+
         if(!isUsingSkill && !isUsedSkill)
         {
             if (ropeStatePhase == 0)
                 StartGrapple();
         }
 
-        if(isUsingSkill && !isUsedSkill)
+        else if(isUsingSkill && !isUsedSkill)
         {
             if (ropeStatePhase == 1)
                 MoveToTarget();
@@ -60,38 +72,46 @@ public class RopeSkill : Skill
         {
             moveSpeed = Mathf.Clamp(moveSpeed, minMoveSpeed, maxMoveSpeed);
             Vector3 v = dirVec * moveSpeed;
-            Vector3 force = new Vector3(v.x - player.rigid.velocity.x, -gravity, v.z - player.rigid.velocity.z);
+            Vector3 force = new Vector3(v.x - player.rigid.velocity.x, v.y - player.rigid.velocity.y -gravity, v.z - player.rigid.velocity.z);
             player.rigid.AddForce(force, ForceMode.VelocityChange);
+            player.playerModel.position = transform.position;
 
             moveSpeed += acceleration * Time.deltaTime;
+
+            if (Vector3.SqrMagnitude(grapplePoint-transform.position)<1.8f)
+            {
+                OffSkill();
+            }
         }
     }
     private void LateUpdate()
     {
         DrawRope();
+
+        Debug.DrawRay(ropeStartPoint.position, cam.forward * maxDist, Color.red);
     }
 
     private void StartGrapple()
     {
         RaycastHit hit;
 
-        if(Physics.Raycast(ropeStartPoint.position ,player.playerModel.forward, out hit, maxDist, whatIsGrappleable))
+        if(Physics.Raycast(ropeStartPoint.position , cam.forward, out hit, maxDist, whatIsGrappleable))
         {
+            rope.gameObject.SetActive(true);
+
             grapplePoint = hit.point;
-            joint = gameObject.AddComponent<SpringJoint>();
-            joint.autoConfigureConnectedAnchor = false;
-            joint.connectedAnchor = grapplePoint;
+            //joint = gameObject.AddComponent<SpringJoint>();
+            //joint.autoConfigureConnectedAnchor = false;
+            //joint.connectedAnchor = grapplePoint;
 
-            float distanceFromPoint = Vector3.Distance(transform.position, grapplePoint);
+            //float distanceFromPoint = Vector3.Distance(transform.position, grapplePoint);
 
-            joint.maxDistance = distanceFromPoint*0.8f;
-            joint.minDistance = distanceFromPoint * 0.01f;
+            //joint.maxDistance = distanceFromPoint*0.85f;
+            //joint.minDistance = distanceFromPoint * 0.01f;
 
-            joint.spring = spring;
-            joint.damper = damper;
-            joint.massScale = massScale;
-
-            rope.positionCount = 2;
+            //joint.spring = spring;
+            //joint.damper = damper;
+            //joint.massScale = massScale;
 
             isUsingSkill = true;
             skillOffTime = Time.time + skillContnTime;
@@ -101,10 +121,11 @@ public class RopeSkill : Skill
     }
     private void StopGrapple()
     {
-        rope.positionCount = 0;
-        Destroy(joint);
+        //Destroy(joint);
 
         isUsingSkill = false;
+
+        rope.gameObject.SetActive(false);
 
         isUsedSkill = true;
         skillRechargeTime = Time.time + coolTime;
@@ -113,11 +134,13 @@ public class RopeSkill : Skill
         player.isMovable = true;
         isMoving = false;
         ropeStatePhase = 0;
+
+        player.rigid.velocity = Vector3.zero;
     }
 
     private void DrawRope()
     {
-        if (!joint) return;
+        //if (!joint) return;
 
         if (ropeStatePhase > 0)
         {
@@ -130,15 +153,17 @@ public class RopeSkill : Skill
     {
         dirVec = (grapplePoint - transform.position).normalized;
 
+        aim.SetActive(false);
         ropeStatePhase = 2;
         isMoving = true;
         player.isMovable = false;
+        player.rigid.velocity = Vector3.zero;
     }
 
     public override void SetData()
     {
-        player.joystickCtrl.ClearSkillBtn();
-        player.joystickCtrl.skillBtn.onClick.AddListener(UseSkill);
+        //player.joystickCtrl.ClearSkillBtn();
+        //player.joystickCtrl.skillBtn.onClick.AddListener(UseSkill);
 
         moveSpeed = minMoveSpeed;
         isMoving = false;

@@ -24,12 +24,13 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
     public bool GetReadyState { get { return isReady; } set { isReady = value; } }
 
     public Dictionary<short, PlayerScript> idToMyPlayer;
+    public List<PlayerScript> playerList;
 
     [HideInInspector] public CameraMove camMove;
 
     public string GetFilePath(string fileName) => string.Concat(Application.persistentDataPath, "/", fileName);
 
-    private void Awake()  //문제점(2): 화면을 터치중에 움직임 UI 누르면 카메라 회전이 비틀어짐. 카메라 콜라이더 없어서 벽을 뚫음.
+    private void Awake()  //문제점(1): 카메라 콜라이더 없어서 벽을 뚫음.
     {
         filePath = GetFilePath(saveFileName_1);
         saveData = new SaveData();
@@ -40,6 +41,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
     private void InitData()
     {
         idToMyPlayer = new Dictionary<short, PlayerScript>();
+        playerList = new List<PlayerScript>();
 
         camMove = sceneObjs.camMove;
     }
@@ -148,19 +150,23 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
         PlayerScript _ps = Instantiate(Resources.Load<GameObject>("Player/" + path),
                                          Vector3.zero, Quaternion.identity).transform.GetChild(1).GetComponent<PlayerScript>();
         idToMyPlayer.Add(_ps.Id, _ps);
+        playerList.Add(_ps);
+
+        SkillManager.Instance.playerSkills.Add(_ps.skill);
         _ps.parent.SetActive(false);
     }
 
     public void ChangeCharacter(short id)  //캐릭터 변경
     {
         if (id == player.Id || !IsExistCharac(id)) return;
-        Save();
 
         GameCharacter gc = GetCharData(id);
-        if(gc==null)
-        {
-            return;
-        }
+        if(gc==null) return;
+        
+        if (player.skill.isResetIfChangeChar) player.skill.OffSkill();
+
+        Save();
+
         saveData.userInfo.currentChar = gc;
         saveData.userInfo.curCharResoName = gc.charResoName;
 
@@ -222,6 +228,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
                                          Vector3.zero, Quaternion.identity).transform.GetChild(1).GetComponent<PlayerScript>();
 
             idToMyPlayer.Add(ps.Id, ps);
+            playerList.Add(ps);
             ps.parent.SetActive(false);
         }
 
@@ -238,19 +245,27 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
         camMove.player = player;
     }
 
-    private void Update()  //Resources/Player 에서 현재 DefaultPlayer2는 테스트 프리팹이므로 나중에 지울것
+    private void Update()  //Resources/Player 에서 현재 DefaultPlayer2,3는 테스트 프리팹이므로 나중에 지울것
     {
-        if(Input.GetKeyDown(KeyCode.Alpha9))  //Test Code
+        if(Input.GetKeyDown(KeyCode.Alpha2))  //Test Code
         {
             ChangeCharacter(20);
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha8))  //Test Code
+        else if (Input.GetKeyDown(KeyCode.Alpha1))  //Test Code
         {
             ChangeCharacter(10);
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha7))  //Test Code
+        else if (Input.GetKeyDown(KeyCode.Alpha4))  //Test Code
         {
             AddCharacter("DefaultPlayer2");
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha5))  //Test Code
+        {
+            AddCharacter("DefaultPlayer3");
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha3))  //Test Code
+        {
+            ChangeCharacter(30);
         }
     }
 

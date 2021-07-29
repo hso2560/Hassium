@@ -8,6 +8,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
 {
     [HideInInspector] public List<Ease> gameEases;
     [HideInInspector] public Image LoadingImg;
+    [HideInInspector] public Image crosshairImg;
 
     private Color noColor;
 
@@ -45,6 +46,11 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
 
         LoadingImg = this.sceneObjs.gameImgs[0];
         gameEases = new List<Ease>(this.sceneObjs.gameEases);
+
+        if(this.sceneObjs.ScType==SceneType.MAIN)
+        {
+            crosshairImg = this.sceneObjs.gameImgs[1];
+        }
 
         isReady = true;
         //LoadingFade(true, 0);

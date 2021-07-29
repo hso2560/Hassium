@@ -13,9 +13,10 @@ public class JoystickControl : MonoBehaviour, IPointerDownHandler, IPointerUpHan
 
     public Button jumpBtn;
     public Button skillBtn;
+    public Button aimBtn;
     private CanvasGroup jumpBtnCvsGroup;
 
-    public PlayerScript player;
+    [HideInInspector] public PlayerScript player;
 
     private float radius;
     private Vector2 dragVec;
@@ -23,16 +24,21 @@ public class JoystickControl : MonoBehaviour, IPointerDownHandler, IPointerUpHan
 
     [HideInInspector] public bool isTouch = false;
     [HideInInspector] public bool isRun;
+    [HideInInspector] public bool isHoldSkill;
+    [HideInInspector] public bool isAimState;
+    [HideInInspector] public GameObject crosshair;
 
-    public EventTrigger trigger;
+    //public EventTrigger trigger;
 
-    public EventTrigger.Entry entry1 = new EventTrigger.Entry();
-    public EventTrigger.Entry entry2 = new EventTrigger.Entry();
+    //public EventTrigger.Entry entry1 = new EventTrigger.Entry();
+    //public EventTrigger.Entry entry2 = new EventTrigger.Entry();
 
     private void Awake()
     {
         radius = rectBackground.rect.width * 0.5f;
         jumpBtn.onClick.AddListener(Jump);
+        skillBtn.onClick.AddListener(ClickSkill);
+        aimBtn.onClick.AddListener(Aim);
 
         bgImg = GetComponent<Image>();
         joystickImg = transform.GetChild(0).GetComponent<Image>();
@@ -41,13 +47,19 @@ public class JoystickControl : MonoBehaviour, IPointerDownHandler, IPointerUpHan
 
         jumpBtnCvsGroup = jumpBtn.GetComponent<CanvasGroup>();
 
-        /*trigger = skillBtn.GetComponent<EventTrigger>();
-        entry1.eventID = EventTriggerType.PointerDown;
-        entry1.callback = new EventTrigger.TriggerEvent();
-        entry2.eventID = EventTriggerType.PointerUp;
-        entry2.callback = new EventTrigger.TriggerEvent();*/
+        //trigger = skillBtn.GetComponent<EventTrigger>();
+        //entry1.eventID = EventTriggerType.PointerDown;
+        //entry1.callback = new EventTrigger.TriggerEvent();
+        //entry2.eventID = EventTriggerType.PointerUp;
+        //entry2.callback = new EventTrigger.TriggerEvent();
     }
 
+    private void Start()
+    {
+        crosshair = UIManager.Instance.crosshairImg.gameObject;
+    }
+
+    #region Move 패드
     public void OnDrag(PointerEventData eventData)
     {
         dragVec = eventData.position - (Vector2)rectBackground.position;
@@ -79,9 +91,7 @@ public class JoystickControl : MonoBehaviour, IPointerDownHandler, IPointerUpHan
         bgImg.color = bgBefore;
         joystickImg.color = joystickBefore;
     }
-
-    public void OnPointerDownRunBtn() => isRun = !player.isStamina0;
-    public void OnPointerUpRunBtn() => isRun = false;
+    #endregion
 
     private void Update()
     {
@@ -91,11 +101,45 @@ public class JoystickControl : MonoBehaviour, IPointerDownHandler, IPointerUpHan
         }
     }
 
+    #region 버튼 처리
+    public void OnPointerDownRunBtn() => isRun = !player.isStamina0;
+    public void OnPointerUpRunBtn() => isRun = false;
+
     private void Jump()
     {
         player.Jump();
         //점프 했을 때 각종 처리 
     }
+
+    private void ClickSkill()
+    {
+        if (!isHoldSkill)
+        {
+            player.skill.UseSkill();
+        }
+    }
+    
+    public void DownSkill()
+    {
+        if(isHoldSkill)
+        {
+            player.skill.UseSkill();
+        }
+    }
+
+    public void UpSkill()
+    {
+        if(isHoldSkill)
+        {
+            player.skill.OffSkill();
+        }
+    }
+
+    public void Aim()
+    { 
+        crosshair.SetActive(!crosshair.activeSelf);
+    }
+    #endregion
 
     public void CheckJoystickState()
     {
@@ -106,15 +150,22 @@ public class JoystickControl : MonoBehaviour, IPointerDownHandler, IPointerUpHan
 
     }
 
-    public void ClearSkillBtn()
+    #region 주석
+    /*public void ClearSkillBtn()
     {
         skillBtn.onClick.RemoveAllListeners();
-        trigger.triggers.RemoveRange(0, 2);
+
+        entry1.callback.RemoveAllListeners();
+        entry2.callback.RemoveAllListeners();
+
+        if (trigger.triggers.Count > 0)
+            trigger.triggers.RemoveRange(0, 2);
     }
 
     public void SkillBtnTriggerAdd()
     {
         trigger.triggers.Add(entry1);
         trigger.triggers.Add(entry2);
-    }
+    }*/
+    #endregion
 }

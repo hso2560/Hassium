@@ -11,13 +11,10 @@ public class ReinforceSkill : Skill
     public float str;
     public float def;
 
-    private void Start()
+    private void Awake()
     {
         player = GetComponent<PlayerScript>();
-
         base.Init(isFirstSkillUseTreat);
-
-        SkillManager.Instance.playerSkills.Add(this);
     }
 
     public override void UseSkill()
@@ -60,7 +57,7 @@ public class ReinforceSkill : Skill
 
     public override void SetData()
     {
-        player.joystickCtrl.ClearSkillBtn();
-        player.joystickCtrl.skillBtn.onClick.AddListener(UseSkill);
+        //player.joystickCtrl.ClearSkillBtn();
+        //player.joystickCtrl.skillBtn.onClick.AddListener(UseSkill);
     }
 }
