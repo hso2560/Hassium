@@ -9,11 +9,11 @@ public class RopeSkill : Skill
     [SerializeField] private LayerMask whatIsGrappleable;  //Wall
     [SerializeField] private Transform ropeStartPoint;
     [SerializeField] private float maxDist=70f;
-    //private SpringJoint joint;
+    private SpringJoint joint;
 
-    //[SerializeField] private float spring=4.5f;
-    //[SerializeField] private float damper = 7f;
-    //[SerializeField] private float massScale = 4.5f;
+    [SerializeField] private float spring=4.5f;
+    [SerializeField] private float damper = 7f;
+    [SerializeField] private float massScale = 4.5f;
 
     private GameObject aim;
     private Transform cam;
@@ -100,18 +100,18 @@ public class RopeSkill : Skill
             rope.gameObject.SetActive(true);
 
             grapplePoint = hit.point;
-            //joint = gameObject.AddComponent<SpringJoint>();
-            //joint.autoConfigureConnectedAnchor = false;
-            //joint.connectedAnchor = grapplePoint;
+            joint = gameObject.AddComponent<SpringJoint>();
+            joint.autoConfigureConnectedAnchor = false;
+            joint.connectedAnchor = grapplePoint;
 
-            //float distanceFromPoint = Vector3.Distance(transform.position, grapplePoint);
+            float distanceFromPoint = Vector3.Distance(transform.position, grapplePoint);
 
-            //joint.maxDistance = distanceFromPoint*0.85f;
-            //joint.minDistance = distanceFromPoint * 0.01f;
+            joint.maxDistance = distanceFromPoint*0.9f;
+            joint.minDistance = distanceFromPoint * 0.05f;
 
-            //joint.spring = spring;
-            //joint.damper = damper;
-            //joint.massScale = massScale;
+            joint.spring = spring;
+            joint.damper = damper;
+            joint.massScale = massScale;
 
             isUsingSkill = true;
             skillOffTime = Time.time + skillContnTime;
@@ -121,7 +121,7 @@ public class RopeSkill : Skill
     }
     private void StopGrapple()
     {
-        //Destroy(joint);
+        Destroy(joint);
 
         isUsingSkill = false;
 
@@ -140,12 +140,10 @@ public class RopeSkill : Skill
 
     private void DrawRope()
     {
-        //if (!joint) return;
-
         if (ropeStatePhase > 0)
         {
-            rope.SetPosition(0, ropeStartPoint.position);
-            rope.SetPosition(1, grapplePoint);
+            //rope.SetPosition(0, ropeStartPoint.position);
+            rope.SetPosition(1, rope.transform.InverseTransformPoint(grapplePoint));
         }
     }
 

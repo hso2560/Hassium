@@ -35,11 +35,13 @@ public class SceneObjects : MonoBehaviour  //해당 씬마다 필요한 오브젝트들을 모�
         UIManager.Instance.ManagerDataLoad(gameObject);
         SoundManager.Instance.ManagerDataLoad(gameObject);
         SkillManager.Instance.ManagerDataLoad(gameObject);
+        MapManager.Instance.ManagerDataLoad(gameObject);
 
         managers.Add(GameManager.Instance.GetComponent<ISceneDataLoad>());
         managers.Add(UIManager.Instance.GetComponent<ISceneDataLoad>());
         managers.Add(SoundManager.Instance.GetComponent<ISceneDataLoad>());
         managers.Add(SkillManager.Instance.GetComponent<ISceneDataLoad>());
+        managers.Add(MapManager.Instance.GetComponent<ISceneDataLoad>());
 
         StartCoroutine(StartGame());
 

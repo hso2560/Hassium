@@ -7,19 +7,19 @@ public class CameraMove : MonoBehaviour
     [HideInInspector] public Transform rotTarget;
     [HideInInspector] public PlayerScript player;
     public JoystickControl joystick;
+    public Vector3 camMinPos, camMaxPos;
 
     public float xSpeed = 220f, ySpeed = 100f;
     [HideInInspector] public float x, y;
     public float yMinLimit = -20f, yMaxLimit = 80f;
 
     public Vector3 Offset;
+
     private Vector3 position;
     private Quaternion rotation;
 
     private int rotFingerId;
-
     private float screenWidth, screenHeight;
-
     private Vector3 firstPoint, secondPoint;
 
     private float ClampAngle(float angle, float min, float max)
@@ -31,6 +31,15 @@ public class CameraMove : MonoBehaviour
             angle -= 360;
 
         return Mathf.Clamp(angle, min, max);
+    }
+
+    public void PositionLimit()
+    {
+        float X = Mathf.Clamp(transform.position.x, camMinPos.x, camMaxPos.x);
+        float Y = Mathf.Clamp(transform.position.y, camMinPos.y, camMaxPos.y);
+        float Z = Mathf.Clamp(transform.position.z, camMinPos.z, camMaxPos.z);
+
+        transform.position = new Vector3(X, Y, Z);
     }
 
     private void Start()  
@@ -51,6 +60,7 @@ public class CameraMove : MonoBehaviour
         {
             CamMove();
             PlayerRotation();
+            PositionLimit();
         }
     }
 

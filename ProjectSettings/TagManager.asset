@@ -9,6 +9,7 @@ TagManager:
   - Object
   - Wall
   - Enemy
+  - Out
   layers:
   - Default
   - TransparentFX
