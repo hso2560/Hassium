@@ -8500,7 +8500,7 @@ MonoBehaviour:
   maxHp: 900
   maxStamina: 75
   staminaDownSpeed: 7
-  groundRayDist: 0.6
+  groundRayDist: 0.63
   rotateSpeed: 10
   needStaminaMin: 6
   staminaRecoverySpeed: 5.5

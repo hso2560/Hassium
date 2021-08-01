@@ -7738,7 +7738,7 @@ MonoBehaviour:
   maxHp: 1100
   maxStamina: 70
   staminaDownSpeed: 7
-  groundRayDist: 0.6
+  groundRayDist: 0.63
   rotateSpeed: 10
   needStaminaMin: 6
   staminaRecoverySpeed: 6.5
@@ -7811,9 +7811,12 @@ MonoBehaviour:
     m_Bits: 512
   ropeStartPoint: {fileID: 1475087997036052629}
   maxDist: 31
-  minMoveSpeed: 8
-  maxMoveSpeed: 28
-  acceleration: 7
+  spring: 6.5
+  damper: 7
+  massScale: 4.5
+  minMoveSpeed: 10
+  maxMoveSpeed: 33
+  acceleration: 10
   gravity: 0.01
 --- !u!1 &2487118331048796514
 GameObject:

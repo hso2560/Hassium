@@ -20303,7 +20303,7 @@ MonoBehaviour:
   maxHp: 1000
   maxStamina: 60
   staminaDownSpeed: 7
-  groundRayDist: 0.6
+  groundRayDist: 0.63
   rotateSpeed: 10
   needStaminaMin: 6
   staminaRecoverySpeed: 5.5
@@ -20360,6 +20360,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isFirstSkillUseTreat: 1
   isResetIfChangeChar: 1
+  isHoldSkill: 0
   skillBtnImg: {fileID: 21300000, guid: 19e5ba7d75c4f2e4e8d2151606339bf3, type: 3}
   player: {fileID: 0}
   isUsedSkill: 0
