@@ -8,6 +8,7 @@ using UnityEngine.UI;
 using DG.Tweening;
 using UnityEngine.SceneManagement;
 
+//generate lighting 할 때는 Sky를 Default Sky로 바꾸고 하자. (그 후에 다시 원래 쓰려던 Sky로 교체 ㄱ)
 public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
 {
     [SerializeField] private SaveData saveData;

@@ -22,6 +22,8 @@ public class SceneObjects : MonoBehaviour  //해당 씬마다 필요한 오브젝트들을 모�
 
     public Image[] gameImgs;
     public Ease[] gameEases;
+    public Canvas[] cvses;
+    public InteractionBtn[] itrBtns;
 
     public JoystickControl joystickCtrl;
     //public CinemachineVirtualCamera thirdPCam;
@@ -36,12 +38,14 @@ public class SceneObjects : MonoBehaviour  //해당 씬마다 필요한 오브젝트들을 모�
         SoundManager.Instance.ManagerDataLoad(gameObject);
         SkillManager.Instance.ManagerDataLoad(gameObject);
         MapManager.Instance.ManagerDataLoad(gameObject);
+        Inventory.Instance.ManagerDataLoad(gameObject);
 
         managers.Add(GameManager.Instance.GetComponent<ISceneDataLoad>());
         managers.Add(UIManager.Instance.GetComponent<ISceneDataLoad>());
         managers.Add(SoundManager.Instance.GetComponent<ISceneDataLoad>());
         managers.Add(SkillManager.Instance.GetComponent<ISceneDataLoad>());
         managers.Add(MapManager.Instance.GetComponent<ISceneDataLoad>());
+        managers.Add(Inventory.Instance.GetComponent<ISceneDataLoad>());
 
         StartCoroutine(StartGame());
 

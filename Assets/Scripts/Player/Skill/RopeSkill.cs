@@ -24,6 +24,9 @@ public class RopeSkill : Skill
     [SerializeField] private float acceleration;
     [SerializeField] private float gravity;
 
+    public float dist=16f;
+    private float d;
+
     private void Awake()
     {
         player = GetComponent<PlayerScript>();
@@ -35,6 +38,7 @@ public class RopeSkill : Skill
     {
         cam = GameManager.Instance.camMove.transform;
         aim = UIManager.Instance.crosshairImg.gameObject;
+        d = dist * dist;
     }
 
     public override void UseSkill()
@@ -72,13 +76,13 @@ public class RopeSkill : Skill
         {
             moveSpeed = Mathf.Clamp(moveSpeed, minMoveSpeed, maxMoveSpeed);
             Vector3 v = dirVec * moveSpeed;
-            Vector3 force = new Vector3(v.x - player.rigid.velocity.x, v.y - player.rigid.velocity.y -gravity, v.z - player.rigid.velocity.z);
-            player.rigid.AddForce(force, ForceMode.VelocityChange);
+            Vector3 force = new Vector3(v.x, v.y - gravity , v.z);
+            player.rigid.AddForce(force, ForceMode.Impulse);
             player.playerModel.position = transform.position;
 
             moveSpeed += acceleration * Time.deltaTime;
 
-            if (Vector3.SqrMagnitude(grapplePoint-transform.position)<1.8f)
+            if (Vector3.SqrMagnitude(grapplePoint-transform.position)<d)
             {
                 OffSkill();
             }

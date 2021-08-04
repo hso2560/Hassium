@@ -47,6 +47,8 @@ public class PlayerScript : MonoBehaviour
     private int speedFloat;  //움직임 애니메이션 처리할 애니메이션 이름의 아이디
     private int jumpTrigger, landingTrigger;
 
+    private float checkTime;
+
     public GameCharacter gameChar;
     [HideInInspector] public bool isMovable = true;
                                             
@@ -87,6 +89,7 @@ public class PlayerScript : MonoBehaviour
     {
         StaminaRecovery();
         Rotate();
+        CheckObj();
 
         _Input();
     }
@@ -97,13 +100,16 @@ public class PlayerScript : MonoBehaviour
         {
             Jump();
         }
+        else if(Input.GetKeyDown(KeyCode.E))
+        {
+            skill.UseSkill();
+        }
     }
 
     private void FixedUpdate()
     {
         Move();
         GroundHit();
-        CheckObj();
         rigid.angularVelocity = Vector3.zero;
     }
 
@@ -189,6 +195,9 @@ public class PlayerScript : MonoBehaviour
 
     private void CheckObj()  //주변에 상호작용 가능한 옵젝 있는지 체크하고 처리
     {
+        if (checkTime < Time.time) checkTime = Time.time + 1f;
+        else return;
+
         Collider[] cols = Physics.OverlapSphere(transform.position, interactionRadius, whatIsObj);
         if(cols.Length>0)
         {
@@ -198,14 +207,15 @@ public class PlayerScript : MonoBehaviour
 
                 if(objData!=null)
                 {
-
+                    UIManager.Instance.ActiveItrBtn(objData);
                 }
             }
 
+            UIManager.Instance.DisableItrBtn(cols);
         }
         else
         {
-
+            UIManager.Instance.OffInterBtn();
         }
     }
 
@@ -244,8 +254,8 @@ public class PlayerScript : MonoBehaviour
         gameChar.level = level;
         gameChar.stamina = stamina;
         gameChar.hp = hp;
+
         GameManager.Instance.savedData.userInfo.currentChar = gameChar;
-        GameManager.Instance.idToMyPlayer[id] = this;
     }
 
     public void AddInfo()  //플레이어 추가
