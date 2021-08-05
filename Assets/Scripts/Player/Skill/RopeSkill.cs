@@ -92,7 +92,7 @@ public class RopeSkill : Skill
     {
         DrawRope();
 
-        Debug.DrawRay(ropeStartPoint.position, cam.forward * maxDist, Color.red);
+        //Debug.DrawRay(ropeStartPoint.position, cam.forward * maxDist, Color.red);
     }
 
     private void StartGrapple()

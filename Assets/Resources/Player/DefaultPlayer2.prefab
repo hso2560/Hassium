@@ -8504,7 +8504,7 @@ MonoBehaviour:
   rotateSpeed: 10
   needStaminaMin: 6
   staminaRecoverySpeed: 5.5
-  interactionRadius: 1
+  interactionRadius: 1.8
   id: 20
   charName: ???
   level: 1

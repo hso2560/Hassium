@@ -178,7 +178,7 @@ public class PlayerScript : MonoBehaviour
 
     private void GroundHit()  //땅을 밟고 있는지 체크
     {
-        Debug.DrawRay(footCenter.position, Vector3.down * groundRayDist, Color.blue);
+        //Debug.DrawRay(footCenter.position, Vector3.down * groundRayDist, Color.blue);
         if(Physics.Raycast(footCenter.position, Vector3.down, groundRayDist, whatIsGround))
         {
             if (isJumping)
@@ -193,12 +193,18 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
+    /*private void OnDrawGizmos()
+    {
+        Gizmos.DrawSphere(center.position, interactionRadius);
+        Gizmos.color = Color.red;
+    }*/
+
     private void CheckObj()  //주변에 상호작용 가능한 옵젝 있는지 체크하고 처리
     {
-        if (checkTime < Time.time) checkTime = Time.time + 1f;
+        if (checkTime < Time.time) checkTime = Time.time + 0.5f;
         else return;
 
-        Collider[] cols = Physics.OverlapSphere(transform.position, interactionRadius, whatIsObj);
+        Collider[] cols = Physics.OverlapSphere(center.position, interactionRadius, whatIsObj);
         if(cols.Length>0)
         {
             for(int i=0; i<cols.Length; i++)

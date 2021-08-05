@@ -20307,7 +20307,7 @@ MonoBehaviour:
   rotateSpeed: 10
   needStaminaMin: 6
   staminaRecoverySpeed: 5.5
-  interactionRadius: 1
+  interactionRadius: 1.8
   id: 10
   charName: "\uD3C9\uBC94\uD55C \uC0AC\uB78C"
   level: 1

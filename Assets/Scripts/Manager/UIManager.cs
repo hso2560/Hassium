@@ -11,7 +11,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
     [HideInInspector] public Image crosshairImg;
     [HideInInspector] public List<InteractionBtn> interactionBtns;
 
-    [HideInInspector] private List<GameObject> beforeItrObjs = new List<GameObject>();
+    public List<GameObject> beforeItrObjs = new List<GameObject>();
 
     private Canvas mainCvs, touchCvs;
 
@@ -131,9 +131,9 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
             {
                 for (int k = 0; k < interactionBtns.Count; k++)
                 {
-                    if (interactionBtns[i].data.gameObject == beforeItrObjs[i])
+                    if (interactionBtns[k].data.gameObject == beforeItrObjs[i])
                     {
-                        OffInterBtn(interactionBtns[i]);
+                        OffInterBtn(interactionBtns[k]);
                         break;
                     }
                 }
