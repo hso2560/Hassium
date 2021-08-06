@@ -66,6 +66,8 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
                     saveData.userInfo.characters[i] = saveData.userInfo.currentChar;
                 }
             }
+
+            UIManager.Instance.SaveData();
         }
     }
     public void Save()  //실제로 파일에 데이터를 저장한다

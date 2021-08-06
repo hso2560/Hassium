@@ -14,6 +14,9 @@ public class CameraMove : MonoBehaviour
     public float yMinLimit = -20f, yMaxLimit = 80f;
 
     public Vector3 Offset;
+    public float zDistMin = -1f, zDistMax = -6f;
+
+    public float defaultCamDist;
 
     private Vector3 position;
     private Quaternion rotation;

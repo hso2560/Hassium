@@ -15,6 +15,7 @@ public class Option
     public float masterSoundSize=0.7f;
     public float soundEffectSize=0.7f;
     public float bgmSize=0.7f;
+    public float distFromCam = -4;
 }
 
 [Serializable]

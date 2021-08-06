@@ -4,6 +4,14 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 
+public enum UIType
+{
+    DIST_FROM_CAM,
+    MASTER_SOUND,
+    BGM_SIZE,
+    SOUND_EFFECT
+}
+
 public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
 {
     [HideInInspector] public List<Ease> gameEases;
@@ -14,9 +22,12 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
     public List<GameObject> beforeItrObjs = new List<GameObject>();
 
     private Canvas mainCvs, touchCvs;
+    private Slider camSlider;
 
     private Color noColor;
+
     private InteractionBtn interBtn = null;
+    private CameraMove camMove;
 
     public bool GetReadyState { get { return isReady; } set { isReady = value; } }
 
@@ -141,6 +152,16 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
         }
     }
 
+    public void AdjustSlider(UIType t) 
+    {
+        switch (t)
+        {
+            case UIType.DIST_FROM_CAM:
+                camMove.Offset.z = camSlider.value;
+                break;
+        }
+    }
+
     public void ManagerDataLoad(GameObject sceneObjs)
     {
         UIManager[] managers = FindObjectsOfType<UIManager>();
@@ -157,11 +178,44 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
 
             mainCvs = this.sceneObjs.cvses[0];
             touchCvs = this.sceneObjs.cvses[1];
+            camSlider = this.sceneObjs.camSlider;
 
             interactionBtns = new List<InteractionBtn>(this.sceneObjs.itrBtns);
+
+            camMove = this.sceneObjs.camMove;
+
+            InitData();
         }
 
         isReady = true;
         //LoadingFade(true, 0);
+    }
+    
+    private void InitData()
+    {
+        camSlider.minValue = camMove.zDistMax;
+        camSlider.maxValue = camMove.zDistMin;
+
+        camSlider.onValueChanged.AddListener((data) =>
+        {
+            AdjustSlider(UIType.DIST_FROM_CAM);
+        });
+    }
+
+    private void Start()
+    {
+        if (sceneObjs.ScType == SceneType.MAIN)
+        {
+            Option op = GameManager.Instance.savedData.option;
+
+            camSlider.value = op.distFromCam;
+        }
+    }
+
+    public void SaveData()
+    {
+        Option op = new Option();
+        op.distFromCam = camSlider.value;
+        GameManager.Instance.savedData.option = op;
     }
 }
