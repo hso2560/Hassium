@@ -7,6 +7,7 @@ public class SaveData
 {
     public Option option = new Option();
     public UserInfo userInfo = new UserInfo();
+    public List<SaveObjData> saveObjDatas = new List<SaveObjData>();
 }
 
 [Serializable]

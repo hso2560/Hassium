@@ -30,6 +30,7 @@ public class SceneObjects : MonoBehaviour  //해당 씬마다 필요한 오브젝트들을 모�
     public JoystickControl joystickCtrl;
     //public CinemachineVirtualCamera thirdPCam;
     public CameraMove camMove;
+    public SceneSaveObjects infoSaveObjs;
 
     private void Awake()
     {

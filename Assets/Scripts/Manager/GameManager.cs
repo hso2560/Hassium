@@ -16,6 +16,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
     private string savedJson, filePath;
     private readonly string saveFileName_1 = "SaveFile01";
 
+    [HideInInspector] public SceneSaveObjects infoSaveObjs;
     public delegate void LoadingFunc();
     public event LoadingFunc LoadingFuncEvent;  //로딩, 확인버튼 등으로 어떤 함수를 처리할 때 여기에 넣어서 씀
 
@@ -41,10 +42,19 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
 
     private void InitData()
     {
+        infoSaveObjs = sceneObjs.infoSaveObjs;
+
         idToMyPlayer = new Dictionary<short, PlayerScript>();
         playerList = new List<PlayerScript>();
 
         camMove = sceneObjs.camMove;
+
+        for(int i=0; i<saveData.saveObjDatas.Count; i++)
+        {
+            int idx = saveData.saveObjDatas[i].index;
+            saveData.saveObjDatas[i].SetData(infoSaveObjs.objs[idx]);
+            infoSaveObjs.objDatas[idx].active = false;
+        }
     }
 
     #region 저장/로드
