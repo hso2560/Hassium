@@ -57,6 +57,15 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
         }
     }
 
+    private void Start()
+    {
+        if(saveData.userInfo.camMinRange!=Vector3.zero)
+        {
+            camMove.camMinPos = saveData.userInfo.camMinRange;
+            camMove.camMaxPos = saveData.userInfo.camMaxRange;
+        }
+    }
+
     #region 저장/로드
     public void SaveData()  //데이터를 저장
     {
@@ -76,6 +85,9 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
                     saveData.userInfo.characters[i] = saveData.userInfo.currentChar;
                 }
             }
+
+            saveData.userInfo.camMinRange = camMove.camMinPos;
+            saveData.userInfo.camMaxRange = camMove.camMaxPos;
 
             UIManager.Instance.SaveData();
         }

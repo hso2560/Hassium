@@ -11,7 +11,7 @@ public class Door : ObjData
     }
 
     public GameObject obj;
-    public Ease ease;
+    public Ease ease = Ease.Linear;
     public Vector3 targetPos;
     public float time;
     public DoorType doorType;
@@ -19,6 +19,8 @@ public class Door : ObjData
     public bool isDOT;
     public bool isOpen;
     public int objIndex;
+    public bool isChangeCamRange;
+    public Vector3 camMinPos, camMaxPos;
 
     private Animator ani;
     private Sequence seq;
@@ -42,9 +44,14 @@ public class Door : ObjData
         if(isDOT)
         {
             seq.Append(obj.transform.DOMove(targetPos, time).SetEase(ease));
-           /* seq.AppendCallback(() =>
+            /*seq.AppendCallback(() =>
             {
-
+                
+                if(isChangeCamRange)
+                {
+                    GameManager.Instance.camMove.camMinPos = camMinPos;
+                    GameManager.Instance.camMove.camMaxPos = camMaxPos;
+                }
             });*/
             seq.Play();
         }
@@ -54,8 +61,13 @@ public class Door : ObjData
         }
 
         isOpen = !isOpen;
-        
-        if(doorType==DoorType.ONLYONCE)
+
+        if (isChangeCamRange)
+        {
+            GameManager.Instance.camMove.camMinPos = camMinPos;
+            GameManager.Instance.camMove.camMaxPos = camMaxPos;
+        }
+        if (doorType==DoorType.ONLYONCE)
         {
             active = false;
             GameManager.Instance.savedData.saveObjDatas.Add(new SaveObjData(objIndex, SaveObjInfoType.TRANSFORM, targetPos, obj.transform.rotation, obj.transform.localScale));
