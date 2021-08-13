@@ -20,10 +20,12 @@ public class SceneObjects : MonoBehaviour  //해당 씬마다 필요한 오브젝트들을 모�
     public Transform ManagerGroup;
     public Transform poolTrm;
 
+    public Button[] gameBtns;
     public Image[] gameImgs;
     public Ease[] gameEases;
     public Canvas[] cvses;
     public InteractionBtn[] itrBtns;
+    public GameObject[] ui;
 
     public Slider camSlider;
 
@@ -81,6 +83,11 @@ public class SceneObjects : MonoBehaviour  //해당 씬마다 필요한 오브젝트들을 모�
         {
             managers[i].GetReadyState = false;
         }
+    }
+
+    public void OnClickUIButton(int num)
+    {
+        UIManager.Instance.OnClickUIButton(0);
     }
 
     public void TestBtn(int i)  //Test Code

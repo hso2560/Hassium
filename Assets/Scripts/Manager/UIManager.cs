@@ -17,12 +17,15 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
     [HideInInspector] public List<Ease> gameEases;
     [HideInInspector] public Image LoadingImg;
     [HideInInspector] public Image crosshairImg;
+    //[HideInInspector] public Image infoPanel;
     [HideInInspector] public List<InteractionBtn> interactionBtns;
 
     public List<GameObject> beforeItrObjs = new List<GameObject>();
+    public List<GameObject> stackUI = new List<GameObject>();
 
-    private Canvas mainCvs, touchCvs;
+    private Canvas mainCvs, touchCvs, infoCvs;
     private Slider camSlider;
+    private Button menuBtn;
 
     private Color noColor;
 
@@ -162,6 +165,23 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
         }
     }
 
+    public void OnClickUIButton(int num)
+    {
+        if (num < 0) return;
+
+        GameObject o = sceneObjs.ui[num];
+        o.SetActive(!o.activeSelf);
+
+        if(o.activeSelf)
+        {
+            stackUI.Add(sceneObjs.ui[num]);
+        }
+        else
+        {
+            stackUI.Remove(o);
+        }
+    }
+
     public void ManagerDataLoad(GameObject sceneObjs)
     {
         UIManager[] managers = FindObjectsOfType<UIManager>();
@@ -175,12 +195,15 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
         if(this.sceneObjs.ScType==SceneType.MAIN)
         {
             crosshairImg = this.sceneObjs.gameImgs[1];
+            //infoPanel = this.sceneObjs.gameImgs[2];
 
             mainCvs = this.sceneObjs.cvses[0];
             touchCvs = this.sceneObjs.cvses[1];
+            infoCvs = this.sceneObjs.cvses[2];
             camSlider = this.sceneObjs.camSlider;
 
             interactionBtns = new List<InteractionBtn>(this.sceneObjs.itrBtns);
+            menuBtn = this.sceneObjs.gameBtns[0];
 
             camMove = this.sceneObjs.camMove;
 
@@ -200,6 +223,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
         {
             AdjustSlider(UIType.DIST_FROM_CAM);
         });
+      
     }
 
     private void Start()
@@ -209,6 +233,19 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
             Option op = GameManager.Instance.savedData.option;
 
             camSlider.value = op.distFromCam;
+        }
+    }
+
+    private void Update()
+    {
+        _Input();
+    }
+
+    private void _Input()
+    {
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            OnClickUIButton(stackUI.Count - 1);
         }
     }
 
