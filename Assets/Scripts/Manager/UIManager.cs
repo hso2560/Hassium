@@ -170,15 +170,21 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
         if (num < 0) return;
 
         GameObject o = sceneObjs.ui[num];
-        o.SetActive(!o.activeSelf);
+        GameUI gu = o.GetComponent<GameUI>();
 
-        if(o.activeSelf)
+        if(!o.activeSelf)
         {
+            o.SetActive(true);
             stackUI.Add(sceneObjs.ui[num]);
         }
         else
         {
-            stackUI.Remove(o);
+            if (gu != null) gu.ResetData();
+            else
+            {
+                o.SetActive(false);
+                stackUI.Remove(o);
+            }
         }
     }
 

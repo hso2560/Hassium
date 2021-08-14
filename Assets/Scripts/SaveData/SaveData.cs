@@ -29,7 +29,7 @@ public class UserInfo
     public List<GameCharacter> characters = new List<GameCharacter>();
     public GameCharacter currentChar = new GameCharacter();
 
-    public Vector3 currentPos=new Vector3(-3,-5,32);  //임시로 기본위치는 이렇게 함
+    public Vector3 currentPos=new Vector3(-1,-6,37);  
     public Quaternion currentRot;
     public Quaternion curModelRot;
 
