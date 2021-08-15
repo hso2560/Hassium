@@ -22,6 +22,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
 
     public List<GameObject> beforeItrObjs = new List<GameObject>();
     public List<GameObject> stackUI = new List<GameObject>();
+    public GameObject curMenuPanel;
 
     private Canvas mainCvs, touchCvs, infoCvs;
     private Slider camSlider;
@@ -176,10 +177,13 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
         {
             o.SetActive(true);
             stackUI.Add(sceneObjs.ui[num]);
+
+            if (gu != null && gu.noStackUI)
+                stackUI.RemoveAt(stackUI.Count - 1);
         }
         else
         {
-            if (gu != null) gu.ResetData();
+            if (gu != null) gu.ResetData(num);
             else
             {
                 o.SetActive(false);
@@ -207,6 +211,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
             touchCvs = this.sceneObjs.cvses[1];
             infoCvs = this.sceneObjs.cvses[2];
             camSlider = this.sceneObjs.camSlider;
+            curMenuPanel = this.sceneObjs.ui[1];
 
             interactionBtns = new List<InteractionBtn>(this.sceneObjs.itrBtns);
             menuBtn = this.sceneObjs.gameBtns[0];
@@ -251,7 +256,8 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
     {
         if(Input.GetKeyDown(KeyCode.Escape))
         {
-            OnClickUIButton(stackUI.Count - 1);
+            if(stackUI.Count>0)
+               OnClickUIButton(sceneObjs.ui.IndexOf(stackUI[stackUI.Count - 1]));
         }
     }
 

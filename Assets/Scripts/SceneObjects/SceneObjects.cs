@@ -15,6 +15,7 @@ public enum SceneType
 public class SceneObjects : MonoBehaviour  //해당 씬마다 필요한 오브젝트들을 모아둔다. (씬마다 있는 스크립트)
 {
     private List<ISceneDataLoad> managers = new List<ISceneDataLoad>();
+    public List<GameObject> ui;
 
     public SceneType ScType;
     public Transform ManagerGroup;
@@ -25,7 +26,6 @@ public class SceneObjects : MonoBehaviour  //해당 씬마다 필요한 오브젝트들을 모�
     public Ease[] gameEases;
     public Canvas[] cvses;
     public InteractionBtn[] itrBtns;
-    public GameObject[] ui;
 
     public Slider camSlider;
 
@@ -90,7 +90,7 @@ public class SceneObjects : MonoBehaviour  //해당 씬마다 필요한 오브젝트들을 모�
 
     public void OnClickUIButton(int num)
     {
-        UIManager.Instance.OnClickUIButton(0);
+        UIManager.Instance.OnClickUIButton(num);
     }
 
     public void TestBtn(int i)  //Test Code
