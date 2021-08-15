@@ -16,7 +16,7 @@ public class Option
     public float masterSoundSize=0.7f;
     public float soundEffectSize=0.7f;
     public float bgmSize=0.7f;
-    public float distFromCam = -4;
+    public float distFromCam = -4;  //캐릭터와 카메라 사이의 거리
 }
 
 [Serializable]
@@ -33,8 +33,8 @@ public class UserInfo
     public Quaternion currentRot;
     public Quaternion curModelRot;
 
-    public Vector3 camMinRange;
-    public Vector3 camMaxRange;
+    public Vector3 camMinRange;  //카메라 위치의 최소 범위
+    public Vector3 camMaxRange;  //카메라 위치의 최대 범위
 }
 
 [Serializable]

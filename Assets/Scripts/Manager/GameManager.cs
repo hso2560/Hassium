@@ -9,7 +9,6 @@ using DG.Tweening;
 using UnityEngine.SceneManagement;
 
 //generate lighting 할 때는 Sky를 Default Sky로 바꾸고 하자. (그 후에 다시 원래 쓰려던 Sky로 교체 ㄱ)
-//폰으로 빌드하면 메뉴패널의 크기가 화면에 맞지않고 렉이 걸린다(메뉴 열면). 그 외에도 폰 화면에 캔버스가 잘 맞지 않음.
 public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
 {
     [SerializeField] private SaveData saveData;
@@ -134,6 +133,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
         {
             case 0:
                 saveData = new SaveData();
+                //File.Delete(filePath);
                 break;
             case 1:
                 saveData.userInfo = new UserInfo();

@@ -39,6 +39,7 @@ public class SaveObjData
     }
 }
 
+#region ¡÷ºÆ
 /*[Serializable]
 public class SaveObjDataTrm : SaveObjData  
 {
@@ -63,3 +64,4 @@ public class SaveObjDataTrm : SaveObjData
         go.transform.localScale = scale;
     }
 }*/
+#endregion

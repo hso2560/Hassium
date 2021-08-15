@@ -34,9 +34,12 @@ public class SceneObjects : MonoBehaviour  //해당 씬마다 필요한 오브젝트들을 모�
     public CameraMove camMove;
     public SceneSaveObjects infoSaveObjs;
 
+    [Header("Screen Resolution")]
+    public int scrWidth = 1920, scrHeight = 1080;
+
     private void Awake()
     {
-        //Screen.SetResolution(1920, 1080, true);
+        Screen.SetResolution(scrWidth, scrHeight, true);
 
         GameManager.Instance.ManagerDataLoad(gameObject);
         UIManager.Instance.ManagerDataLoad(gameObject);
