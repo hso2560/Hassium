@@ -17,7 +17,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
     private readonly string saveFileName_1 = "SaveFile01";
 
     [HideInInspector] public SceneSaveObjects infoSaveObjs;
-    public delegate void LoadingFunc();
+    public delegate void LoadingFunc();  //이 부분 주석치고 밑의 LoadingFunc를 Action으로 바꿔서 할 수 있다.
     public event LoadingFunc LoadingFuncEvent;  //로딩, 확인버튼 등으로 어떤 함수를 처리할 때 여기에 넣어서 씀
 
     private PlayerScript player;
@@ -237,7 +237,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
         {
             LoadingFuncEvent.Invoke();
 
-            foreach (LoadingFunc lf in LoadingFuncEvent.GetInvocationList())
+            foreach (LoadingFunc lf in LoadingFuncEvent.GetInvocationList())  //Action을 쓸 경우에는 그냥 LoadingFunc를 Action으로 바꾸면 된다
             {
                 LoadingFuncEvent -= lf;
             }

@@ -39,7 +39,7 @@ public class SceneObjects : MonoBehaviour  //ÇØ´ç ¾À¸¶´Ù ÇÊ¿äÇÑ ¿ÀºêÁ§Æ®µéÀ» ¸ð¾
 
     private void Awake()
     {
-        Screen.SetResolution(scrWidth, scrHeight, true);
+        Screen.SetResolution(scrWidth, scrHeight, true);  //¾ÈÇÏ¸é ÇØ»óµµ ±úÁü
 
         GameManager.Instance.ManagerDataLoad(gameObject);
         UIManager.Instance.ManagerDataLoad(gameObject);
@@ -70,7 +70,7 @@ public class SceneObjects : MonoBehaviour  //ÇØ´ç ¾À¸¶´Ù ÇÊ¿äÇÑ ¿ÀºêÁ§Æ®µéÀ» ¸ð¾
         UIManager.Instance.LoadingFade(true, 0);
     }
 
-    public bool IsAllReadyManager()
+    public bool IsAllReadyManager() //¸ðµç ¸Å³ÊÁö´Â ÁØºñµÆ´ÂÁö
     {
         for(int i=0; i<managers.Count; i++)
         {
@@ -80,7 +80,7 @@ public class SceneObjects : MonoBehaviour  //ÇØ´ç ¾À¸¶´Ù ÇÊ¿äÇÑ ¿ÀºêÁ§Æ®µéÀ» ¸ð¾
         return true;
     }
 
-    public void AllReadyFalse()
+    public void AllReadyFalse()  //¸ðµç ¸Å´ÏÀúÀÇ ÁØºñ »óÅÂ¸¦ ÇØÁ¦
     {
         for (int i = 0; i < managers.Count; i++)
         {
@@ -88,7 +88,7 @@ public class SceneObjects : MonoBehaviour  //ÇØ´ç ¾À¸¶´Ù ÇÊ¿äÇÑ ¿ÀºêÁ§Æ®µéÀ» ¸ð¾
         }
     }
 
-    public void OnClickUIButton(int num)
+    public void OnClickUIButton(int num)  //UIManager¿¡¼­ ÀÏÀÏÈ÷ onClick.AddListener·Î ¹öÆ°¿¡ Ãß°¡ÇÏ±â¿£ ½ºÅ©¸³Æ®°¡ º¹ÀâÇØÁú °Í °°¾Æ ÀÌ°ÍÀ¸·Î ÇØ°áÇÏ°Ú´Ù
     {
         UIManager.Instance.OnClickUIButton(num);
     }
