@@ -41,7 +41,7 @@ public class PlayerScript : MonoBehaviour
     [HideInInspector] public bool isStamina0;  //스테미나가 0인지 체크
     public Transform center;  //플레이어 오브젝트에서의 중심 부분
     public Transform playerModel;  //플레이어의 실제 형태(모델)가 있는 오브젝트
-    public Transform footCenter;
+    public Transform footCenter, footCenter2;  //하나로 하려했더니 여러 문제가 생겨서 갑작스럽게 2를 추가함
     public LayerMask whatIsGround, whatIsObj;
     public GameObject parent;
     private int speedFloat;  //움직임 애니메이션 처리할 애니메이션 이름의 아이디
@@ -179,7 +179,9 @@ public class PlayerScript : MonoBehaviour
     private void GroundHit()  //땅을 밟고 있는지 체크
     {
         //Debug.DrawRay(footCenter.position, Vector3.down * groundRayDist, Color.blue);
-        if(Physics.Raycast(footCenter.position, Vector3.down, groundRayDist, whatIsGround))
+        //Debug.DrawRay(footCenter2.position, Vector3.down * groundRayDist, Color.blue);
+        if(Physics.Raycast(footCenter.position, Vector3.down, groundRayDist, whatIsGround) 
+            || Physics.Raycast(footCenter2.position, Vector3.down, groundRayDist, whatIsGround))  //점프 애니메이션에서 위치까지 강제 이동돼서 코드도 이상해지고 점프 모션도 좀 어색함
         {
             if (isJumping)
             {

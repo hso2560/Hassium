@@ -7738,7 +7738,7 @@ MonoBehaviour:
   maxHp: 1100
   maxStamina: 70
   staminaDownSpeed: 7
-  groundRayDist: 0.63
+  groundRayDist: 0.58
   rotateSpeed: 10
   needStaminaMin: 6
   staminaRecoverySpeed: 6.5
@@ -7758,6 +7758,7 @@ MonoBehaviour:
   center: {fileID: 2487118330849164519}
   playerModel: {fileID: 1097246956311335399}
   footCenter: {fileID: 3354527575778937847}
+  footCenter2: {fileID: 4738218780379453327}
   whatIsGround:
     serializedVersion: 2
     m_Bits: 896
@@ -11083,6 +11084,36 @@ Transform:
   m_Father: {fileID: 7010046685140876364}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3425497335039274568
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4738218780379453327}
+  m_Layer: 0
+  m_Name: FootCenter (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4738218780379453327
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3425497335039274568}
+  m_LocalRotation: {x: -0.28872043, y: -0.0035823602, z: -0.9574068, w: 0.000000078463906}
+  m_LocalPosition: {x: -0.101, y: -0.398, z: -0.007}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 8804321101793460575}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3436157822560835647
 GameObject:
   m_ObjectHideFlags: 0
@@ -13088,6 +13119,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8056320908326419988}
+  - {fileID: 4738218780379453327}
   m_Father: {fileID: 5721457349093135438}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

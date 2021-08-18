@@ -3054,7 +3054,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1488358794906101540}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &903137434541242759
 BoxCollider:
@@ -8500,7 +8500,7 @@ MonoBehaviour:
   maxHp: 900
   maxStamina: 75
   staminaDownSpeed: 7
-  groundRayDist: 0.63
+  groundRayDist: 0.58
   rotateSpeed: 10
   needStaminaMin: 6
   staminaRecoverySpeed: 5.5
@@ -8520,6 +8520,7 @@ MonoBehaviour:
   center: {fileID: 2646664784831273799}
   playerModel: {fileID: 7039892981742319516}
   footCenter: {fileID: 2995869088097497494}
+  footCenter2: {fileID: 6511190301307379649}
   whatIsGround:
     serializedVersion: 2
     m_Bits: 896
@@ -8747,6 +8748,36 @@ Transform:
   - {fileID: 8155711101319272638}
   m_Father: {fileID: 2224760584735792557}
   m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2702066873813702662
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6511190301307379649}
+  m_Layer: 0
+  m_Name: FootCenter (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6511190301307379649
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2702066873813702662}
+  m_LocalRotation: {x: -0.28872043, y: -0.0035823602, z: -0.9574068, w: 0.000000078463906}
+  m_LocalPosition: {x: -0.145, y: -0.399, z: -0.023}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1488358794906101540}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2712811556826076624
 GameObject:
@@ -21006,6 +21037,7 @@ Transform:
   m_LocalPosition: {x: -0.07346585, y: 0.15726504, z: 3.5527136e-17}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 6511190301307379649}
   - {fileID: 1527954593764113370}
   m_Father: {fileID: 2444960024098402869}
   m_RootOrder: 0
