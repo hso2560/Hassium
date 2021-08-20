@@ -6,8 +6,13 @@ public class MapManager : MonoSingleton<MapManager>, ISceneDataLoad
 {
     public bool GetReadyState { get { return isReady; } set { isReady = value; } }
 
+    public Dictionary<short, Transform> mapCenterDict = new Dictionary<short, Transform>();
 
 
+    private void InitData()
+    {
+        
+    }
 
     public void ManagerDataLoad(GameObject sceneObjs)
     {
@@ -18,7 +23,7 @@ public class MapManager : MonoSingleton<MapManager>, ISceneDataLoad
 
         if (this.sceneObjs.ScType == SceneType.MAIN)
         {
-            
+            InitData();
         }
 
         isReady = true;

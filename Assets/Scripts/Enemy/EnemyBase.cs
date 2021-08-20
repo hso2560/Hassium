@@ -1,12 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class EnemyBase : MonoBehaviour
 {
-    //스크립터블 오브젝트 사용
+    public EnemyData enemyData;
 
+    public bool bViewingAngle360;
+
+    protected Vector3 startPoint;
+    
     public virtual void Trace()
+    {
+
+    }
+    public virtual void Die()
+    {
+
+    }
+    public virtual void ResetData()
     {
 
     }

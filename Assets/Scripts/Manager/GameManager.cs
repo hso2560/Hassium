@@ -18,7 +18,10 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
 
     [HideInInspector] public SceneSaveObjects infoSaveObjs;
     public delegate void LoadingFunc();  //이 부분 주석치고 밑의 LoadingFunc를 Action으로 바꿔서 할 수 있다.
+    //public LoadingFunc loadingFunc;
     public event LoadingFunc LoadingFuncEvent;  //로딩, 확인버튼 등으로 어떤 함수를 처리할 때 여기에 넣어서 씀
+    public Dictionary<string, LoadingFunc> keyToVoidFunction;
+    //public Dictionary<int, Action> idToAction;
 
     private PlayerScript player;
     public PlayerScript PlayerSc { get { return player; } }
@@ -46,6 +49,9 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
 
         idToMyPlayer = new Dictionary<short, PlayerScript>();
         playerList = new List<PlayerScript>();
+        keyToVoidFunction = new Dictionary<string, LoadingFunc>();
+
+        
 
         camMove = sceneObjs.camMove;
 
@@ -213,10 +219,8 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
         return null;
     }
 
-    public bool IsExistCharac(short id)  
-    {
-        return idToMyPlayer.ContainsKey(id);
-    }
+    public bool IsExistCharac(short id) => idToMyPlayer.ContainsKey(id);
+   
     private void ActiveCharacter(short idx)  //비활성화된 캐릭터를 활성화한다.
     {
         player = idToMyPlayer[idx].gameObject.GetComponent<PlayerScript>();
