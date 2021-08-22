@@ -59,7 +59,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
         {
             int idx = saveData.saveObjDatas[i].index;
             saveData.saveObjDatas[i].SetData(infoSaveObjs.objs[idx]);
-            infoSaveObjs.objDatas[idx].active = false;
+            //infoSaveObjs.objDatas[idx].active = false;
         }
     }
 
@@ -75,6 +75,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
     #region 저장/로드
     public void SaveData()  //데이터를 저장
     {
+        saveData.objActiveInfo.SaveDictionary();
         if (sceneObjs.ScType == SceneType.MAIN)
         {
             player.Save();
@@ -123,6 +124,8 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
      
     public void SetData()  //불러온 데이터로 세팅하기
     {
+        saveData.objActiveInfo.SetDictionary();
+
         if(saveData.userInfo.isFirstStart)
         {
             PlayerScript ps = Resources.Load<GameObject>("Player/" + saveData.userInfo.curCharResoName).transform.GetChild(1).GetComponent<PlayerScript>();
@@ -147,7 +150,6 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
             case 2:
                 saveData.option = new Option();
                 break;
-
 
             case 11:
                 player.transform.position= new Vector3(-1, -6, 37);  //Test

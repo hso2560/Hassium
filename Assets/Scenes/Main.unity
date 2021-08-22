@@ -2250,17 +2250,24 @@ MonoBehaviour:
   active: 1
   objName: "\uC5F4\uAE30"
   explain: 
-  obj: {fileID: 8242037333575515758}
+  saveActiveStateId: 0
+  obj:
+  - {fileID: 8242037333575515758}
+  bSimultaneously: 1
   ease: 1
-  targetPos: {x: 18.67, y: -4.53, z: 47.9}
-  time: 3.5
+  targetPos:
+  - {x: 18.67, y: -4.53, z: 47.9}
+  time:
+  - 2
   doorType: 1
+  soit: 0
   isDOT: 1
   isOpen: 0
-  objIndex: 0
+  objIndex: 00000000
   isChangeCamRange: 1
   camMinPos: {x: -60.5, y: -50, z: 11}
   camMaxPos: {x: 31, y: 100, z: 100}
+  ani: {fileID: 0}
 --- !u!1 &421476760
 GameObject:
   m_ObjectHideFlags: 0
@@ -2306,6 +2313,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objs:
   - {fileID: 8242037333575515758}
+  - {fileID: 383410359}
   objDatas:
   - {fileID: 383410364}
 --- !u!1 &422228471

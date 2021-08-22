@@ -7,6 +7,7 @@ public class SaveData
 {
     public Option option = new Option();
     public UserInfo userInfo = new UserInfo();
+    public SaveClass1<int, bool> objActiveInfo = new SaveClass1<int, bool>();
     public List<SaveObjData> saveObjDatas = new List<SaveObjData>();
 }
 

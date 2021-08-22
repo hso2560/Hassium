@@ -5,5 +5,4 @@ public class SceneSaveObjects : MonoBehaviour
 {
     public GameObject[] objs;
     public ObjData[] objDatas;
-    
 }
