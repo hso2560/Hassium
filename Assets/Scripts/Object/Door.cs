@@ -7,7 +7,8 @@ public class Door : ObjData  //문 열릴 때 ScaleX값을 0.003으로 바꿔야하는데(저장
     public enum DoorType
     {
         ETERNAL,
-        ONLYONCE
+        ONLYONCE,
+        ROTATION
     }
 
     public GameObject[] obj;  //타겟
