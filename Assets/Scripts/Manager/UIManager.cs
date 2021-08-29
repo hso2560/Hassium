@@ -72,6 +72,10 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
                     break;
                 }
             }
+            /*interactionBtns.ForEach(x => {
+                if(x.data==od) OffInterBtn(x);
+            });*/
+
             return;
         }
 

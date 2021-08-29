@@ -4,7 +4,9 @@ using System;
 
 public enum SaveObjInfoType
 {
-    TRANSFORM
+    TRANSFORM,
+    ACTIVE,
+    MATERIAL
 }
 
 [Serializable]
@@ -65,31 +67,46 @@ public class SaveObjData
     public SaveObjInfoType soit;
     public int index;
 
+    public PRS prs;
+
+    public SaveObjData(int index, SaveObjInfoType soit, Vector3 position, Quaternion rotation, Vector3 scale)
+    {
+        this.index = index;
+        this.soit = soit;
+        prs = new PRS(position, rotation, scale);
+    }
+
+    public void SetData(GameObject go)
+    {
+        switch (soit)
+        {
+            case SaveObjInfoType.TRANSFORM:
+                go.transform.position = prs.position;
+                go.transform.rotation = prs.rotation;
+                go.transform.localScale = prs.scale;
+                break;
+        }
+    }
+}
+
+[Serializable]
+public class PRS
+{
     #region Transform
     public Vector3 position;
     public Quaternion rotation;
     public Vector3 scale;
     #endregion
 
-    public SaveObjData(int index, SaveObjInfoType soit, Vector3 position, Quaternion rotation, Vector3 scale)
+    public PRS(Vector3 position, Quaternion rotation, Vector3 scale)
     {
-        this.index = index;
-        this.soit = soit;
         this.position = position;
         this.rotation = rotation;
         this.scale = scale;
     }
-
-    public void SetData(GameObject go)
-    {
-        if (soit == SaveObjInfoType.TRANSFORM)
-        {
-            go.transform.position = position;
-            go.transform.rotation = rotation;
-            go.transform.localScale = scale;
-        }
-    }
 }
+
+
 
 #region 주석
 /*[Serializable]
@@ -118,7 +135,7 @@ public class SaveObjDataTrm : SaveObjData
 }*/
 
 /*[Serializable]
-public class SaveClass1<K,V> : Dictionary<K,V>, ISerializationCallbackReceiver  //인스펙터에도 나온다
+public class SaveClass11<K,V> : Dictionary<K,V>, ISerializationCallbackReceiver  //인스펙터에도 나온다
 {
     public List<K> objActiveKeys = new List<K>();
     public List<V> objActiveValues = new List<V>();

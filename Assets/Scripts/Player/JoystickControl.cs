@@ -10,11 +10,15 @@ public class JoystickControl : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     public Color bgAfter, joystickAfter;
     private Color bgBefore, joystickBefore;
     private Image bgImg, joystickImg;
+    [SerializeField] private Image staminaGauge;
+    [SerializeField] private CanvasGroup staminaGaugeCvg;
 
     public Button jumpBtn;
     public Button skillBtn;
     public Button aimBtn;
+    
     private CanvasGroup jumpBtnCvsGroup;
+    [SerializeField] private CanvasGroup runBtnCvg;
 
     [HideInInspector] public PlayerScript player;
 
@@ -143,11 +147,34 @@ public class JoystickControl : MonoBehaviour, IPointerDownHandler, IPointerUpHan
 
     public void CheckJoystickState()
     {
+        //점프 버튼
         bool jumpCheck = player.isJumping;
         jumpBtnCvsGroup.alpha = !jumpCheck ? 1 : 0.3f;
         jumpBtnCvsGroup.blocksRaycasts = !jumpCheck ? true : false;
         jumpBtnCvsGroup.interactable = !jumpCheck ? true : false;
+    }
 
+    public void CheckRunBtnState(bool zero)
+    {
+        if (zero) isRun = false;
+
+        runBtnCvg.alpha = zero ? 0.3f : 1;
+        runBtnCvg.blocksRaycasts = !zero;
+        runBtnCvg.interactable = !zero;
+    }
+
+    public void CheckStamina(Vector3 dir, float curStamina, float maxStamina)
+    {
+        if (curStamina < maxStamina)
+        {
+            staminaGaugeCvg.gameObject.SetActive(true);       
+        }
+        else
+        {
+            //false하기전에 애니메이션
+        }
+
+        staminaGauge.fillAmount = curStamina / maxStamina;
     }
 
     #region 주석

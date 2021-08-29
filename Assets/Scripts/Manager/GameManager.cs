@@ -9,19 +9,20 @@ using DG.Tweening;
 using UnityEngine.SceneManagement;
 
 //generate lighting 할 때는 Sky를 Default Sky로 바꾸고 하자. (그 후에 다시 원래 쓰려던 Sky로 교체 ㄱ)
-public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
+public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작후 캐릭터 최초 변경시 카메라가 잠시동안 이상한 곳 바라보는 문제점 있음.
 {
     [SerializeField] private SaveData saveData;
     public SaveData savedData { get { return saveData; } }
     private string savedJson, filePath;
     private readonly string saveFileName_1 = "SaveFile01";
 
-    [HideInInspector] public SceneSaveObjects infoSaveObjs;
-    public delegate void LoadingFunc();  //이 부분 주석치고 밑의 LoadingFunc를 Action으로 바꿔서 할 수 있다.
+    [HideInInspector] public SceneSaveObjects infoSaveObjs;  
+    public delegate void LoadingFunc();  //이 부분 주석치고 밑의 LoadingFunc를 Action으로 바꿔서 할 수 있다.  //Action<매개변수,매개변수,매개변수...> Func<매개변수..., 반환값>  매개변수 없이도 가능
     //public LoadingFunc loadingFunc;
     public event LoadingFunc LoadingFuncEvent;  //로딩, 확인버튼 등으로 어떤 함수를 처리할 때 여기에 넣어서 씀
     public Dictionary<string, LoadingFunc> keyToVoidFunction;
     //public Dictionary<int, Action> idToAction;
+    public event Action objActionHandle;
 
     private PlayerScript player;
     public PlayerScript PlayerSc { get { return player; } }
@@ -204,8 +205,11 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
         saveData.userInfo.currentChar = gc;
         saveData.userInfo.curCharResoName = gc.charResoName;
 
-        player.parent.SetActive(false);
+        //GameObject go = player.parent;
+        //objActionHandle += () => go.SetActive(false);
+        //objActionHandle += go =>  go.SetActive(false); 
 
+        player.parent.SetActive(false);
         ActiveCharacter(id);
     }
 
@@ -275,6 +279,20 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad
         camMove.target = player.center;
         camMove.rotTarget = player.transform;
         camMove.player = player;
+
+        //ActionFuncHandle();
+    }
+
+    private void ActionFuncHandle()
+    {
+        if (objActionHandle == null) return;
+
+        objActionHandle?.Invoke();  // == if(objActionHandle!=null) { objActionHandle(); }
+
+        foreach(Action a in objActionHandle.GetInvocationList())
+        {
+            objActionHandle -= a;
+        }
     }
 
     private void Update()  //Resources/Player 에서 현재 DefaultPlayer2,3는 테스트 프리팹이므로 나중에 지울것

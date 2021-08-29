@@ -12,7 +12,7 @@ public class ObjData : MonoBehaviour
 
     public virtual void Interaction() //버튼 클릭 시
     {
-        if (saveActiveStateId > -1)
+        if (saveActiveStateId > -1)  //오브젝트 액티브상태 값 저장
         {
             GameManager.Instance.savedData.objActiveInfo[saveActiveStateId] = false;
         }

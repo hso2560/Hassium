@@ -1224,7 +1224,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.45490196}
+  m_Color: {r: 0.62352943, g: 0.16862746, b: 0.67058825, a: 0.6392157}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2151,6 +2151,7 @@ GameObject:
   - component: {fileID: 383410361}
   - component: {fileID: 383410360}
   - component: {fileID: 383410364}
+  - component: {fileID: 383410365}
   m_Layer: 8
   m_Name: DoorButton
   m_TagString: Object
@@ -2268,6 +2269,29 @@ MonoBehaviour:
   camMinPos: {x: -60.5, y: -50, z: 11}
   camMaxPos: {x: 31, y: 100, z: 100}
   ani: {fileID: 0}
+  useDoorBtnScr: 1
+  doorBtnData: {fileID: 383410365}
+--- !u!114 &383410365
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 383410359}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5cc32db84c8a6949989ee2ca0826247, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 10
+  active: 1
+  objName: 
+  explain: 
+  saveActiveStateId: -1
+  s_active: 0
+  objIdx: 1
+  time: 0.5
+  targetVector: {x: 0.002, y: 0.0014629582, z: 0.0017167329}
 --- !u!1 &421476760
 GameObject:
   m_ObjectHideFlags: 0
@@ -2445,7 +2469,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.6886792, g: 0.6886792, b: 0.6886792, a: 1}
+  m_Color: {r: 0.53333336, g: 0.69803923, b: 1, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3945,6 +3969,7 @@ GameObject:
   - component: {fileID: 740634415}
   - component: {fileID: 740634417}
   - component: {fileID: 740634416}
+  - component: {fileID: 740634418}
   m_Layer: 5
   m_Name: Crosshair
   m_TagString: Untagged
@@ -3984,7 +4009,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.92156863}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -4009,6 +4034,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 740634414}
   m_CullTransparentMesh: 1
+--- !u!114 &740634418
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 740634414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0.12613294, g: 0.745283, b: 0, a: 1}
+  m_EffectDistance: {x: 3, y: -3}
+  m_UseGraphicAlpha: 1
 --- !u!1 &759417908
 GameObject:
   m_ObjectHideFlags: 0
@@ -5664,6 +5704,7 @@ GameObject:
   - component: {fileID: 1115769555}
   - component: {fileID: 1115769554}
   - component: {fileID: 1115769557}
+  - component: {fileID: 1115769558}
   m_Layer: 5
   m_Name: JumpButton
   m_TagString: Untagged
@@ -5785,6 +5826,21 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &1115769558
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1115769552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0.35283017, g: 0.69689417, b: 1, a: 0.80784315}
+  m_EffectDistance: {x: 3, y: -3}
+  m_UseGraphicAlpha: 1
 --- !u!1 &1139879852
 GameObject:
   m_ObjectHideFlags: 0
@@ -6475,7 +6531,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.69411767}
+  m_Color: {r: 1, g: 0.9137255, b: 0.25882354, a: 0.77254903}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -7616,7 +7672,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.6886792, g: 0.6886792, b: 0.6886792, a: 1}
+  m_Color: {r: 0.53333336, g: 0.69803923, b: 1, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -9433,6 +9489,7 @@ GameObject:
   - component: {fileID: 1761820722}
   - component: {fileID: 1761820721}
   - component: {fileID: 1761820720}
+  - component: {fileID: 1761820723}
   m_Layer: 5
   m_Name: AimButton
   m_TagString: Untagged
@@ -9541,6 +9598,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1761820718}
   m_CullTransparentMesh: 1
+--- !u!114 &1761820723
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1761820718}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 1, g: 0.5566255, b: 0.40943396, a: 0.5}
+  m_EffectDistance: {x: 1, y: -1}
+  m_UseGraphicAlpha: 1
 --- !u!1 &1788705718
 GameObject:
   m_ObjectHideFlags: 0
@@ -9637,6 +9709,7 @@ MonoBehaviour:
   jumpBtn: {fileID: 1115769554}
   skillBtn: {fileID: 189191547}
   aimBtn: {fileID: 1761820720}
+  runBtnCvg: {fileID: 1836287054}
   player: {fileID: 0}
   dirVec: {x: 0, y: 0}
   isTouch: 0
@@ -9858,6 +9931,7 @@ GameObject:
   - component: {fileID: 1836287055}
   - component: {fileID: 1836287058}
   - component: {fileID: 1836287054}
+  - component: {fileID: 1836287059}
   m_Layer: 5
   m_Name: RunButton
   m_TagString: Untagged
@@ -10024,6 +10098,21 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &1836287059
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1836287052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0.35283017, g: 0.69689417, b: 1, a: 0.80784315}
+  m_EffectDistance: {x: 3, y: -3}
+  m_UseGraphicAlpha: 1
 --- !u!1 &1857048439
 GameObject:
   m_ObjectHideFlags: 0

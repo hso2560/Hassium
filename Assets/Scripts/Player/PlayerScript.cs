@@ -90,6 +90,7 @@ public class PlayerScript : MonoBehaviour
         StaminaRecovery();
         Rotate();
         CheckObj();
+        joystickCtrl?.CheckStamina(moveDir,stamina,maxStamina);
 
         _Input();
     }
@@ -151,7 +152,7 @@ public class PlayerScript : MonoBehaviour
             {
                 stamina = 0;
                 isStamina0 = true;
-                joystickCtrl.isRun = false;
+                joystickCtrl.CheckRunBtnState(true);
             }
         }
     }
@@ -162,7 +163,11 @@ public class PlayerScript : MonoBehaviour
         {
             stamina += staminaRecoverySpeed * Time.deltaTime;
 
-            if (isStamina0 && stamina >= needStaminaMin) isStamina0 = false;
+            if (isStamina0 && stamina >= needStaminaMin)
+            {
+                isStamina0 = false;
+                joystickCtrl.CheckRunBtnState(false);
+            }
             if (stamina >= maxStamina) stamina = maxStamina;
         }
     }
