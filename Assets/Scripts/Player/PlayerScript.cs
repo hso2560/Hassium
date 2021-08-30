@@ -90,7 +90,7 @@ public class PlayerScript : MonoBehaviour
         StaminaRecovery();
         Rotate();
         CheckObj();
-        joystickCtrl?.CheckStamina(moveDir,stamina,maxStamina);
+        joystickCtrl?.CheckStamina(stamina,maxStamina,needStaminaMin);
 
         _Input();
     }

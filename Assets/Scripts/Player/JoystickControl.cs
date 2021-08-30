@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using DG.Tweening;
 
 public class JoystickControl : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
 {
@@ -12,6 +13,8 @@ public class JoystickControl : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     private Image bgImg, joystickImg;
     [SerializeField] private Image staminaGauge;
     [SerializeField] private CanvasGroup staminaGaugeCvg;
+    [SerializeField] private Color defaultGaugeColor, shortageGaugeColor;
+    private bool isShortage = false;
 
     public Button jumpBtn;
     public Button skillBtn;
@@ -163,7 +166,7 @@ public class JoystickControl : MonoBehaviour, IPointerDownHandler, IPointerUpHan
         runBtnCvg.interactable = !zero;
     }
 
-    public void CheckStamina(Vector3 dir, float curStamina, float maxStamina)
+    public void CheckStamina(float curStamina, float maxStamina, float needStaminaMin)
     {
         if (curStamina < maxStamina)
         {
@@ -175,6 +178,12 @@ public class JoystickControl : MonoBehaviour, IPointerDownHandler, IPointerUpHan
         }
 
         staminaGauge.fillAmount = curStamina / maxStamina;
+        staminaGauge.color = curStamina <= needStaminaMin ? shortageGaugeColor : defaultGaugeColor;
+
+        if(curStamina <= needStaminaMin && !isShortage)
+        {
+            staminaGaugeCvg.DOFade(0.2f, 0.3f).SetLoops(-1,LoopType.Yoyo);
+        }
     }
 
     #region ÁÖ¼®
