@@ -104,6 +104,11 @@ public class PRS
         this.rotation = rotation;
         this.scale = scale;
     }
+
+    public PRS()
+    {
+
+    }
 }
 
 

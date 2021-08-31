@@ -18,21 +18,37 @@ public class GameUI : MonoBehaviour
     [SerializeField] private Ease ease = Ease.Linear;
     private int idx = -1;
 
+    public PRS prs;
+
+    private void Awake()
+    {
+        prs = new PRS(transform.position, transform.rotation, transform.localScale);
+    }
+
     private void OnEnable()
     {
         if (idx == -1)
             idx = UIManager.Instance.sceneObjs.ui.IndexOf(gameObject);
 
-        if (id == 0)
-            UIAnimation(targetVec, () => { Time.timeScale = 0; }, 1, time2, time1);
-        else if(id==10 && UIManager.Instance.curMenuPanel != gameObject)
+        switch (id)
         {
-            GameObject o = UIManager.Instance.curMenuPanel;
-            o.GetComponent<GameUI>().img.gameObject.SetActive(false);
-            o.SetActive(false);
+            case 0:
+                UIAnimation(targetVec, () => { Time.timeScale = 0; }, 1, time2, time1);
+                break;
+            case 10:
+                if(UIManager.Instance.curMenuPanel!=gameObject)
+                {
+                    GameObject o = UIManager.Instance.curMenuPanel;
+                    o.GetComponent<GameUI>().img.gameObject.SetActive(false);
+                    o.SetActive(false);
 
-            img.gameObject.SetActive(true);
-            UIManager.Instance.curMenuPanel = gameObject;
+                    img.gameObject.SetActive(true);
+                    UIManager.Instance.curMenuPanel = gameObject;
+                }
+                break;
+            case 20:
+                UIAnimation(targetVec, () => { }, time1, time2);
+                break;
         }
     }
 
@@ -46,10 +62,15 @@ public class GameUI : MonoBehaviour
         if(!bSameBtnOff && idx==num)
             return;
 
-        if (id == 0)
+        switch (id)
         {
-            Time.timeScale = 1;
-            UIAnimation(Vector3.zero, () => { gameObject.SetActive(false); }, 0, time2, time1);
+            case 0:
+                Time.timeScale = 1;
+                UIAnimation(Vector3.zero, () => { gameObject.SetActive(false); }, 0, time2, time1);
+                break;
+            case 20:
+                UIAnimation(prs.rotation.eulerAngles, null, time1, time2);
+                break;
         }
     }
 
@@ -57,12 +78,20 @@ public class GameUI : MonoBehaviour
     {
         Sequence seq = DOTween.Sequence();
 
-        if(id==0)
+        switch (id)
         {
-            cvsGroup.DOFade(fValues[0], fValues[1]);
-            seq.Append(transform.DOScale(vValue, fValues[2]).SetEase(ease));
-            seq.AppendCallback(tc);
-            seq.Play();
+            case 0:
+                cvsGroup.DOFade(fValues[0], fValues[1]);
+                seq.Append(transform.DOScale(vValue, fValues[2]).SetEase(ease));
+                seq.AppendCallback(tc);
+                seq.Play();
+                break;
+            case 20:
+                transform.DOKill();
+                cvsGroup.DOKill();
+                transform.DORotate(targetVec, fValues[0]);
+                cvsGroup.DOFade(fValues[1], fValues[0]);
+                break;
         }
     }
 }

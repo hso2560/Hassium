@@ -183,6 +183,13 @@ public class JoystickControl : MonoBehaviour, IPointerDownHandler, IPointerUpHan
         if(curStamina <= needStaminaMin && !isShortage)
         {
             staminaGaugeCvg.DOFade(0.2f, 0.3f).SetLoops(-1,LoopType.Yoyo);
+            isShortage = true;
+        }
+
+        if(curStamina>needStaminaMin && isShortage)
+        {
+            isShortage = false;
+            staminaGauge.DOKill();
         }
     }
 
