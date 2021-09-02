@@ -5,8 +5,8 @@ using System;
 public enum SaveObjInfoType
 {
     TRANSFORM,
-    ACTIVE,
-    MATERIAL
+    MATERIAL,
+    ACTIVE
 }
 
 [Serializable]
@@ -68,12 +68,30 @@ public class SaveObjData
     public int index;
 
     public PRS prs;
+    public ResoNameStr resoName;
+    public bool active;
+
+    public SaveObjData() { }
 
     public SaveObjData(int index, SaveObjInfoType soit, Vector3 position, Quaternion rotation, Vector3 scale)
     {
         this.index = index;
         this.soit = soit;
         prs = new PRS(position, rotation, scale);
+    }
+
+    public SaveObjData(int index, SaveObjInfoType soit, string resourceName)
+    {
+        this.index = index;
+        this.soit = soit;
+        resoName = new ResoNameStr(resourceName);
+    }
+
+    public SaveObjData(int index, SaveObjInfoType soit, bool active)
+    {
+        this.index = index;
+        this.soit = soit;
+        this.active = active;
     }
 
     public void SetData(GameObject go)
@@ -84,6 +102,12 @@ public class SaveObjData
                 go.transform.position = prs.position;
                 go.transform.rotation = prs.rotation;
                 go.transform.localScale = prs.scale;
+                break;
+            case SaveObjInfoType.MATERIAL:
+                go.GetComponent<MeshRenderer>().material = Resources.Load<Material>("Materials/" + resoName.resoNameList[0]);
+                break;
+            case SaveObjInfoType.ACTIVE:
+                go.SetActive(active);
                 break;
         }
     }
@@ -105,9 +129,20 @@ public class PRS
         this.scale = scale;
     }
 
-    public PRS()
-    {
+    public PRS() { }
+}
 
+[Serializable]
+public class ResoNameStr
+{
+    public List<string> resoNameList = new List<string>();
+
+    public ResoNameStr() { }
+
+    public ResoNameStr(params string[] names)
+    {
+        for(int i=0; i<names.Length; i++)
+            resoNameList.Add(names[i]);
     }
 }
 
