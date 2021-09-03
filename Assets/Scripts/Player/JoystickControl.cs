@@ -14,7 +14,8 @@ public class JoystickControl : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     [SerializeField] private Image staminaGauge;
     [SerializeField] private CanvasGroup staminaGaugeCvg;
     [SerializeField] private Color defaultGaugeColor, shortageGaugeColor;
-    private bool isShortage = false;
+    private bool isShortage = false;  //스태미나 부족 상태
+    private bool isStmFull = true; //스태미나 꽉 찬 상태?  
 
     public Button jumpBtn;
     public Button skillBtn;
@@ -170,11 +171,20 @@ public class JoystickControl : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     {
         if (curStamina < maxStamina)
         {
-            staminaGaugeCvg.gameObject.SetActive(true);       
+            if (isStmFull)
+            {
+                staminaGaugeCvg.gameObject.SetActive(true);
+                isStmFull = false;
+            }
+            else if(!isStmFull && !staminaGauge.gameObject.activeSelf)
+            {
+                staminaGaugeCvg.gameObject.SetActive(true);
+            }
         }
-        else
+        else if(curStamina==maxStamina && !isStmFull)
         {
-            //false하기전에 애니메이션
+            staminaGaugeCvg.GetComponent<GameUI>().ResetData();
+            isStmFull = true;
         }
 
         staminaGauge.fillAmount = curStamina / maxStamina;
@@ -182,6 +192,7 @@ public class JoystickControl : MonoBehaviour, IPointerDownHandler, IPointerUpHan
 
         if(curStamina <= needStaminaMin && !isShortage)
         {
+            staminaGaugeCvg.DOKill();
             staminaGaugeCvg.DOFade(0.2f, 0.3f).SetLoops(-1,LoopType.Yoyo);
             isShortage = true;
         }
@@ -189,7 +200,8 @@ public class JoystickControl : MonoBehaviour, IPointerDownHandler, IPointerUpHan
         if(curStamina>needStaminaMin && isShortage)
         {
             isShortage = false;
-            staminaGauge.DOKill();
+            staminaGaugeCvg.DOKill();
+            staminaGaugeCvg.DOFade(1, 0.3f);
         }
     }
 

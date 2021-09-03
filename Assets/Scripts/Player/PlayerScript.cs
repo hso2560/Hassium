@@ -17,6 +17,7 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private int maxHp;
     [SerializeField] private float maxStamina;
     [SerializeField] private float staminaDownSpeed=7f;  //스테미나 감소 속도
+    [SerializeField] private float staminaDecJAR = 10f;  //달리는 중에 점프할 때의 스테미나 감소 수치
     
     [SerializeField] private float groundRayDist=3f;  //플레이어가 땅위를 밟고 있는지 체크하는 레이의 길이
     public float rotateSpeed = 3.5f;
@@ -105,6 +106,15 @@ public class PlayerScript : MonoBehaviour
         {
             skill.UseSkill();
         }
+        else if(Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            joystickCtrl.OnPointerDownRunBtn();
+        }
+
+        if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            joystickCtrl.OnPointerUpRunBtn();
+        }
     }
 
     private void FixedUpdate()
@@ -178,6 +188,8 @@ public class PlayerScript : MonoBehaviour
         {
             ani.SetTrigger(jumpTrigger);
             rigid.velocity = Vector3.up * jumpPower;
+
+            if (joystickCtrl.isRun) stamina -= staminaDecJAR;
         }
     }
 
