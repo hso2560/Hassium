@@ -8,6 +8,11 @@ using UnityEngine.UI;
 using DG.Tweening;
 using UnityEngine.SceneManagement;
 
+public enum LoadingType
+{
+    
+}
+
 //generate lighting 할 때는 Sky를 Default Sky로 바꾸고 하자. (그 후에 다시 원래 쓰려던 Sky로 교체 ㄱ)
 public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작후 캐릭터 최초 변경시 카메라가 잠시동안 이상한 곳 바라보는 문제점 있음.
 {
@@ -20,7 +25,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
     public delegate void LoadingFunc();  //이 부분 주석치고 밑의 LoadingFunc를 Action으로 바꿔서 할 수 있다.  //Action<매개변수,매개변수,매개변수...> Func<매개변수..., 반환값>  매개변수 없이도 가능
     //public LoadingFunc loadingFunc;
     public event LoadingFunc LoadingFuncEvent;  //로딩, 확인버튼 등으로 어떤 함수를 처리할 때 여기에 넣어서 씀
-    public Dictionary<string, LoadingFunc> keyToVoidFunction;
+    public Dictionary<LoadingType, LoadingFunc> keyToVoidFunction;
     //public Dictionary<int, Action> idToAction;
     public event Action objActionHandle;
 
@@ -50,9 +55,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
 
         idToMyPlayer = new Dictionary<short, PlayerScript>();
         playerList = new List<PlayerScript>();
-        keyToVoidFunction = new Dictionary<string, LoadingFunc>();
-
-        
+        keyToVoidFunction = new Dictionary<LoadingType, LoadingFunc>();
 
         camMove = sceneObjs.camMove;
 
@@ -205,11 +208,11 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
         saveData.userInfo.currentChar = gc;
         saveData.userInfo.curCharResoName = gc.charResoName;
 
-        //GameObject go = player.parent;
-        //objActionHandle += () => go.SetActive(false);
+        GameObject go = player.parent;
+        objActionHandle += () => go.SetActive(false);
         //objActionHandle += go =>  go.SetActive(false); 
 
-        player.parent.SetActive(false);
+        //player.parent.SetActive(false);
         ActiveCharacter(id);
     }
 
@@ -245,7 +248,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
     {
         if (LoadingFuncEvent != null)
         {
-            LoadingFuncEvent.Invoke();
+            LoadingFuncEvent();
 
             foreach (LoadingFunc lf in LoadingFuncEvent.GetInvocationList())  //Action을 쓸 경우에는 그냥 LoadingFunc를 Action으로 바꾸면 된다
             {
@@ -280,16 +283,16 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
         camMove.rotTarget = player.transform;
         camMove.player = player;
 
-        //ActionFuncHandle();
+        ActionFuncHandle();
     }
 
     private void ActionFuncHandle()
     {
         if (objActionHandle == null) return;
 
-        objActionHandle?.Invoke();  // == if(objActionHandle!=null) { objActionHandle(); }
+        objActionHandle();  //  objActionHandle?.Invoke() == if(objActionHandle!=null) { objActionHandle(); }
 
-        foreach(Action a in objActionHandle.GetInvocationList())
+        foreach (Action a in objActionHandle.GetInvocationList())
         {
             objActionHandle -= a;
         }

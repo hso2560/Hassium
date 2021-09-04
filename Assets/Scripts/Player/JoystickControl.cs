@@ -176,7 +176,7 @@ public class JoystickControl : MonoBehaviour, IPointerDownHandler, IPointerUpHan
                 staminaGaugeCvg.gameObject.SetActive(true);
                 isStmFull = false;
             }
-            else if(!isStmFull && !staminaGauge.gameObject.activeSelf)
+            else if(!staminaGaugeCvg.gameObject.activeSelf)
             {
                 staminaGaugeCvg.gameObject.SetActive(true);
             }

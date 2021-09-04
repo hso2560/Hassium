@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[System.Serializable]
 public class PrevInfo
 {
     public Vector3 position;

@@ -7,7 +7,7 @@ public class GameUI : MonoBehaviour
 {
     public short id;
     public bool timeStop;  //UI가 켜지면 시간을 멈출지 (일시정지)
-    public bool bSameBtnOff = false;
+    public bool bSameBtnOff = false;  //같은 버튼으로 해당 UI를 끌 수 있는가?  ==> false면 같은 버튼 눌러도 해당 UI꺼지지않고 아무 변화 없음
     public bool noStackUI = false;  //UIManager의 UI List에 쌓이지 않음. --> ESC로 끌 수 없는 UI --> 이런건 대부분 ESC를 누르면 그 UI를 담고 있는 상위 UI가 꺼질 것
 
     public Image img;
@@ -19,6 +19,7 @@ public class GameUI : MonoBehaviour
     [SerializeField] private int idx = -1;  //스태미나 같은 UI는 그저 보이기만 하는 것이기때문에 -2로 해놓고 따로 UIManager까지 접근할 필요는 없다
 
     [SerializeField] private bool startAutoInactive = false;  //시작하면 자동으로 오브젝트 꺼줄까?  
+    [SerializeField] private bool useUIQueue = true;  //UIQueue를 사용할까  (스테미나 UI같은거는 사용X)
     public PRS prs;
     Sequence seq;
 
@@ -30,6 +31,8 @@ public class GameUI : MonoBehaviour
 
     private void OnEnable()
     {
+        UIQueue(true);
+
         if (idx == -1)
             idx = UIManager.Instance.sceneObjs.ui.IndexOf(gameObject);
 
@@ -39,7 +42,7 @@ public class GameUI : MonoBehaviour
                 UIAnimation(targetVec, () => { Time.timeScale = 0; }, 1, time2, time1);
                 break;
             case 10:
-                if(UIManager.Instance.curMenuPanel!=gameObject)
+                if (UIManager.Instance.curMenuPanel != gameObject)
                 {
                     GameObject o = UIManager.Instance.curMenuPanel;
                     o.GetComponent<GameUI>().img.gameObject.SetActive(false);
@@ -48,6 +51,7 @@ public class GameUI : MonoBehaviour
                     img.gameObject.SetActive(true);
                     UIManager.Instance.curMenuPanel = gameObject;
                 }
+                UIQueue();
                 break;
             case 20:  //스태미나 바
                 UIAnimation(targetVec, () => { }, time1);
@@ -62,8 +66,11 @@ public class GameUI : MonoBehaviour
 
     public void ResetData(int num=-3)
     {
-        if (!bSameBtnOff && idx==num)
+        if (!bSameBtnOff && idx == num)
+        {
+            UIQueue();
             return;
+        }
 
         switch (id)
         {
@@ -81,6 +88,8 @@ public class GameUI : MonoBehaviour
     {
         seq = DOTween.Sequence();
 
+        tc += () => UIQueue();
+
         switch (id)
         {
             case 0:
@@ -94,5 +103,11 @@ public class GameUI : MonoBehaviour
                     .AppendCallback(tc).Play();
                 break;
         }
+    }
+
+    private void UIQueue(bool enqueue=false)
+    {
+        if(useUIQueue)
+           UIManager.Instance.UIQueue(enqueue);
     }
 }

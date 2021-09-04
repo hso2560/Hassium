@@ -33,6 +33,8 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
     private InteractionBtn interBtn = null;
     private CameraMove camMove;
 
+    public Queue<bool> uiChangeQueue = new Queue<bool>();  //화면의 UI 변화, 위치, 애니메이션 등이 실행/변화중인지 체크하기 위함. 비어있어야 변화 가능
+    
     public bool GetReadyState { get { return isReady; } set { isReady = value; } }
 
     private void Awake()
@@ -133,7 +135,27 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
     {
         bool exist;
 
-        for(int i=0; i<beforeItrObjs.Count; i++)
+        beforeItrObjs.ForEach(x =>
+        {
+            exist = false;
+
+            for (int j = 0; j < cols.Length; j++)
+            {
+                if (x == cols[j].gameObject)
+                {
+                    exist = true;
+                    break;
+                }
+            }
+
+            if (!exist)
+            {
+                OffInterBtn(interactionBtns.Find(k => k.data.gameObject == x));
+            }
+        });
+
+        #region 주석
+        /*for(int i=0; i<beforeItrObjs.Count; i++)
         {
             exist = false;
 
@@ -157,7 +179,8 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
                     }
                 }
             }
-        }
+        }*/
+        #endregion
     }
 
     public void AdjustSlider(UIType t) 
@@ -172,7 +195,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
 
     public void OnClickUIButton(int num)
     {
-        if (num < 0) return;
+        if (num < 0 || uiChangeQueue.Count!=0) return;
 
         GameObject o = sceneObjs.ui[num];
         GameUI gu = o.GetComponent<GameUI>();
@@ -187,13 +210,26 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
         }
         else
         {
+            UIQueue(true); 
             if (gu != null) gu.ResetData(num);
             else
             {
                 o.SetActive(false);
                 stackUI.Remove(o);
+                UIQueue();
             }
         }
+    }
+
+    public void UIQueue(bool enqueue=false)
+    {
+        if(enqueue)
+        {
+            uiChangeQueue.Enqueue(true);
+            return;
+        }
+
+        if (uiChangeQueue.Count > 0) uiChangeQueue.Dequeue();
     }
 
     public void ManagerDataLoad(GameObject sceneObjs)
@@ -254,14 +290,17 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
     private void Update()
     {
         _Input();
+        //deleteValue = uiChangeQueue.Count;
     }
 
     private void _Input()
     {
-        if(Input.GetKeyDown(KeyCode.Escape))
+        if(Input.GetKeyDown(KeyCode.Escape) && uiChangeQueue.Count==0)
         {
-            if(stackUI.Count>0)
-               OnClickUIButton(sceneObjs.ui.IndexOf(stackUI[stackUI.Count - 1]));
+            if (stackUI.Count > 0)
+            {
+                OnClickUIButton(sceneObjs.ui.IndexOf(stackUI[stackUI.Count - 1]));
+            }
         }
     }
 
