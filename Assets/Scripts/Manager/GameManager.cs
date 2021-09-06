@@ -10,7 +10,7 @@ using UnityEngine.SceneManagement;
 
 public enum LoadingType
 {
-    
+    RESPAWN
 }
 
 //generate lighting 할 때는 Sky를 Default Sky로 바꾸고 하자. (그 후에 다시 원래 쓰려던 Sky로 교체 ㄱ)
@@ -57,6 +57,8 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
         playerList = new List<PlayerScript>();
         keyToVoidFunction = new Dictionary<LoadingType, LoadingFunc>();
 
+        keyToVoidFunction.Add(LoadingType.RESPAWN, () => player.transform.position = MapManager.Instance.mapCenterDict[saveData.userInfo.mapIndex].position);
+
         camMove = sceneObjs.camMove;
 
         for(int i=0; i<saveData.saveObjDatas.Count; i++)
@@ -82,6 +84,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
         saveData.objActiveInfo.SaveDictionary();
         if (sceneObjs.ScType == SceneType.MAIN)
         {
+            if (player.skill.isResetIfChangeChar) player.skill.OffSkill();
             player.Save();
             saveData.userInfo.curCharResoName = saveData.userInfo.currentChar.charResoName;
 
@@ -198,10 +201,8 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
     {
         if (id == player.Id || !IsExistCharac(id)) return;
 
-        GameCharacter gc = GetCharData(id);
+        GameCharacter gc = GetCharData(id);   //??null 붙일 수도 있음
         if(gc==null) return;
-        
-        if (player.skill.isResetIfChangeChar) player.skill.OffSkill();
 
         Save();
 
@@ -225,6 +226,9 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
                 return saveData.userInfo.characters[i];
             }
         }
+
+        //saveData.userInfo.characters.Find(x=>x.id==id) 쓸 수도 있음
+
         return null;
     }
 

@@ -8492,6 +8492,7 @@ MonoBehaviour:
   ani: {fileID: 3986413043150613990}
   col: {fileID: 2646664783980689186}
   skill: {fileID: 6991445282255690608}
+  pData: {fileID: 11400000, guid: 7f5007da1b01a7f49ac52f0f1d51dac1, type: 2}
   joystickCtrl: {fileID: 0}
   speed: 3.8
   runSpeed: 15
@@ -8500,11 +8501,10 @@ MonoBehaviour:
   maxHp: 900
   maxStamina: 75
   staminaDownSpeed: 7
-  groundRayDist: 0.58
+  staminaDecJAR: 10
   rotateSpeed: 10
   needStaminaMin: 6
   staminaRecoverySpeed: 5.5
-  interactionRadius: 1.8
   id: 20
   charName: ???
   level: 1

@@ -7,6 +7,7 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] Animator ani;
     public Collider col;
     public Skill skill;
+    public PlayerData pData;
 
     [HideInInspector] public JoystickControl joystickCtrl;
 
@@ -19,11 +20,11 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private float staminaDownSpeed=7f;  //스테미나 감소 속도
     [SerializeField] private float staminaDecJAR = 10f;  //달리는 중에 점프할 때의 스테미나 감소 수치
     
-    [SerializeField] private float groundRayDist=3f;  //플레이어가 땅위를 밟고 있는지 체크하는 레이의 길이
+    //[SerializeField] private float groundRayDist=3f;  //플레이어가 땅위를 밟고 있는지 체크하는 레이의 길이
     public float rotateSpeed = 3.5f;
     [SerializeField] private float needStaminaMin;  //스테미나 바닥난 후에 다시 런하기 위해서 필요한 최소 스테미나
     public float staminaRecoverySpeed;  //스테미나 회복 속도
-    [SerializeField] private float interactionRadius = 3.5f;  //오브젝트와 상호작용 가능한 범위
+    //[SerializeField] private float interactionRadius = 3.5f;  //오브젝트와 상호작용 가능한 범위
 
     [Header("고유 값")] [SerializeField] private short id;
     public short Id { get { return id; } }
@@ -48,7 +49,8 @@ public class PlayerScript : MonoBehaviour
     private int speedFloat;  //움직임 애니메이션 처리할 애니메이션 이름의 아이디
     private int jumpTrigger, landingTrigger;
 
-    private float checkTime;
+    private float checkTime;  //
+    private bool isDamageableByFall;  //높은 곳에서 떨어져서 데미지를 받을 수 있는 상태인지
 
     public GameCharacter gameChar;
     [HideInInspector] public bool isMovable = true;
@@ -197,18 +199,28 @@ public class PlayerScript : MonoBehaviour
     {
         //Debug.DrawRay(footCenter.position, Vector3.down * groundRayDist, Color.blue);
         //Debug.DrawRay(footCenter2.position, Vector3.down * groundRayDist, Color.blue);
-        if(Physics.Raycast(footCenter.position, Vector3.down, groundRayDist, whatIsGround) 
-            || Physics.Raycast(footCenter2.position, Vector3.down, groundRayDist, whatIsGround))  //점프 애니메이션에서 위치까지 강제 이동돼서 코드도 이상해지고 점프 모션도 좀 어색함
+        if(Physics.Raycast(footCenter.position, Vector3.down, pData.groundRayDist, whatIsGround) 
+            || Physics.Raycast(footCenter2.position, Vector3.down, pData.groundRayDist, whatIsGround))  //점프 애니메이션에서 위치까지 강제 이동돼서 코드도 이상해지고 점프 모션도 좀 어색함
         {
             if (isJumping)
             {
                 isJumping = false;
                 ani.SetTrigger(landingTrigger);
+                if (isDamageableByFall)
+                {
+                    isDamageableByFall = false;
+                    //데미지 받기
+                }
             }
         }
         else
         {
             isJumping = true;
+
+            if (rigid.velocity.y < -pData.DamagedByFallNeedHeight)
+            {
+                isDamageableByFall = true;
+            }
         }
     }
 
@@ -223,7 +235,7 @@ public class PlayerScript : MonoBehaviour
         if (checkTime < Time.time) checkTime = Time.time + 0.5f;
         else return;
 
-        Collider[] cols = Physics.OverlapSphere(center.position, interactionRadius, whatIsObj);
+        Collider[] cols = Physics.OverlapSphere(center.position, pData.interactionRadius, whatIsObj);
         if(cols.Length>0)
         {
             for(int i=0; i<cols.Length; i++)
