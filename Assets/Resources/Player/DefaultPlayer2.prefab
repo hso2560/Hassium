@@ -8495,9 +8495,8 @@ MonoBehaviour:
   pData: {fileID: 11400000, guid: 7f5007da1b01a7f49ac52f0f1d51dac1, type: 2}
   joystickCtrl: {fileID: 0}
   speed: 3.8
-  runSpeed: 15
+  runSpeed: 10
   jumpPower: 12.5
-  gravity: 0.5
   maxHp: 900
   maxStamina: 75
   staminaDownSpeed: 7
@@ -8514,6 +8513,7 @@ MonoBehaviour:
   resoName: DefaultPlayer2
   hp: 0
   stamina: 0
+  fallDamage: 80
   isDie: 0
   isJumping: 0
   isStamina0: 0
@@ -8529,6 +8529,7 @@ MonoBehaviour:
     m_Bits: 2304
   parent: {fileID: 2646664783761339466}
   gameChar:
+    isDie: 0
     id: 0
     level: 0
     exp: 0

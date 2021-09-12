@@ -170,5 +170,17 @@ public class RopeSkill : Skill
         moveSpeed = minMoveSpeed;
         isMoving = false;
         ropeStatePhase = 0;
+        
+        SetAim(true);
+    }
+
+    public override void Change() => GameManager.Instance.objActionHandle += ()=>SetAim(false);
+
+    private void SetAim(bool active)
+    {
+        player.joystickCtrl.aimBtn.gameObject.SetActive(active);
+
+        if(player.joystickCtrl.crosshair!=null)
+           player.joystickCtrl.crosshair.SetActive(false);
     }
 }

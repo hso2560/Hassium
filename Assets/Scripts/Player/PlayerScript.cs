@@ -1,6 +1,7 @@
 using UnityEngine;
+using System.Collections;
 
-public class PlayerScript : MonoBehaviour
+public class PlayerScript : MonoBehaviour, IDamageable
 {
     public PSkillType skillType;
     public Rigidbody rigid;
@@ -14,7 +15,6 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private float speed = 8.5f;
     public float runSpeed = 17.8f;
     public float jumpPower = 10f;
-    [SerializeField] private float gravity = 9.8f;
     [SerializeField] private int maxHp;
     [SerializeField] private float maxStamina;
     [SerializeField] private float staminaDownSpeed=7f;  //스테미나 감소 속도
@@ -36,9 +36,11 @@ public class PlayerScript : MonoBehaviour
     [Header("고유 값")] [SerializeField] private string resoName;  //Resources폴더에서 꺼낼 때의 파일 이름(부모)
 
     private Vector3 moveDir, worldDir;  //움직임 방향, 움직임 월드 방향
-    [SerializeField] public int hp;
-    [SerializeField] public float stamina;
-    [HideInInspector] public bool isDie, isJumping;
+    public int hp;
+    public float stamina;
+    [SerializeField] private int fallDamage; //해당 변수 * 높이에 따른 값
+    private float rigidVelY; //점프로 데미지 입을 때 rigid.velocity의 Y의 절댓값이 가장 큰 값을 저장
+    public bool isDie, isJumping;
     
     [HideInInspector] public bool isStamina0;  //스테미나가 0인지 체크
     public Transform center;  //플레이어 오브젝트에서의 중심 부분
@@ -49,11 +51,15 @@ public class PlayerScript : MonoBehaviour
     private int speedFloat;  //움직임 애니메이션 처리할 애니메이션 이름의 아이디
     private int jumpTrigger, landingTrigger;
 
-    private float checkTime;  //
+    private float checkTime;  //너무 빨리 CheckObj함수 호출하는 것을 방지해줌
     private bool isDamageableByFall;  //높은 곳에서 떨어져서 데미지를 받을 수 있는 상태인지
+    private bool isInvincible = false;
 
     public GameCharacter gameChar;
     [HideInInspector] public bool isMovable = true;
+
+    private IEnumerator IEhit, IEdeath;
+    private WaitForSeconds hitWs = new WaitForSeconds(.25f);
                                             
     private void Start() //문제점(2): 점프 애니메이션이 위치까지 가져와지면서 움직임이 어색함. 착지 애니메이션 때문에 점프하다가 가끔씩 맛나가고 점프가 짧게 실행되고 끊김.
     {                               // --> 땅 체크 레이가 발에서 나가는 것으로 반해결.             --> 제자리 점프일 때만 그래서 어색. => fixed duration을 줘서 반해결
@@ -67,7 +73,10 @@ public class PlayerScript : MonoBehaviour
         speedFloat = Animator.StringToHash("moveSpeed");
         jumpTrigger = Animator.StringToHash("jump");
         landingTrigger = Animator.StringToHash("landing");
+        
         gameChar = new GameCharacter();
+        IEhit = HitCo();
+        IEdeath = DeathCo();
     }
 
     /*private void GiveSkill()
@@ -128,7 +137,7 @@ public class PlayerScript : MonoBehaviour
 
     private void Move()
     {
-        if (!isMovable) return;
+        if (!isMovable || isDie) return;
 
         if(!isJumping)
         {
@@ -137,7 +146,7 @@ public class PlayerScript : MonoBehaviour
         }
 
         worldDir = transform.TransformDirection(moveDir);
-        Vector3 force = new Vector3(worldDir.x - rigid.velocity.x, -gravity, worldDir.z - rigid.velocity.z);
+        Vector3 force = new Vector3(worldDir.x - rigid.velocity.x, -pData.gravity, worldDir.z - rigid.velocity.z);
         rigid.AddForce(force, ForceMode.VelocityChange);
 
         ani.SetFloat(speedFloat,joystickCtrl.isTouch?(joystickCtrl.isRun?runSpeed:speed):0);
@@ -209,8 +218,9 @@ public class PlayerScript : MonoBehaviour
                 if (isDamageableByFall)
                 {
                     isDamageableByFall = false;
-                    //데미지 받기
+                    OnDamaged(fallDamage * (int)-rigidVelY / 20, Vector3.zero, 0);
                 }
+                rigidVelY = 0;
             }
         }
         else
@@ -220,6 +230,10 @@ public class PlayerScript : MonoBehaviour
             if (rigid.velocity.y < -pData.DamagedByFallNeedHeight)
             {
                 isDamageableByFall = true;
+                if(rigid.velocity.y<rigidVelY)
+                {
+                    rigidVelY = rigid.velocity.y;
+                }
             }
         }
     }
@@ -256,10 +270,73 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
+    private void CheckHp()
+    {
+        //HpUI 업데이트
+        if (hp <= 0) Death();
+    }
+
+    public void OnDamaged(int damage, Vector3 hitNormal, float force)
+    {
+        if (isDie || isInvincible) return;
+        
+        hp -= damage;
+        //rigid.AddForce(hitNormal * force, ForceMode.VelocityChange);
+        //rigid.velocity = hitNormal * force;
+        CheckHp();
+
+        ani.SetTrigger("hit" + Random.Range(1, 3).ToString());
+        StopCoroutine(IEhit);
+        StartCoroutine(IEhit);
+        //ani.SetInteger(hitInt, Random.Range(1, 3));
+    }
+
+    public void Death()
+    {
+        if (isDie) return;
+
+        hp = 0;
+        isDie = true;
+        ani.SetTrigger("death" + Random.Range(1, 3).ToString());
+        //ani.SetInteger(deathInt, Random.Range(1, 3));
+        GameManager.Instance.keyToVoidFunction[LoadingType.PLAYERDEATH]();
+
+        StopCoroutine(IEhit);
+        StartCoroutine(IEdeath);
+    }
+
+    public void RecoveryHp(int value)
+    {
+        hp += value;
+        CheckHp();
+        if (isDie)
+        {
+            isDie = false;
+            //부활처리
+        }
+    }
+
+    private IEnumerator HitCo()
+    {
+        isInvincible = true;
+        isMovable = false;
+
+        yield return hitWs;
+        isMovable = true;
+        yield return hitWs;
+        isInvincible = false;
+    }
+
+    private IEnumerator DeathCo()
+    {
+        yield return null;
+    }
+
     public void SetData(JoystickControl jc, Vector3 pos, Quaternion rot, Quaternion modelRot)  //플레이어 스폰되거나 교체될 때마다 실행
     {
         gameChar = GameManager.Instance.savedData.userInfo.currentChar;
 
+        isDie = gameChar.isDie;
         maxHp = gameChar.maxHp;
         hp = gameChar.hp;
         maxStamina = gameChar.maxStamina;
@@ -291,6 +368,7 @@ public class PlayerScript : MonoBehaviour
         gameChar.level = level;
         gameChar.stamina = stamina;
         gameChar.hp = hp;
+        gameChar.isDie = isDie;
 
         GameManager.Instance.savedData.userInfo.currentChar = gameChar;
     }

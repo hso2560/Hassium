@@ -42,6 +42,8 @@ public class UserInfo
 [Serializable]
 public class GameCharacter
 {
+    public bool isDie;
+
     public short id;
     public short level;
 
@@ -83,5 +85,6 @@ public class GameCharacter
 
         hp = maxHp;
         stamina = maxStamina;
+        isDie = false;
     }
 }

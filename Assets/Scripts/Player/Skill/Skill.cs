@@ -31,4 +31,9 @@ public abstract class Skill : MonoBehaviour
             isUsedSkill = true;
         }
     }
+
+    public virtual void Change()  //캐릭터가 바뀔 때
+    {
+          
+    }
 }

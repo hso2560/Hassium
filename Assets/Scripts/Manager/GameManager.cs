@@ -10,7 +10,8 @@ using UnityEngine.SceneManagement;
 
 public enum LoadingType
 {
-    RESPAWN
+    RESPAWN,
+    PLAYERDEATH
 }
 
 //generate lighting 할 때는 Sky를 Default Sky로 바꾸고 하자. (그 후에 다시 원래 쓰려던 Sky로 교체 ㄱ)
@@ -35,7 +36,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
     public bool GetReadyState { get { return isReady; } set { isReady = value; } }
 
     public Dictionary<short, PlayerScript> idToMyPlayer;
-    public List<PlayerScript> playerList;
+    public List<PlayerScript> playerList; 
 
     [HideInInspector] public CameraMove camMove;
 
@@ -58,6 +59,19 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
         keyToVoidFunction = new Dictionary<LoadingType, LoadingFunc>();
 
         keyToVoidFunction.Add(LoadingType.RESPAWN, () => player.transform.position = MapManager.Instance.mapCenterDict[saveData.userInfo.mapIndex].position);
+        keyToVoidFunction.Add(LoadingType.PLAYERDEATH, () =>
+        {
+            PlayerScript p = playerList.Find(p => !p.isDie);
+            if (p != null) ChangeCharacter(p.Id);
+            else
+            {
+                player.RecoveryHp(player.pData.defaultRespawnHp);
+                player.gameObject.SetActive(false);
+                LoadingFuncEvent += keyToVoidFunction[LoadingType.RESPAWN];
+                player.gameObject.SetActive(true);
+                UIManager.Instance.LoadingFade(false);
+            }
+        });
 
         camMove = sceneObjs.camMove;
 
@@ -84,7 +98,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
         saveData.objActiveInfo.SaveDictionary();
         if (sceneObjs.ScType == SceneType.MAIN)
         {
-            if (player.skill.isResetIfChangeChar) player.skill.OffSkill();
+            if (player.skill.isResetIfChangeChar) player.skill.OffSkill();  //이렇게 되면 사용자가 잠시동안 백그라운드 상태로 전환해도 스킬 꺼짐
             player.Save();
             saveData.userInfo.curCharResoName = saveData.userInfo.currentChar.charResoName;
 
@@ -161,6 +175,11 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
             case 11:
                 player.transform.position= new Vector3(-1, -6, 37);  //Test
                 break;
+
+            case 15:
+                AddCharacter("DefaultPlayer3");  //Test
+                ChangeCharacter(30);
+                break;
         }
 
         Save();
@@ -200,6 +219,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
     public void ChangeCharacter(short id)  //캐릭터 변경
     {
         if (id == player.Id || !IsExistCharac(id)) return;
+        if (idToMyPlayer[id].isDie) return;
 
         GameCharacter gc = GetCharData(id);   //??null 붙일 수도 있음
         if(gc==null) return;
@@ -236,6 +256,11 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
    
     private void ActiveCharacter(short idx)  //비활성화된 캐릭터를 활성화한다.
     {
+        if (player != null)
+        {
+            player.skill.Change();
+        }
+
         player = idToMyPlayer[idx].gameObject.GetComponent<PlayerScript>();
         player.parent.SetActive(true);
         player.SetData(sceneObjs.joystickCtrl, saveData.userInfo.currentPos, saveData.userInfo.currentRot, saveData.userInfo.curModelRot);
@@ -290,7 +315,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
         ActionFuncHandle();
     }
 
-    private void ActionFuncHandle()
+    public void ActionFuncHandle()
     {
         if (objActionHandle == null) return;
 
