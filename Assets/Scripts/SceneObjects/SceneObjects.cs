@@ -24,6 +24,7 @@ public class SceneObjects : MonoBehaviour  //해당 씬마다 필요한 오브젝트들을 모�
     public Button[] gameBtns;
     public Image[] gameImgs;
     public Ease[] gameEases;
+    public Color[] gameColors;
     public Canvas[] cvses;
     public InteractionBtn[] itrBtns;
 
@@ -40,6 +41,7 @@ public class SceneObjects : MonoBehaviour  //해당 씬마다 필요한 오브젝트들을 모�
     private void Awake()
     {
         Screen.SetResolution(scrWidth, scrHeight, true);  //안하면 해상도 깨짐
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
 
         GameManager.Instance.ManagerDataLoad(gameObject);
         UIManager.Instance.ManagerDataLoad(gameObject);

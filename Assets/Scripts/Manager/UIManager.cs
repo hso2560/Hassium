@@ -9,7 +9,8 @@ public enum UIType
     DIST_FROM_CAM,
     MASTER_SOUND,
     BGM_SIZE,
-    SOUND_EFFECT
+    SOUND_EFFECT,
+    HPFILL
 }
 
 public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
@@ -17,11 +18,13 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
     [HideInInspector] public List<Ease> gameEases;
     [HideInInspector] public Image LoadingImg;
     [HideInInspector] public Image crosshairImg;
+    [HideInInspector] public Image hpFillImg;
     //[HideInInspector] public Image infoPanel;
     [HideInInspector] public List<InteractionBtn> interactionBtns;
 
     public List<GameObject> beforeItrObjs = new List<GameObject>();
     public List<GameObject> stackUI = new List<GameObject>();
+    public List<Color> uiColors;
     public GameObject curMenuPanel;
 
     private Canvas mainCvs, touchCvs, infoCvs;
@@ -183,6 +186,20 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
         #endregion
     }
 
+    public void AdjustFillAmound(UIType t, float current=0, float max=0)
+    {
+        switch(t)
+        {
+            case UIType.HPFILL:
+                hpFillImg.fillAmount = current / max;
+
+                if (current < max / 6) hpFillImg.color = uiColors[1];
+                else hpFillImg.color = uiColors[0];
+
+                break;
+        }
+    }
+
     public void AdjustSlider(UIType t) 
     {
         switch (t)
@@ -245,6 +262,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
         if(this.sceneObjs.ScType==SceneType.MAIN)
         {
             crosshairImg = this.sceneObjs.gameImgs[1];
+            hpFillImg = this.sceneObjs.gameImgs[3];
             //infoPanel = this.sceneObjs.gameImgs[2];
 
             mainCvs = this.sceneObjs.cvses[0];
@@ -254,6 +272,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
             curMenuPanel = this.sceneObjs.ui[1];
 
             interactionBtns = new List<InteractionBtn>(this.sceneObjs.itrBtns);
+            uiColors = new List<Color>(this.sceneObjs.gameColors);
             menuBtn = this.sceneObjs.gameBtns[0];
 
             camMove = this.sceneObjs.camMove;

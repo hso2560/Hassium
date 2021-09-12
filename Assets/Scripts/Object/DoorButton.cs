@@ -24,17 +24,20 @@ public class DoorButton : ObjData
         switch (id)
         {
             case 10:
-                seq.Append(transform.DOScale(targetVector, time));
+                transform.DOScale(targetVector, time);
+
+                GameManager.Instance.savedData.saveObjDatas.Add(new SaveObjData(objIdx, SaveObjInfoType.TRANSFORM,
+                            transform.position, transform.rotation, targetVector));
                 break;
 
             default:
                 break;
         }
 
-        seq.AppendCallback(() =>
+       /* seq.AppendCallback(() =>
         {
             GameManager.Instance.savedData.saveObjDatas.Add(new SaveObjData(objIdx, SaveObjInfoType.TRANSFORM,
                 transform.position, transform.rotation, transform.localScale));
-        }).Play();
+        }).Play();*/
     }
 }

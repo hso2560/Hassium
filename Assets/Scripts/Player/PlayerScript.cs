@@ -272,7 +272,7 @@ public class PlayerScript : MonoBehaviour, IDamageable
 
     private void CheckHp()
     {
-        //HpUI 업데이트
+        UIManager.Instance.AdjustFillAmound(UIType.HPFILL, hp, maxHp);
         if (hp <= 0) Death();
     }
 
