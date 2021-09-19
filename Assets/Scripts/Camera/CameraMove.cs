@@ -3,6 +3,7 @@ using UnityEngine.EventSystems;
 
 public class CameraMove : MonoBehaviour
 {
+    [SerializeField] Vector3 defaultCamMinPos, defaultCamMaxPos;
     [HideInInspector] public Transform target;
     [HideInInspector] public Transform rotTarget;
     [HideInInspector] public PlayerScript player;
@@ -153,5 +154,11 @@ public class CameraMove : MonoBehaviour
         {
             rotTarget.rotation = Quaternion.Slerp(rotTarget.rotation, Quaternion.Euler(0, x, 0), Time.deltaTime * player.rotateSpeed);
         }
+    }
+
+    public void ResetRange()
+    {
+        camMinPos = defaultCamMinPos;
+        camMaxPos = defaultCamMaxPos;
     }
 }

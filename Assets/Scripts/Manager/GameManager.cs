@@ -98,9 +98,12 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
         saveData.objActiveInfo.SaveDictionary();
         if (sceneObjs.ScType == SceneType.MAIN)
         {
-            if (player.skill.isResetIfChangeChar) player.skill.OffSkill();  //이렇게 되면 사용자가 잠시동안 백그라운드 상태로 전환해도 스킬 꺼짐
-            player.Save();
-            saveData.userInfo.curCharResoName = saveData.userInfo.currentChar.charResoName;
+            if (player!=null)
+            {
+                if (player.skill.isResetIfChangeChar) player.skill.OffSkill();  //이렇게 되면 사용자가 잠시동안 백그라운드 상태로 전환해도 스킬 꺼짐
+                player.Save();
+            }
+            saveData.userInfo.curCharResoName = saveData.userInfo.currentChar.charResoName ?? "DefaultPlayer1";
 
             saveData.userInfo.currentPos = player.transform.position;
             saveData.userInfo.currentRot = player.transform.rotation;
@@ -169,7 +172,16 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
                 saveData.userInfo = new UserInfo();
                 break;
             case 2:
-                saveData.option = new Option();
+                LoadingFuncEvent += () =>
+                {
+                    player.transform.position = MapManager.Instance.mapCenterDict[0].position;
+                    saveData.option = new Option();
+                    camMove.ResetRange();
+                    saveData.userInfo.isFirstStart = false;
+                    player = null;
+                    //씬 이동
+                };
+                UIManager.Instance.LoadingFade(false);
                 break;
 
             case 11:

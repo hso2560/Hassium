@@ -359,6 +359,7 @@ public class PlayerScript : MonoBehaviour, IDamageable
         skill.SetData();
         joystickCtrl.skillBtn.image.sprite = skill.skillBtnImg;
         joystickCtrl.isHoldSkill = skill.isHoldSkill;
+        
     }
 
     public void Save()  //플레이어 능력치 정보 저장

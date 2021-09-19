@@ -72,7 +72,7 @@ public class RopeSkill : Skill
 
     private void Update()
     {
-        if(isMoving)
+        if(isMoving)  //Vector3.Lerp 써서 함 해보자
         {
             moveSpeed = Mathf.Clamp(moveSpeed, minMoveSpeed, maxMoveSpeed);
             Vector3 v = dirVec * moveSpeed;

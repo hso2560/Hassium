@@ -28,6 +28,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
     public GameObject curMenuPanel;
 
     private Canvas mainCvs, touchCvs, infoCvs;
+    private CanvasGroup hpFillCvsg;
     private Slider camSlider;
     private Button menuBtn;
 
@@ -191,9 +192,10 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
         switch(t)
         {
             case UIType.HPFILL:
-                hpFillImg.fillAmount = current / max;
+                hpFillImg.DOFillAmount(current / max, 0.3f);
 
-                if (current < max / 6) hpFillImg.color = uiColors[1];
+                if (current < max / 6) hpFillImg.color = uiColors[2];
+                else if (current < max / 2) hpFillImg.color = uiColors[1];
                 else hpFillImg.color = uiColors[0];
 
                 break;
@@ -263,6 +265,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
         {
             crosshairImg = this.sceneObjs.gameImgs[1];
             hpFillImg = this.sceneObjs.gameImgs[3];
+            hpFillCvsg = hpFillImg.GetComponent<CanvasGroup>();
             //infoPanel = this.sceneObjs.gameImgs[2];
 
             mainCvs = this.sceneObjs.cvses[0];
