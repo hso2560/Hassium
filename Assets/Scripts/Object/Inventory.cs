@@ -5,12 +5,23 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad
 {
     public bool GetReadyState { get { return isReady; } set { isReady = value; } }
 
-    public List<Item> items = new List<Item>();
-    public Dictionary<int, Item> idToItem = new Dictionary<int, Item>(); 
+    public List<ItemData> items;
+    public Dictionary<int, ItemData> idToItem = new Dictionary<int, ItemData>(); 
     private int maxItemSlotCnt = 28; // 4 * 7
 
-    public void GetItem(Item item)
+    private void Start()
     {
+        items = GameManager.Instance.savedData.userInfo.itemList;
+
+        for(int i=0; i<items.Count; i++)
+        {
+            idToItem.Add(items[0].id, items[i]);
+        }
+    }
+
+    public void GetItem(Item itemObj)
+    {
+        ItemData item = itemObj.itemData;
         if(!idToItem.ContainsKey(item.id))
         {
             if(items.Count==maxItemSlotCnt)
@@ -27,11 +38,11 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad
         }
         else
         {
-            idToItem[item.id].count += item.droppedCount;
+            idToItem[item.id].count += itemObj.droppedCount;
             //인벤토리 뷰 업데이트
         }
 
-        item.gameObject.SetActive(false);
+        itemObj.gameObject.SetActive(false);
     }
 
     public void ManagerDataLoad(GameObject sceneObjs)

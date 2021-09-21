@@ -98,6 +98,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
     public void SaveData()  //데이터를 저장
     {
         saveData.objActiveInfo.SaveDictionary();
+        saveData.npcInfo.SaveDictionary();
         if (sceneObjs.ScType == SceneType.MAIN)
         {
             if (player != null)
@@ -152,6 +153,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
     public void SetData()  //불러온 데이터로 세팅하기
     {
         saveData.objActiveInfo.SetDictionary();
+        saveData.npcInfo.SetDictionary();
 
         if(saveData.userInfo.isFirstStart)
         {

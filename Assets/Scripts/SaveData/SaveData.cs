@@ -9,6 +9,7 @@ public class SaveData
     public UserInfo userInfo = new UserInfo();
     public SaveClass1<int, bool> objActiveInfo = new SaveClass1<int, bool>();
     public List<SaveObjData> saveObjDatas = new List<SaveObjData>();
+    public SaveClass1<short, NPCInfo> npcInfo = new SaveClass1<short, NPCInfo>();
 }
 
 [Serializable]
@@ -28,6 +29,7 @@ public class UserInfo
     public long money;
     public short mapIndex = 0;
 
+    public List<ItemData> itemList = new List<ItemData>();
     public List<GameCharacter> characters = new List<GameCharacter>();
     public GameCharacter currentChar = new GameCharacter();
 

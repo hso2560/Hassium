@@ -46,7 +46,7 @@ public class PlayerScript : MonoBehaviour, IDamageable
     public Transform center;  //플레이어 오브젝트에서의 중심 부분
     public Transform playerModel;  //플레이어의 실제 형태(모델)가 있는 오브젝트
     public Transform footCenter, footCenter2;  //하나로 하려했더니 여러 문제가 생겨서 갑작스럽게 2를 추가함
-    public LayerMask whatIsGround, whatIsObj;
+    //public LayerMask whatIsGround, whatIsObj;
     public GameObject parent;
     private int speedFloat;  //움직임 애니메이션 처리할 애니메이션 이름의 아이디
     private int jumpTrigger, landingTrigger;
@@ -54,12 +54,13 @@ public class PlayerScript : MonoBehaviour, IDamageable
     private float checkTime;  //너무 빨리 CheckObj함수 호출하는 것을 방지해줌
     private bool isDamageableByFall;  //높은 곳에서 떨어져서 데미지를 받을 수 있는 상태인지
     private bool isInvincible = false;  //무적상태인가
+    public bool IsInvincible { get { return isInvincible; } set { isInvincible = value; } }
     private bool isStart; //한 번이라도 시작했나
 
     public GameCharacter gameChar;
     [HideInInspector] public bool isMovable = true;  //움직일 수 없는 상태  (중력도 사라짐)
     private bool noControl = false; //제어할 수 없는 상태 (중력은 적용 됨)
-    public bool NoControl { get { return noControl; } }
+    public bool NoControl { get { return noControl; } set { noControl = value; } }
 
     private IEnumerator IEhit, IEdeath;
     private WaitForSeconds hitWs = new WaitForSeconds(.3f);
@@ -219,8 +220,8 @@ public class PlayerScript : MonoBehaviour, IDamageable
     {
         //Debug.DrawRay(footCenter.position, Vector3.down * groundRayDist, Color.blue);
         //Debug.DrawRay(footCenter2.position, Vector3.down * groundRayDist, Color.blue);
-        if(Physics.Raycast(footCenter.position, Vector3.down, pData.groundRayDist, whatIsGround) 
-            || Physics.Raycast(footCenter2.position, Vector3.down, pData.groundRayDist, whatIsGround))  //점프 애니메이션에서 위치까지 강제 이동돼서 코드도 이상해지고 점프 모션도 좀 어색함
+        if(Physics.Raycast(footCenter.position, Vector3.down, pData.groundRayDist,pData.whatIsGround) 
+            || Physics.Raycast(footCenter2.position, Vector3.down, pData.groundRayDist,pData.whatIsGround))  //점프 애니메이션에서 위치까지 강제 이동돼서 코드도 이상해지고 점프 모션도 좀 어색함
         {
             if (isJumping)
             {
@@ -260,7 +261,7 @@ public class PlayerScript : MonoBehaviour, IDamageable
         if (checkTime < Time.time) checkTime = Time.time + 0.5f;
         else return;
 
-        Collider[] cols = Physics.OverlapSphere(center.position, pData.interactionRadius, whatIsObj);
+        Collider[] cols = Physics.OverlapSphere(center.position, pData.interactionRadius, pData.whatIsObj);
         if(cols.Length>0)
         {
             for(int i=0; i<cols.Length; i++)

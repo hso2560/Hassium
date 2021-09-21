@@ -7759,12 +7759,6 @@ MonoBehaviour:
   playerModel: {fileID: 1097246956311335399}
   footCenter: {fileID: 3354527575778937847}
   footCenter2: {fileID: 4738218780379453327}
-  whatIsGround:
-    serializedVersion: 2
-    m_Bits: 896
-  whatIsObj:
-    serializedVersion: 2
-    m_Bits: 2304
   parent: {fileID: 2487118331048796514}
   gameChar:
     isDie: 0
@@ -7818,7 +7812,7 @@ MonoBehaviour:
   massScale: 4.5
   minMoveSpeed: 2
   maxMoveSpeed: 8
-  acceleration: 10
+  acceleration: 2.5
   gravity: 0.01
   dist: 1
 --- !u!1 &2487118331048796514

@@ -17,3 +17,9 @@ MonoBehaviour:
   interactionRadius: 1.8
   DamagedByFallNeedHeight: 17.5
   defaultRespawnHp: 350
+  whatIsGround:
+    serializedVersion: 2
+    m_Bits: 896
+  whatIsObj:
+    serializedVersion: 2
+    m_Bits: 6400

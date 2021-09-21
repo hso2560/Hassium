@@ -9,6 +9,14 @@ public enum SaveObjInfoType
     ACTIVE
 }
 
+public enum NPCType
+{
+    INFORMATION, //일방적으로 정보만 준다
+    ONLYTALK,  //대화만 가능
+    CANNOTFIGHT,  //싸울 수 없음(일방적으로 맞을 수는 있음)
+    CANFIGHT //싸울 수 있다
+}
+
 [Serializable]
 public class SaveClass1<K,V>  //만약 딕셔너리 클래스 여러개 저장할 시 인터페이스 활용해서 하는 것도 좋을듯
 {
@@ -111,6 +119,20 @@ public class SaveObjData
                 break;
         }
     }
+}
+
+[Serializable]
+public class NPCInfo
+{
+    public short id;   //키값
+    public string name; 
+
+    public short talkId = 0;  //무슨 대화를 할 차례인지 저장한다
+    public List<StringListClass> talkList = new List<StringListClass>();
+
+    public NPCType npcType;
+    public bool dead = false;
+    public bool isFighting = false;
 }
 
 [Serializable]
