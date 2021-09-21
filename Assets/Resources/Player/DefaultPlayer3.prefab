@@ -7743,7 +7743,7 @@ MonoBehaviour:
   needStaminaMin: 6
   staminaRecoverySpeed: 6.5
   id: 30
-  charName: "\uC815\uCCB4\uBD88\uBA85"
+  charName: "\uC5D0\uB514\uC2A4"
   level: 1
   str: 25
   def: 17
@@ -7816,11 +7816,11 @@ MonoBehaviour:
   spring: 6.5
   damper: 7
   massScale: 4.5
-  minMoveSpeed: 10
-  maxMoveSpeed: 33
+  minMoveSpeed: 2
+  maxMoveSpeed: 8
   acceleration: 10
   gravity: 0.01
-  dist: 2.8
+  dist: 1
 --- !u!1 &2487118331048796514
 GameObject:
   m_ObjectHideFlags: 0

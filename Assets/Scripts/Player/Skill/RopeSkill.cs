@@ -75,9 +75,15 @@ public class RopeSkill : Skill
         if(isMoving)  //Vector3.Lerp 써서 함 해보자
         {
             moveSpeed = Mathf.Clamp(moveSpeed, minMoveSpeed, maxMoveSpeed);
-            Vector3 v = dirVec * moveSpeed;
+
+            //rigid이동  minSpeed 10  maxSpeed 33 dist 2.8
+            /*Vector3 v = dirVec * moveSpeed;
             Vector3 force = new Vector3(v.x, v.y - gravity , v.z);
             player.rigid.AddForce(force, ForceMode.Impulse);
+            player.playerModel.position = transform.position;*/
+
+            //lerp이동  minSpeed 2  maxSpeed 8 dist 1
+            transform.position = Vector3.Lerp(transform.position, grapplePoint, moveSpeed * Time.deltaTime);
             player.playerModel.position = transform.position;
 
             moveSpeed += acceleration * Time.deltaTime;

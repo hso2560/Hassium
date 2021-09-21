@@ -24,7 +24,7 @@ public class Option
 public class UserInfo
 {
     public bool isFirstStart = true;
-    public string curCharResoName="DefaultPlayer1";
+    //public string curCharResoName="DefaultPlayer1";
     public long money;
     public short mapIndex = 0;
 

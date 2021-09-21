@@ -53,13 +53,16 @@ public class PlayerScript : MonoBehaviour, IDamageable
 
     private float checkTime;  //너무 빨리 CheckObj함수 호출하는 것을 방지해줌
     private bool isDamageableByFall;  //높은 곳에서 떨어져서 데미지를 받을 수 있는 상태인지
-    private bool isInvincible = false;
+    private bool isInvincible = false;  //무적상태인가
+    private bool isStart; //한 번이라도 시작했나
 
     public GameCharacter gameChar;
-    [HideInInspector] public bool isMovable = true;
+    [HideInInspector] public bool isMovable = true;  //움직일 수 없는 상태  (중력도 사라짐)
+    private bool noControl = false; //제어할 수 없는 상태 (중력은 적용 됨)
+    public bool NoControl { get { return noControl; } }
 
     private IEnumerator IEhit, IEdeath;
-    private WaitForSeconds hitWs = new WaitForSeconds(.25f);
+    private WaitForSeconds hitWs = new WaitForSeconds(.3f);
                                             
     private void Start() //문제점(2): 점프 애니메이션이 위치까지 가져와지면서 움직임이 어색함. 착지 애니메이션 때문에 점프하다가 가끔씩 맛나가고 점프가 짧게 실행되고 끊김.
     {                               // --> 땅 체크 레이가 발에서 나가는 것으로 반해결.             --> 제자리 점프일 때만 그래서 어색. => fixed duration을 줘서 반해결
@@ -75,8 +78,10 @@ public class PlayerScript : MonoBehaviour, IDamageable
         landingTrigger = Animator.StringToHash("landing");
         
         gameChar = new GameCharacter();
-        IEhit = HitCo();
-        IEdeath = DeathCo();
+        //IEhit = HitCo();
+        //IEdeath = DeathCo();
+        CheckHp();
+        isStart = true;
     }
 
     /*private void GiveSkill()
@@ -145,6 +150,12 @@ public class PlayerScript : MonoBehaviour, IDamageable
             moveDir.z = joystickCtrl.isTouch ? (joystickCtrl.dirVec.y * (joystickCtrl.isRun ? runSpeed : speed)) : 0;
         }
 
+        if (noControl)
+        {
+            moveDir.x = 0;
+            moveDir.z = 0;
+        }
+
         worldDir = transform.TransformDirection(moveDir);
         Vector3 force = new Vector3(worldDir.x - rigid.velocity.x, -pData.gravity, worldDir.z - rigid.velocity.z);
         rigid.AddForce(force, ForceMode.VelocityChange);
@@ -156,7 +167,7 @@ public class PlayerScript : MonoBehaviour, IDamageable
     }
     private void Rotate()
     {
-        if (!joystickCtrl.isTouch || isJumping || !isMovable) return;
+        if (!joystickCtrl.isTouch || isJumping || !isMovable || noControl) return;
 
         float angle = Mathf.Atan2(worldDir.x, worldDir.z) * Mathf.Rad2Deg;
 
@@ -195,7 +206,7 @@ public class PlayerScript : MonoBehaviour, IDamageable
 
     public void Jump()
     {
-        if(!isJumping && isMovable)
+        if(!isJumping && isMovable && !noControl)
         {
             ani.SetTrigger(jumpTrigger);
             rigid.velocity = Vector3.up * jumpPower;
@@ -286,8 +297,12 @@ public class PlayerScript : MonoBehaviour, IDamageable
         CheckHp();
 
         ani.SetTrigger("hit" + Random.Range(1, 3).ToString());
-        StopCoroutine(IEhit);
-        StartCoroutine(IEhit);
+        //StopCoroutine(IEhit);
+        if (IEhit == null)
+        {
+            IEhit = HitCo();
+            StartCoroutine(IEhit);
+        }
         //ani.SetInteger(hitInt, Random.Range(1, 3));
     }
 
@@ -295,14 +310,12 @@ public class PlayerScript : MonoBehaviour, IDamageable
     {
         if (isDie) return;
 
-        hp = 0;
-        isDie = true;
-        ani.SetTrigger("death" + Random.Range(1, 3).ToString());
-        //ani.SetInteger(deathInt, Random.Range(1, 3));
-        GameManager.Instance.keyToVoidFunction[LoadingType.PLAYERDEATH]();
-
-        StopCoroutine(IEhit);
-        StartCoroutine(IEdeath);
+        //StopCoroutine(IEhit);
+        if (IEdeath == null)
+        {
+            IEdeath = DeathCo();
+            StartCoroutine(IEdeath);
+        }
     }
 
     public void RecoveryHp(int value)
@@ -319,17 +332,36 @@ public class PlayerScript : MonoBehaviour, IDamageable
     private IEnumerator HitCo()
     {
         isInvincible = true;
-        isMovable = false;
+        noControl = true;
 
         yield return hitWs;
-        isMovable = true;
+        noControl = false;
         yield return hitWs;
         isInvincible = false;
+
+        IEhit = null;
     }
 
     private IEnumerator DeathCo()
     {
-        yield return null;
+        yield return hitWs;
+
+        hp = 0;
+        isDie = true;
+        isInvincible = false;
+        noControl = true;
+        ani.SetTrigger("death" + Random.Range(1, 3).ToString());
+        //ani.SetInteger(deathInt, Random.Range(1, 3));
+
+        System.Action handler = null; 
+        handler = () =>
+        {
+            IEdeath = null;
+            noControl = false;
+            GameManager.Instance.DeathEvent -= handler;
+        };
+        GameManager.Instance.DeathEvent += handler;
+        GameManager.Instance.keyToVoidFunction[LoadingType.PLAYERDEATH]();
     }
 
     public void SetData(JoystickControl jc, Vector3 pos, Quaternion rot, Quaternion modelRot)  //플레이어 스폰되거나 교체될 때마다 실행
@@ -359,12 +391,14 @@ public class PlayerScript : MonoBehaviour, IDamageable
         skill.SetData();
         joystickCtrl.skillBtn.image.sprite = skill.skillBtnImg;
         joystickCtrl.isHoldSkill = skill.isHoldSkill;
-        
+
+        if (isStart) CheckHp();
     }
 
     public void Save()  //플레이어 능력치 정보 저장
     {
-        gameChar = new GameCharacter(id, str, def, maxHp, maxStamina, runSpeed, jumpPower, staminaRecoverySpeed, charName, resoName);
+        gameChar = new GameCharacter(id, str, def, maxHp, maxStamina, runSpeed, jumpPower, staminaRecoverySpeed, charName, resoName);  //str~staminaRecoverySpeed까진 강화로 증가할 경우엔 gameChar.으로 접근해서 하고 플레이어값에도 대입한다.
+        //이 안에서 값을 쓸 때는 str, def로 쓰지만 값을 저장하고 받을 땐 gameChar로 접근. 버프 아이템 쓸 경우를 위해서 이렇게  ---> 이렇게 하려 했음
         gameChar.exp = exp;
         gameChar.level = level;
         gameChar.stamina = stamina;

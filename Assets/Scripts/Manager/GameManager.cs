@@ -29,6 +29,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
     public Dictionary<LoadingType, LoadingFunc> keyToVoidFunction;
     //public Dictionary<int, Action> idToAction;
     public event Action objActionHandle;
+    public event Action DeathEvent;
 
     private PlayerScript player;
     public PlayerScript PlayerSc { get { return player; } }
@@ -62,15 +63,16 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
         keyToVoidFunction.Add(LoadingType.PLAYERDEATH, () =>
         {
             PlayerScript p = playerList.Find(p => !p.isDie);
-            if (p != null) ChangeCharacter(p.Id);
+            if (p != null) ChangeCharacter(p.Id, true);
             else
             {
                 player.RecoveryHp(player.pData.defaultRespawnHp);
-                player.gameObject.SetActive(false);
+                LoadingFuncEvent+=()=> player.transform.parent.gameObject.SetActive(false);
                 LoadingFuncEvent += keyToVoidFunction[LoadingType.RESPAWN];
-                player.gameObject.SetActive(true);
+                LoadingFuncEvent+=()=>player.transform.parent.gameObject.SetActive(true);
                 UIManager.Instance.LoadingFade(false);
             }
+            DeathEvent?.Invoke();
         });
 
         camMove = sceneObjs.camMove;
@@ -98,16 +100,17 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
         saveData.objActiveInfo.SaveDictionary();
         if (sceneObjs.ScType == SceneType.MAIN)
         {
-            if (player!=null)
+            if (player != null)
             {
                 if (player.skill.isResetIfChangeChar) player.skill.OffSkill();  //이렇게 되면 사용자가 잠시동안 백그라운드 상태로 전환해도 스킬 꺼짐
                 player.Save();
-            }
-            saveData.userInfo.curCharResoName = saveData.userInfo.currentChar.charResoName ?? "DefaultPlayer1";
 
-            saveData.userInfo.currentPos = player.transform.position;
-            saveData.userInfo.currentRot = player.transform.rotation;
-            saveData.userInfo.curModelRot = player.playerModel.rotation;
+                //saveData.userInfo.curCharResoName = saveData.userInfo.currentChar.charResoName ?? "DefaultPlayer1";
+
+                saveData.userInfo.currentPos = player.transform.position;
+                saveData.userInfo.currentRot = player.transform.rotation;
+                saveData.userInfo.curModelRot = player.playerModel.rotation;
+            }
 
             for (int i = 0; i < saveData.userInfo.characters.Count; i++)
             {
@@ -152,11 +155,19 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
 
         if(saveData.userInfo.isFirstStart)
         {
-            PlayerScript ps = Resources.Load<GameObject>("Player/" + saveData.userInfo.curCharResoName).transform.GetChild(1).GetComponent<PlayerScript>();
+            PlayerScript ps = Resources.Load<GameObject>("Player/DefaultPlayer1").transform.GetChild(1).GetComponent<PlayerScript>();
             ps.AddInfo();
             saveData.userInfo.currentChar = saveData.userInfo.characters[0];
 
             saveData.userInfo.isFirstStart = false;
+        }
+        else
+        {
+            if (saveData.userInfo.currentChar.isDie)
+            {
+                saveData.userInfo.currentChar.isDie = false;
+                saveData.userInfo.currentChar.hp = 100;
+            }
         }
     }
 
@@ -175,9 +186,9 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
                 LoadingFuncEvent += () =>
                 {
                     player.transform.position = MapManager.Instance.mapCenterDict[0].position;
-                    saveData.option = new Option();
+                    saveData = new SaveData();
                     camMove.ResetRange();
-                    saveData.userInfo.isFirstStart = false;
+                    //saveData.userInfo.isFirstStart = false;
                     player = null;
                     //씬 이동
                 };
@@ -228,10 +239,10 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
         _ps.parent.SetActive(false);
     }
 
-    public void ChangeCharacter(short id)  //캐릭터 변경
+    public void ChangeCharacter(short id, bool respawn=false)  //캐릭터 변경
     {
         if (id == player.Id || !IsExistCharac(id)) return;
-        if (idToMyPlayer[id].isDie) return;
+        if (!respawn && (idToMyPlayer[id].isDie || !player.isMovable || player.NoControl) ) return;
 
         GameCharacter gc = GetCharData(id);   //??null 붙일 수도 있음
         if(gc==null) return;
@@ -239,7 +250,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
         Save();
 
         saveData.userInfo.currentChar = gc;
-        saveData.userInfo.curCharResoName = gc.charResoName;
+        //saveData.userInfo.curCharResoName = gc.charResoName;
 
         GameObject go = player.parent;
         objActionHandle += () => go.SetActive(false);
@@ -320,8 +331,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
 
     public void SetPlayer()
     {
-        camMove.target = player.center;
-        camMove.rotTarget = player.transform;
+        camMove.Setting(player.center, player.transform);
         camMove.player = player;
 
         ActionFuncHandle();

@@ -161,4 +161,10 @@ public class CameraMove : MonoBehaviour
         camMinPos = defaultCamMinPos;
         camMaxPos = defaultCamMaxPos;
     }
+
+    public void Setting(Transform target, Transform rotTarget)
+    {
+        this.target = target;
+        this.rotTarget = rotTarget;
+    }
 }
