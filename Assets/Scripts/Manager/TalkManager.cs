@@ -14,7 +14,7 @@ public class TalkManager : MonoSingleton<TalkManager>, ISceneDataLoad
 
     [SerializeField] private CanvasGroup mainCvsg, infoCvsg;
     [SerializeField] private Button screenTouchPanel;
-    public GameObject interBtnsPanel;
+    public GameObject interBtnsPanel, talkEndMark;
 
     private int index, talkCount;
     public float talkTextTime = 0.1f;  //한 글자당 나오는 시간
@@ -40,7 +40,7 @@ public class TalkManager : MonoSingleton<TalkManager>, ISceneDataLoad
     {
         GameManager.Instance.PlayerSc.NoControl = talk;
         GameManager.Instance.PlayerSc.IsInvincible = talk;
-        interBtnsPanel.SetActive(!talk);
+        //interBtnsPanel.SetActive(!talk);
     }
 
     public void StartTalk(NPCInfo info)
@@ -49,6 +49,7 @@ public class TalkManager : MonoSingleton<TalkManager>, ISceneDataLoad
         seq = DOTween.Sequence();
         talkText.text = "";
         SetPlayerState(true);
+        interBtnsPanel.SetActive(false);
 
         {
             CvsgFade(mainCvsg, 0, 0.6f);
@@ -62,7 +63,7 @@ public class TalkManager : MonoSingleton<TalkManager>, ISceneDataLoad
         {
             string s = info.talkList[info.talkId].stringList[0];
             seq.Append(talkText.DOText(s, s.Length * talkTextTime));
-            seq.AppendCallback(() => isTalking = false).Play();
+            seq.AppendCallback(() => { isTalking = false; talkEndMark.SetActive(true); }).Play();
         }
         screenTouchPanel.gameObject.SetActive(true);
         talkCount = info.talkList[info.talkId].stringList.Count;
@@ -83,11 +84,13 @@ public class TalkManager : MonoSingleton<TalkManager>, ISceneDataLoad
             isTalking = false;
             seq.Kill();
             talkText.DOKill();
-            talkText.text = currentNpc.talkList[currentNpc.id].stringList[index];
+            talkText.text = currentNpc.talkList[currentNpc.talkId].stringList[index];
+            talkEndMark.SetActive(true);
         }
         else
         {
             index++;
+            talkEndMark.SetActive(false);
 
             if (index == talkCount)
             {
@@ -98,18 +101,24 @@ public class TalkManager : MonoSingleton<TalkManager>, ISceneDataLoad
                 CvsgFade(infoCvsg, 1, 0.5f);
                 Invoke("OffTalkPanel", 0.6f);
                 SetPlayerState(false);
+                talkEndMark.SetActive(false);
 
                 return;
             }
 
+            seq = DOTween.Sequence();
             talkText.text = "";
             string s = currentNpc.talkList[currentNpc.talkId].stringList[index];
             isTalking = true;
-            seq.Append(talkText.DOText(s,s.Length*talkTextTime)).AppendCallback(()=>isTalking=false).Play();
+            seq.Append(talkText.DOText(s,s.Length*talkTextTime)).AppendCallback(()=> { isTalking = false; talkEndMark.SetActive(true); }).Play();
         }
     }
 
-    private void OffTalkPanel() => talkPanelAni.gameObject.SetActive(false);
+    private void OffTalkPanel()
+    {
+        talkPanelAni.gameObject.SetActive(false);
+        interBtnsPanel.SetActive(true);
+    }
 
     public void ManagerDataLoad(GameObject sceneObjs)
     {

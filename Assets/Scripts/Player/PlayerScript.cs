@@ -221,7 +221,7 @@ public class PlayerScript : MonoBehaviour, IDamageable
         //Debug.DrawRay(footCenter.position, Vector3.down * groundRayDist, Color.blue);
         //Debug.DrawRay(footCenter2.position, Vector3.down * groundRayDist, Color.blue);
         if(Physics.Raycast(footCenter.position, Vector3.down, pData.groundRayDist,pData.whatIsGround) 
-            || Physics.Raycast(footCenter2.position, Vector3.down, pData.groundRayDist,pData.whatIsGround))  //점프 애니메이션에서 위치까지 강제 이동돼서 코드도 이상해지고 점프 모션도 좀 어색함
+            || Physics.Raycast(footCenter2.position, Vector3.down, pData.groundRayDist,pData.whatIsGround))  //점프 애니메이션에서 위치까지 강제 이동돼서 코드도 이상해지고 점프 모션도 좀 어색함 (임포트한 에셋의 점프가 위치까지 가져와서 매우 귀찮아짐)
         {
             if (isJumping)
             {

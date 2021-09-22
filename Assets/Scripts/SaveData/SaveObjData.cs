@@ -18,7 +18,7 @@ public enum NPCType
 }
 
 [Serializable]
-public class SaveClass1<K,V>  //만약 딕셔너리 클래스 여러개 저장할 시 인터페이스 활용해서 하는 것도 좋을듯
+public class SaveClass1<K,V>  //만약 딕셔너리 클래스 여러개 저장할 시 인터페이스 활용해서 하는 것도 좋을듯 (클래스 이름 잘못지었지만 걍 이렇게 간다)
 {
     public V this[K k]
     {
@@ -46,7 +46,7 @@ public class SaveClass1<K,V>  //만약 딕셔너리 클래스 여러개 저장할 시 인터페이스
     public List<K> objActiveKeys = new List<K>();
     public List<V> objActiveValues = new List<V>();
 
-    public void SetDictionary()
+    public void SetDictionary()  //로드
     {
         objActiveDic.Clear();
 
@@ -56,7 +56,7 @@ public class SaveClass1<K,V>  //만약 딕셔너리 클래스 여러개 저장할 시 인터페이스
         }
     }
 
-    public void SaveDictionary()
+    public void SaveDictionary()  //세이브
     {
         objActiveKeys.Clear();
         objActiveValues.Clear();

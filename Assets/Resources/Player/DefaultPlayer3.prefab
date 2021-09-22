@@ -7735,7 +7735,7 @@ MonoBehaviour:
   speed: 3.8
   runSpeed: 10
   jumpPower: 12.5
-  maxHp: 1100
+  maxHp: 1050
   maxStamina: 70
   staminaDownSpeed: 7
   staminaDecJAR: 10
@@ -7745,8 +7745,8 @@ MonoBehaviour:
   id: 30
   charName: "\uC5D0\uB514\uC2A4"
   level: 1
-  str: 25
-  def: 17
+  str: 20
+  def: 15
   exp: 0
   resoName: DefaultPlayer3
   hp: 0

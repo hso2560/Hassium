@@ -322,6 +322,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //°× ½ÃÀÛ
 
             idToMyPlayer.Add(ps.Id, ps);
             playerList.Add(ps);
+            ps.isDie = saveData.userInfo.characters[i].isDie;
             ps.parent.SetActive(false);
         }
 

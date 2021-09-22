@@ -20340,7 +20340,7 @@ MonoBehaviour:
   id: 10
   charName: "\uC81C\uC774\uC2A8"
   level: 1
-  str: 20
+  str: 25
   def: 20
   exp: 0
   resoName: DefaultPlayer1
@@ -20354,12 +20354,6 @@ MonoBehaviour:
   playerModel: {fileID: 5357712060568717319}
   footCenter: {fileID: 1297948982489868141}
   footCenter2: {fileID: 5876325675536642872}
-  whatIsGround:
-    serializedVersion: 2
-    m_Bits: 896
-  whatIsObj:
-    serializedVersion: 2
-    m_Bits: 2304
   parent: {fileID: 6344671277620335180}
   gameChar:
     isDie: 0

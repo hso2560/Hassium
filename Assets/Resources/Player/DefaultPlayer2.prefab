@@ -8497,8 +8497,8 @@ MonoBehaviour:
   speed: 3.8
   runSpeed: 10
   jumpPower: 12.5
-  maxHp: 900
-  maxStamina: 75
+  maxHp: 910
+  maxStamina: 76
   staminaDownSpeed: 7
   staminaDecJAR: 10
   rotateSpeed: 10
@@ -8507,8 +8507,8 @@ MonoBehaviour:
   id: 20
   charName: "\uC874"
   level: 1
-  str: 18
-  def: 24
+  str: 20
+  def: 30
   exp: 0
   resoName: DefaultPlayer2
   hp: 0
@@ -8521,12 +8521,6 @@ MonoBehaviour:
   playerModel: {fileID: 7039892981742319516}
   footCenter: {fileID: 2995869088097497494}
   footCenter2: {fileID: 6511190301307379649}
-  whatIsGround:
-    serializedVersion: 2
-    m_Bits: 896
-  whatIsObj:
-    serializedVersion: 2
-    m_Bits: 2304
   parent: {fileID: 2646664783761339466}
   gameChar:
     isDie: 0
