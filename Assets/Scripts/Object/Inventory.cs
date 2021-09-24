@@ -23,10 +23,19 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad
     private RectTransform btnSelectPanelPos;
     private float slotHalfWidth;
 
+    [SerializeField] private InfoPanelData dumpPanelInfo;
+
     private void Awake()
     {
         btnSelectPanelPos = btnSelectPanel.GetComponent<RectTransform>();
         slotHalfWidth = itemSlots[0].GetComponent<RectTransform>().rect.width * 0.5f;
+        throwBtn.onClick.AddListener(() => 
+        {
+            dumpPanelInfo.objImage.sprite = clickedSlot.Item_Data.sprite;
+            dumpPanelInfo.mainInput.text = "1";
+            dumpPanelInfo.explain.text = $"<b>[{clickedSlot.Item_Data.name}]</b> 몇 개 버리시겠습니까?\n(보유 개수를 초과해서 입력할 경우, 자동으로 보유개수로 입력됩니다.)";
+            UIManager.Instance.OnClickUIButton(7);
+        });
     }
 
     private void Start()
@@ -161,7 +170,27 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad
         {
             Vector3 pos = clickedSlot.GetComponent<RectTransform>().position;
             btnSelectPanelPos.position = new Vector3(pos.x+slotHalfWidth,pos.y) + (new Vector3(btnSelectPanelPos.rect.width, btnSelectPanelPos.rect.height) * 0.5f);
+            useBtn.gameObject.SetActive(clickedSlot.Item_Data.itemType != ItemType.ETC); 
         }
+    }
+
+    public void DumpItem()
+    {
+        ItemData idt = idToItem[clickedSlot.Item_Data.id];
+        idt.count -= Mathf.Clamp(int.Parse(dumpPanelInfo.mainInput.text), 0, idt.count);
+
+        if (idt.count == 0)
+        {
+            items.Remove(clickedSlot.Item_Data);
+            idToItem.Remove(clickedSlot.Item_Data.id);
+            clickedSlot.ResetData();
+        }
+        else
+        {
+            clickedSlot.itemCountText.text = idt.count.ToString();
+        }
+        ClickSetting(false);
+        UIManager.Instance.OnClickUIButton(7);
     }
 
     public void ManagerDataLoad(GameObject sceneObjs)
@@ -170,8 +199,6 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad
         if (managers.Length > 1) Destroy(gameObject);
 
         this.sceneObjs = sceneObjs.GetComponent<SceneObjects>();
-
-
 
         isReady = true;
     }

@@ -41,4 +41,6 @@ public class InfoPanelData
     public Text explain;
     public Image objImage;
     public Text countText;
+    public Button mainBtn;
+    public InputField mainInput;
 }

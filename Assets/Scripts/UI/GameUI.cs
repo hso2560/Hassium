@@ -56,6 +56,12 @@ public class GameUI : MonoBehaviour
             case 20:  //스태미나 바
                 UIAnimation(targetVec, () => { }, time1);
                 break;
+            case 30:
+                UIAnimation(targetVec, () => { }, time1);
+                break;
+
+            default:
+                break;
         }
     }
 
@@ -81,6 +87,9 @@ public class GameUI : MonoBehaviour
             case 20:
                 UIAnimation(prs.rotation.eulerAngles, () => { gameObject.SetActive(false); }, time1);
                 break;
+            case 30:
+                UIAnimation(prs.scale, () => { gameObject.SetActive(false); }, time1);
+                break;
         }
     }
 
@@ -101,6 +110,10 @@ public class GameUI : MonoBehaviour
             case 20:
                 seq.Append ( transform.DORotate(vValue, fValues[0]) )
                     .AppendCallback(tc).Play();
+                break;
+            case 30:
+                seq.Append(transform.DOScale(vValue, fValues[0]))
+                    .AppendCallback(tc).SetUpdate(true).Play();  //.Play() 안 붙여도 실행은 되더라 (일단 명시적으로 붙여야겠다)  메뉴 안에서는 Time.timeScale이 0이라서 실행안되는거 있으므로 그거 고쳐 
                 break;
         }
     }

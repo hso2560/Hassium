@@ -214,7 +214,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
 
     public void OnClickUIButton(int num)
     {
-        if (num < 0 || uiChangeQueue.Count!=0) return;
+        if (num < 0 || (uiChangeQueue.Count!=0 && num!=6)) return;
 
         GameObject o = sceneObjs.ui[num];
         GameUI gu = o.GetComponent<GameUI>();
@@ -323,7 +323,19 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
             {
                 OnClickUIButton(sceneObjs.ui.IndexOf(stackUI[stackUI.Count - 1]));
             }
+            else
+            {
+                
+            }
         }
+    }
+
+    public void OnSystemPanel(string msg, int fontSize=69)
+    {
+        OnClickUIButton(6);
+        Text t = sceneObjs.ui[6].transform.GetChild(0).GetComponent<Text>();
+        t.text = msg;
+        t.fontSize = fontSize;
     }
 
     public void SaveData()
