@@ -36,6 +36,9 @@ public class JoystickControl : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     [HideInInspector] public bool isAimState;
     [HideInInspector] public GameObject crosshair;
 
+
+    [HideInInspector] public Vector3 PC_MoveDir;
+
     //public EventTrigger trigger;
 
     //public EventTrigger.Entry entry1 = new EventTrigger.Entry();
@@ -107,6 +110,8 @@ public class JoystickControl : MonoBehaviour, IPointerDownHandler, IPointerUpHan
         {
             CheckJoystickState();
         }
+
+        PC_MoveDir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
     }
 
     #region 버튼 처리
@@ -149,6 +154,7 @@ public class JoystickControl : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     }
     #endregion
 
+    #region Check
     public void CheckJoystickState()
     {
         //점프 버튼
@@ -204,6 +210,7 @@ public class JoystickControl : MonoBehaviour, IPointerDownHandler, IPointerUpHan
             staminaGaugeCvg.DOFade(1, 0.3f);
         }
     }
+    #endregion
 
     #region 주석
     /*public void ClearSkillBtn()

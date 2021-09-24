@@ -64,6 +64,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
         seq.Play();
     }
 
+    #region IteractionBtn
     public void ActiveItrBtn(ObjData od)
     {
         short i;
@@ -186,7 +187,9 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
         }*/
         #endregion
     }
+    #endregion
 
+    #region UI Fill
     public void AdjustFillAmound(UIType t, float current=0, float max=0)
     {
         switch(t)
@@ -211,6 +214,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
                 break;
         }
     }
+    #endregion
 
     public void OnClickUIButton(int num)
     {
@@ -304,9 +308,15 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
         if (sceneObjs.ScType == SceneType.MAIN)
         {
             Option op = GameManager.Instance.savedData.option;
-
             camSlider.value = op.distFromCam;
+
+            SetData();
         }
+    }
+
+    public void SetData()
+    {
+        sceneObjs.gameTexts[0].text = GameManager.Instance.savedData.userInfo.money.ToString();  //돈 텍스트 업데이트
     }
 
     private void Update()

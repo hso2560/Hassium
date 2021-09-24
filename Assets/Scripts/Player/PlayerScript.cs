@@ -151,6 +151,12 @@ public class PlayerScript : MonoBehaviour, IDamageable
             moveDir.z = joystickCtrl.isTouch ? (joystickCtrl.dirVec.y * (joystickCtrl.isRun ? runSpeed : speed)) : 0;
         }
 
+        if(joystickCtrl.PC_MoveDir!=Vector3.zero)
+        {
+            moveDir.x = joystickCtrl.PC_MoveDir.x * (joystickCtrl.isRun ? runSpeed : speed);
+            moveDir.z = joystickCtrl.PC_MoveDir.z * (joystickCtrl.isRun ? runSpeed : speed);
+        }
+
         if (noControl)
         {
             moveDir.x = 0;
@@ -161,14 +167,17 @@ public class PlayerScript : MonoBehaviour, IDamageable
         Vector3 force = new Vector3(worldDir.x - rigid.velocity.x, -pData.gravity, worldDir.z - rigid.velocity.z);
         rigid.AddForce(force, ForceMode.VelocityChange);
 
-        ani.SetFloat(speedFloat,joystickCtrl.isTouch?(joystickCtrl.isRun?runSpeed:speed):0);
+        if (joystickCtrl.PC_MoveDir == Vector3.zero)
+            ani.SetFloat(speedFloat, joystickCtrl.isTouch ? (joystickCtrl.isRun ? runSpeed : speed) : 0);
+        else
+            ani.SetFloat(speedFloat, joystickCtrl.isRun ? runSpeed : speed);
         playerModel.position = transform.position;
 
         StaminaCheck();
     }
     private void Rotate()
     {
-        if (!joystickCtrl.isTouch || isJumping || !isMovable || noControl) return;
+        if ((!joystickCtrl.isTouch && joystickCtrl.PC_MoveDir==Vector3.zero) || isJumping || !isMovable || noControl) return;
 
         float angle = Mathf.Atan2(worldDir.x, worldDir.z) * Mathf.Rad2Deg;
 

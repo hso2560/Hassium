@@ -26,6 +26,8 @@ public class CameraMove : MonoBehaviour
     private float screenWidth, screenHeight;
     private Vector3 firstPoint, secondPoint;
 
+    public bool isPCModeRotateCam = false;
+
     private float ClampAngle(float angle, float min, float max)
     {
         if (angle < -360)
@@ -118,6 +120,19 @@ public class CameraMove : MonoBehaviour
                     break;
             }
         }
+
+        if (isPCModeRotateCam)
+        {
+            x += Input.GetAxis("Mouse X") * xSpeed * 0.015f;
+            y -= Input.GetAxis("Mouse Y") * ySpeed * 0.015f;
+            y = ClampAngle(y, yMinLimit, yMaxLimit);
+        
+            rotation = Quaternion.Euler(y, x, 0);
+            position = rotation * Offset + target.position;
+
+            transform.position = position;
+            transform.rotation = rotation;
+        }
     }
 
     private void Move(Touch t, bool isFingerMoved=true)
@@ -150,7 +165,7 @@ public class CameraMove : MonoBehaviour
 
     private void PlayerRotation()
     {
-        if (joystick.isTouch && !player.isJumping)
+        if ((joystick.PC_MoveDir!=Vector3.zero || joystick.isTouch) && !player.isJumping)
         {
             rotTarget.rotation = Quaternion.Slerp(rotTarget.rotation, Quaternion.Euler(0, x, 0), Time.deltaTime * player.rotateSpeed);
         }
