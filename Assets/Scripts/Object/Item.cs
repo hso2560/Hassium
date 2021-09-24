@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class Item : ObjData
 {
+    public int index;
     public int droppedCount = 1;  //떨어진 아이템 수
     public ItemData itemData;
 

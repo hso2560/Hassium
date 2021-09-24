@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 [Serializable]
 public class StringListClass 
@@ -30,4 +31,14 @@ public class ItemData
         sprite = data.sprite;
         itemType = data.itemType;
     }
+}
+
+[Serializable]
+public class InfoPanelData
+{
+    public GameObject infoPanel;
+    public Text nameText;
+    public Text explain;
+    public Image objImage;
+    public Text countText;
 }

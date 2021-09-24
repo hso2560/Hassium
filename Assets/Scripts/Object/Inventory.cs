@@ -15,6 +15,20 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad
     public ItemSlot beginSlot;
     public bool isDragging;
 
+    public InfoPanelData infoPanelData;
+    private ItemSlot clickedSlot;
+
+    public GameObject btnSelectPanel;
+    public Button useBtn, throwBtn;
+    private RectTransform btnSelectPanelPos;
+    private float slotHalfWidth;
+
+    private void Awake()
+    {
+        btnSelectPanelPos = btnSelectPanel.GetComponent<RectTransform>();
+        slotHalfWidth = itemSlots[0].GetComponent<RectTransform>().rect.width * 0.5f;
+    }
+
     private void Start()
     {
         items = GameManager.Instance.savedData.userInfo.itemList;
@@ -40,6 +54,7 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad
 
             items.Add(item);
             idToItem.Add(item.id, item);
+            item.count += itemObj.droppedCount;
 
             for(int i=0; i<itemSlots.Count; i++)
             {
@@ -57,6 +72,7 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad
         }
 
         itemObj.gameObject.SetActive(false);
+        GameManager.Instance.savedData.saveObjDatas.Add(new SaveObjData(itemObj.index, SaveObjInfoType.ACTIVE, false));
     }
 
     public void BeginDrg(bool active, ItemSlot i = null)
@@ -78,12 +94,16 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad
 
         beginSlot.SetData(data1);
         i.SetData(data2);
+
+        ClickSetting(false);
     }
 
     public void Change(ItemSlot i)
     {
         i.SetData(beginSlot.Item_Data);
         beginSlot.ResetData();
+
+        ClickSetting(false);
     }
 
     public void SortItemList()
@@ -96,6 +116,8 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad
         {
             itemSlots[i].SetData(items[i]);
         }
+
+        ClickSetting(false);
     }
 
     private int ItemSort1(ItemData x, ItemData y)
@@ -106,6 +128,39 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad
         else
         {
             return x.name.CompareTo(y.name);
+        }
+    }
+
+    public void ClickItemSlot(ItemSlot ist)
+    {
+        if (clickedSlot == null || ist!=clickedSlot)
+        {
+            clickedSlot = ist;
+            ClickSetting(true);
+
+            ItemData idt = ist.Item_Data;
+
+            infoPanelData.objImage.sprite = idt.sprite;
+            infoPanelData.nameText.text = idt.name;
+            infoPanelData.countText.text = $"보유 개수: {idt.count}";
+            infoPanelData.explain.text = idt.explain;
+        }
+        else
+        {
+            ClickSetting(false);
+        }
+    }
+
+    private void ClickSetting(bool active)
+    {
+        if (!active) clickedSlot = null;
+        infoPanelData.infoPanel.gameObject.SetActive(active);
+        btnSelectPanel.SetActive(active);
+
+        if (active)
+        {
+            Vector3 pos = clickedSlot.GetComponent<RectTransform>().position;
+            btnSelectPanelPos.position = new Vector3(pos.x+slotHalfWidth,pos.y) + (new Vector3(btnSelectPanelPos.rect.width, btnSelectPanelPos.rect.height) * 0.5f);
         }
     }
 

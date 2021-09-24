@@ -4,8 +4,8 @@ using UnityEngine.UI;
 
 public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler, IPointerClickHandler
 {
-    private Image dragImg;
-    private Image itemImg;
+    [SerializeField] private Image dragImg;
+    [SerializeField] private Image itemImg;
     public Text itemCountText;
 
     [SerializeField] private ItemData itemData;
@@ -24,12 +24,6 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         itemImg.gameObject.SetActive(false);
         itemCountText.gameObject.SetActive(false);
         itemData = null;
-    }
-
-    private void Awake()
-    {
-        itemImg = transform.GetChild(0).GetComponent<Image>();
-        itemCountText = transform.GetChild(1).GetComponent<Text>();
     }
 
     private void Start()
@@ -73,6 +67,7 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        //정보를 띄운다
+        if(itemImg.gameObject.activeSelf)
+           Inventory.Instance.ClickItemSlot(this);
     }
 }
