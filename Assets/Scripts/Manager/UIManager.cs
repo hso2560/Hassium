@@ -335,7 +335,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
             }
             else
             {
-                
+                OnClickUIButton(8);
             }
         }
     }

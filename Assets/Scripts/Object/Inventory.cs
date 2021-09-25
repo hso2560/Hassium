@@ -20,10 +20,14 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad
 
     public GameObject btnSelectPanel;
     public Button useBtn, throwBtn;
-    private RectTransform btnSelectPanelPos;
+    private RectTransform btnSelectPanelPos;  //인벤 버튼 누르면 사용/버리기 뜨는 그거
     private float slotHalfWidth;
 
     [SerializeField] private InfoPanelData dumpPanelInfo;
+
+    public GameObject noRenderingZone;
+    public GameObject[] playerModelsInUI; //캐릭터 창에서 보일 캐릭터들
+    private GameObject currentModelInUI;
 
     private void Awake()
     {
@@ -36,6 +40,7 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad
             dumpPanelInfo.explain.text = $"<b>[{clickedSlot.Item_Data.name}]</b> 몇 개 버리시겠습니까?\n(보유 개수를 초과해서 입력할 경우, 자동으로 보유개수로 입력됩니다.)";
             UIManager.Instance.OnClickUIButton(7);
         });
+        currentModelInUI = playerModelsInUI[0];
     }
 
     private void Start()
@@ -49,10 +54,10 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad
         }
     }
 
-    public void GetItem(Item itemObj)
+    public void GetItem(Item itemObj) //템 획득
     {
         ItemData item = itemObj.itemData;
-        if(!idToItem.ContainsKey(item.id))
+        if(!idToItem.ContainsKey(item.id))  //없는 템일 때
         {
             if(items.Count==maxItemSlotCnt)
             {
@@ -74,7 +79,7 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad
                 }
             }
         }
-        else
+        else  //이미 가지고 있는템 --> 개수 증가
         {
             idToItem[item.id].count += itemObj.droppedCount;
             itemSlots.Find(x => x.Item_Data.id == item.id).itemCountText.text = idToItem[item.id].count.ToString();
@@ -84,7 +89,7 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad
         GameManager.Instance.savedData.saveObjDatas.Add(new SaveObjData(itemObj.index, SaveObjInfoType.ACTIVE, false));
     }
 
-    public void BeginDrg(bool active, ItemSlot i = null)
+    public void BeginDrg(bool active, ItemSlot i = null)  
     {
         dragImage.gameObject.SetActive(active);
         isDragging = active;
@@ -115,7 +120,7 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad
         ClickSetting(false);
     }
 
-    public void SortItemList()
+    public void SortItemList() //아이템 정렬
     {
         itemSlots.FindAll(x => x.itemCountText.gameObject.activeSelf).ForEach(y => y.ResetData());
 
@@ -174,7 +179,7 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad
         }
     }
 
-    public void DumpItem()
+    public void DumpItem()  //아이템 버리기
     {
         ItemData idt = idToItem[clickedSlot.Item_Data.id];
         idt.count -= Mathf.Clamp(int.Parse(dumpPanelInfo.mainInput.text), 0, idt.count);
@@ -191,6 +196,12 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad
         }
         ClickSetting(false);
         UIManager.Instance.OnClickUIButton(7);
+    }
+
+    public void ClickCharacterPanel(bool on)
+    {
+        noRenderingZone.SetActive(on);
+        currentModelInUI.SetActive(on);
     }
 
     public void ManagerDataLoad(GameObject sceneObjs)
@@ -210,3 +221,22 @@ public enum ItemType
     CONSUME,
     ETC
 }
+
+
+
+
+
+//End와 Drop 차이점: 1. End는 객체 밖에 나가서 드랍해도 호출, Drop은 해당 객체 안에서만 드롭해야 호출
+//                  2. End는 잡은 객체의 스크립트에서 호출되지만 Drop은 처음에 잡은 객체가 아니더라도 같은 스크립트 달린 객체에 드롭하면 호출 되지만 그 객체에서 호출
+//              ex) 2번 슬롯을 잡고 드래그 하다가 18번 슬롯에서 드롭을 하면 End는 2번 슬롯에서 호출되고 Drop은 18번 슬롯에서 호출됨.
+// Drop이 End보다 먼저 호출됨.
+
+
+
+
+
+
+
+
+
+//

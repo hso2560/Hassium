@@ -50,6 +50,15 @@ public class GameUI : MonoBehaviour
 
                     img.gameObject.SetActive(true);
                     UIManager.Instance.curMenuPanel = gameObject;
+
+                    if (idx == 3)  //캐릭터 창
+                    {
+                        Inventory.Instance.ClickCharacterPanel(true);
+                    }
+                    else
+                    {
+                        Inventory.Instance.ClickCharacterPanel(false);
+                    }
                 }
                 UIQueue();
                 break;
