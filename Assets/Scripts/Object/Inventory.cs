@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad
 {
@@ -25,9 +26,16 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad
 
     [SerializeField] private InfoPanelData dumpPanelInfo;
 
+    //캐릭터 창 관련 변수
     public GameObject noRenderingZone;
     public GameObject[] playerModelsInUI; //캐릭터 창에서 보일 캐릭터들
-    private GameObject currentModelInUI;
+    private GameObject currentCharInUI;
+    public GameObject deathMark;
+    public TextMeshProUGUI charNameTxt; 
+    public Text charInfoTxt, expTxt, lvTxt;
+    public Image expFill;
+
+    private PlayerScript ps;
 
     private void Awake()
     {
@@ -40,7 +48,6 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad
             dumpPanelInfo.explain.text = $"<b>[{clickedSlot.Item_Data.name}]</b> 몇 개 버리시겠습니까?\n(보유 개수를 초과해서 입력할 경우, 자동으로 보유개수로 입력됩니다.)";
             UIManager.Instance.OnClickUIButton(7);
         });
-        currentModelInUI = playerModelsInUI[0];
     }
 
     private void Start()
@@ -201,7 +208,40 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad
     public void ClickCharacterPanel(bool on)
     {
         noRenderingZone.SetActive(on);
-        currentModelInUI.SetActive(on);
+        
+        if (on)
+        {
+            ViewCharacterInfo(10);
+        }
+    }
+
+    public void ViewCharacterInfo(short id)
+    {
+        if (GameManager.Instance.IsExistCharac(id))
+        {
+            if (currentCharInUI != null) currentCharInUI.SetActive(false);
+
+            currentCharInUI = playerModelsInUI[(id / 10) - 1];
+            currentCharInUI.SetActive(true);
+            ps = GameManager.Instance.idToMyPlayer[id];
+            UpdateCharInfoUI();
+        }
+    }
+
+    public void UpdateCharInfoUI()
+    {
+        if (currentCharInUI != null)
+        {
+            deathMark.SetActive(ps.isDie);
+            charNameTxt.text = ps.CharName;
+
+            charInfoTxt.text = $"공격력: {ps.str}\n\n방어력: {ps.def}\n\n생명력: {ps.hp}/{ps.MaxHp}\n\n스테미나: {ps.stamina}/{ps.MaxStamina}\n\n " +
+                $"달리기 속도: {ps.runSpeed}\n\n 점프력: {ps.jumpPower}\n\n 스테미나 회복 속도: {ps.staminaRecoverySpeed}";
+
+            expTxt.text = string.Format("{0}/{1}", ps.Exp, ps.MaxExp);
+            expFill.fillAmount = (float)ps.Exp / ps.MaxExp;
+            lvTxt.text = "레벨: " + ps.Level.ToString();
+        }
     }
 
     public void ManagerDataLoad(GameObject sceneObjs)

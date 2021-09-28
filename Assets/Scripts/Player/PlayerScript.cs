@@ -12,11 +12,14 @@ public class PlayerScript : MonoBehaviour, IDamageable
 
     [HideInInspector] public JoystickControl joystickCtrl;
 
+    //저장/로드 할 정보들은 차라리 저장할 때의 클래스로 가져와서 클래스 접근을 통해 값을 쓰고 바꾸고 하는게 나았을듯.....
     [SerializeField] private float speed = 8.5f;
     public float runSpeed = 17.8f;
     public float jumpPower = 10f;
     [SerializeField] private int maxHp;
+    public int MaxHp { get { return maxHp; } set { maxHp = value; } }
     [SerializeField] private float maxStamina;
+    public float MaxStamina { get { return maxStamina; } set { maxStamina = value; } }
     [SerializeField] private float staminaDownSpeed=7f;  //스테미나 감소 속도
     [SerializeField] private float staminaDecJAR = 10f;  //달리는 중에 점프할 때의 스테미나 감소 수치
     
@@ -29,10 +32,15 @@ public class PlayerScript : MonoBehaviour, IDamageable
     [Header("고유 값")] [SerializeField] private short id;
     public short Id { get { return id; } }
     [Header("고유 값")] [SerializeField] private string charName;  //캐릭터 이름
+    public string CharName { get { return charName; } }
     [SerializeField] private short level;
+    public short Level { get { return level;  } set { level = value; } }
     public int str;
     public int def;
     [SerializeField] private int exp;
+    [SerializeField] private int currentMaxExp;
+    public int Exp { get { return exp; } set { exp = value; } }
+    public int MaxExp { get { return currentMaxExp; } set { currentMaxExp = value; } }
     [Header("고유 값")] [SerializeField] private string resoName;  //Resources폴더에서 꺼낼 때의 파일 이름(부모)
 
     private Vector3 moveDir, worldDir;  //움직임 방향, 움직임 월드 방향
@@ -385,6 +393,7 @@ public class PlayerScript : MonoBehaviour, IDamageable
         stamina = gameChar.stamina;
         level = gameChar.level;
         exp = gameChar.exp;
+        currentMaxExp = gameChar.currentMaxExp;
         str = gameChar.str;
         def = gameChar.def;
         runSpeed = gameChar.runSpeed;
@@ -414,6 +423,7 @@ public class PlayerScript : MonoBehaviour, IDamageable
         gameChar.stamina = stamina;
         gameChar.hp = hp;
         gameChar.isDie = isDie;
+        gameChar.currentMaxExp = currentMaxExp;
 
         GameManager.Instance.savedData.userInfo.currentChar = gameChar;
     }

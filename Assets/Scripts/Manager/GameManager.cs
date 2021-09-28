@@ -66,7 +66,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //°× ½ÃÀÛ
             if (p != null) ChangeCharacter(p.Id, true);
             else
             {
-                player.RecoveryHp(player.pData.defaultRespawnHp);
+                LoadingFuncEvent += ()=> player.RecoveryHp(player.pData.defaultRespawnHp);
                 LoadingFuncEvent+=()=> player.transform.parent.gameObject.SetActive(false);
                 LoadingFuncEvent += keyToVoidFunction[LoadingType.RESPAWN];
                 LoadingFuncEvent+=()=>player.transform.parent.gameObject.SetActive(true);

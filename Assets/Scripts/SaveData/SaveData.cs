@@ -44,21 +44,22 @@ public class UserInfo
 [Serializable]
 public class GameCharacter
 {
-    public bool isDie;
+    public bool isDie;  
 
     public short id;
-    public short level;
+    public short level;  
 
-    public int exp;
-    public int str;
-    public int def;
-    public int hp;
-    public int maxHp;
+    public int exp;  
+    public int currentMaxExp;  
+    public int str;  
+    public int def;  
+    public int hp;  
+    public int maxHp;  
 
-    public float stamina;
-    public float maxStamina;
+    public float stamina;  
+    public float maxStamina;  
 
-    public float runSpeed;
+    public float runSpeed;  
     public float jumpPower;
     public float staminaRecoverySpeed;
 
@@ -73,6 +74,7 @@ public class GameCharacter
     {
         level = 1;
         exp = 0;
+        currentMaxExp = 400;
 
         this.id = id;
         this.str = str;
