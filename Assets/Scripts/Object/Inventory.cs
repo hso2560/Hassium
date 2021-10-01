@@ -235,7 +235,7 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad
             deathMark.SetActive(ps.isDie);
             charNameTxt.text = ps.CharName;
 
-            charInfoTxt.text = $"공격력: {ps.str}\n\n방어력: {ps.def}\n\n생명력: {ps.hp}/{ps.MaxHp}\n\n스테미나: {ps.stamina}/{ps.MaxStamina}\n\n " +
+            charInfoTxt.text = $"공격력: {ps.str}\n\n방어력: {ps.def}\n\n생명력: {ps.hp}/{ps.MaxHp}\n\n스테미나: {Mathf.Round(ps.stamina)}/{ps.MaxStamina}\n\n " +
                 $"달리기 속도: {ps.runSpeed}\n\n 점프력: {ps.jumpPower}\n\n 스테미나 회복 속도: {ps.staminaRecoverySpeed}";
 
             expTxt.text = string.Format("{0}/{1}", ps.Exp, ps.MaxExp);

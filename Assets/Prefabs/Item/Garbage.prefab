@@ -131,6 +131,7 @@ MonoBehaviour:
   objName: "\uC4F0\uB808\uAE30"
   explain: 
   saveActiveStateId: -1
+  index: 0
   droppedCount: 1
   itemData:
     id: 5
@@ -1006,7 +1007,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 4
+      scalar: 1
       minScalar: 10
       maxCurve:
         serializedVersion: 2
