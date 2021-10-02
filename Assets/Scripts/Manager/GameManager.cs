@@ -21,6 +21,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
     public SaveData savedData { get { return saveData; } }
     private string savedJson, filePath;
     private readonly string saveFileName_1 = "SaveFile01";
+    [SerializeField] private float playTime;
 
     [HideInInspector] public SceneSaveObjects infoSaveObjs;  
     public delegate void LoadingFunc();  //이 부분 주석치고 밑의 LoadingFunc를 Action으로 바꿔서 할 수 있다.  //Action<매개변수,매개변수,매개변수...> Func<매개변수..., 반환값>  매개변수 없이도 가능
@@ -99,6 +100,8 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
     {
         saveData.objActiveInfo.SaveDictionary();
         saveData.npcInfo.SaveDictionary();
+        saveData.userInfo.playTime += (int)playTime;
+        playTime = 0;
         if (sceneObjs.ScType == SceneType.MAIN)
         {
             if (player != null)
@@ -239,6 +242,8 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
 
         SkillManager.Instance.playerSkills.Add(_ps.skill);
         _ps.parent.SetActive(false);
+
+        Inventory.Instance.charChangeBtns[(int)(_ps.Id * 0.1f - 1)].gameObject.SetActive(true);
     }
 
     public void ChangeCharacter(short id, bool respawn=false)  //캐릭터 변경
@@ -352,9 +357,15 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
         }
     }
 
-    private void Update()  //Resources/Player 에서 현재 DefaultPlayer2,3는 테스트 프리팹이므로 나중에 지울것
+    private void Update()  
     {
-        if(Input.GetKeyDown(KeyCode.Alpha2))  //Test Code
+        TestInput();
+        playTime += Time.deltaTime;
+    }
+
+    public void TestInput()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha2))  //Test Code
         {
             ChangeCharacter(20);
         }

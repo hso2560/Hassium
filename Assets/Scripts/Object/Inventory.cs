@@ -35,6 +35,8 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad
     public Text charInfoTxt, expTxt, lvTxt;
     public Image expFill;
 
+    public Button[] charChangeBtns;
+
     private PlayerScript ps;
 
     private void Awake()
@@ -58,6 +60,16 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad
         {
             idToItem.Add(items[i].id, items[i]);
             itemSlots[i].SetData(items[i]);
+        }
+
+        for(int i=1; i<=GameManager.Instance.savedData.userInfo.characters.Count; i++)
+        {
+            short key = (short)(i * 10);
+            if (GameManager.Instance.IsExistCharac(key))
+            {
+                charChangeBtns[i - 1].gameObject.SetActive(true);
+                charChangeBtns[i - 1].transform.GetChild(0).GetComponent<Text>().text = GameManager.Instance.idToMyPlayer[key].CharName;
+            }
         }
     }
 
@@ -252,6 +264,12 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad
         this.sceneObjs = sceneObjs.GetComponent<SceneObjects>();
 
         isReady = true;
+    }
+
+    public void ChangeCharacter(int id)
+    {
+        GameManager.Instance.ChangeCharacter((short)id);
+        UIManager.Instance.OnClickUIButton(9);
     }
 }
 

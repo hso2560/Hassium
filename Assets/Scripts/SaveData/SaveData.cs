@@ -28,6 +28,7 @@ public class UserInfo
     //public string curCharResoName="DefaultPlayer1";
     public long money;
     public short mapIndex = 0;
+    public int playTime = 0;
 
     public List<ItemData> itemList = new List<ItemData>();
     public List<GameCharacter> characters = new List<GameCharacter>();

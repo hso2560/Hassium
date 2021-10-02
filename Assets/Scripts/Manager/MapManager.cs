@@ -8,6 +8,7 @@ public class MapManager : MonoSingleton<MapManager>, ISceneDataLoad
 
     public Dictionary<short, Transform> mapCenterDict = new Dictionary<short, Transform>();
 
+    [SerializeField] private bool isDevMode;
 
     private void InitData()
     {
