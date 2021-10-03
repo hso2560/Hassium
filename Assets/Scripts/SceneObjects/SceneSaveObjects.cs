@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class SceneSaveObjects : MonoBehaviour
 {
-    public GameObject[] objs;
+    public List<GameObject> objs;
     public ObjData[] objDatas;  //사실상 이거는 안쓰는 듯
 
     public bool visibleCursor = true;

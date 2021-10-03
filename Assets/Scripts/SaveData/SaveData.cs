@@ -25,14 +25,18 @@ public class Option
 public class UserInfo
 {
     public bool isFirstStart = true;
+    public string startDate;
     //public string curCharResoName="DefaultPlayer1";
     public long money;
     public short mapIndex = 0;
     public int playTime = 0;
+    //public int chestCount = 0;
 
     public List<ItemData> itemList = new List<ItemData>();
     public List<GameCharacter> characters = new List<GameCharacter>();
     public GameCharacter currentChar = new GameCharacter();
+
+    public List<ChestData> myChestList = new List<ChestData>();
 
     public Vector3 currentPos=new Vector3(-1,-6,37);  
     public Quaternion currentRot;
@@ -91,5 +95,26 @@ public class GameCharacter
         hp = maxHp;
         stamina = maxStamina;
         isDie = false;
+    }
+}
+
+[Serializable]
+public class ChestData
+{
+    public int id;
+    public string name;
+    public string explain;
+    public string date;
+    //public Sprite sprite;
+
+    public ChestData() { }
+    public ChestData(ChestData chest)
+    {
+        id = chest.id;
+        name = chest.name;
+        explain = chest.explain;
+
+        //sprite = chest.sprite;
+        date = DateTime.Now.ToString();
     }
 }

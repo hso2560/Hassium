@@ -4117,7 +4117,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ab4f7393a05f6ed46a55f55a6b81ab71, type: 2}
+  - {fileID: 2100000, guid: 630c0c34fe5069d44ab0169e27a50ec5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4143,7 +4143,7 @@ LineRenderer:
   - {x: 0, y: 0, z: 1}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.1
+    widthMultiplier: 0.2
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -7748,6 +7748,7 @@ MonoBehaviour:
   str: 20
   def: 15
   exp: 0
+  currentMaxExp: 0
   resoName: DefaultPlayer3
   hp: 0
   stamina: 0
@@ -7765,6 +7766,7 @@ MonoBehaviour:
     id: 0
     level: 0
     exp: 0
+    currentMaxExp: 0
     str: 0
     def: 0
     hp: 0
@@ -7814,7 +7816,7 @@ MonoBehaviour:
   maxMoveSpeed: 8
   acceleration: 2.5
   gravity: 0.01
-  dist: 1
+  dist: 2
 --- !u!1 &2487118331048796514
 GameObject:
   m_ObjectHideFlags: 0

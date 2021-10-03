@@ -71,6 +71,8 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad
                 charChangeBtns[i - 1].transform.GetChild(0).GetComponent<Text>().text = GameManager.Instance.idToMyPlayer[key].CharName;
             }
         }
+
+        ps = GameManager.Instance.PlayerSc;
     }
 
     public void GetItem(Item itemObj) //≈€ »πµÊ
@@ -223,7 +225,7 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad
         
         if (on)
         {
-            ViewCharacterInfo(10);
+            ViewCharacterInfo(ps.Id);
         }
     }
 
@@ -269,6 +271,7 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad
     public void ChangeCharacter(int id)
     {
         GameManager.Instance.ChangeCharacter((short)id);
+        ViewCharacterInfo((short)id);
         UIManager.Instance.OnClickUIButton(9);
     }
 }

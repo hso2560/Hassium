@@ -26,6 +26,7 @@ public class RopeSkill : Skill
 
     public float dist=16f;
     private float d;
+    private Vector2 screenCenterPos;
 
     private void Awake()
     {
@@ -39,6 +40,7 @@ public class RopeSkill : Skill
         cam = GameManager.Instance.camMove.transform;
         aim = UIManager.Instance.crosshairImg.gameObject;
         d = dist * dist;
+        screenCenterPos = new Vector2(Screen.width / 2f, Screen.height / 2f);
     }
 
     public override void UseSkill()
@@ -104,8 +106,9 @@ public class RopeSkill : Skill
     private void StartGrapple()
     {
         RaycastHit hit;
+        Ray ray = Camera.main.ScreenPointToRay(screenCenterPos);
 
-        if(Physics.Raycast(ropeStartPoint.position , cam.forward, out hit, maxDist, whatIsGrappleable))
+        if(Physics.Raycast(ray, out hit, maxDist, whatIsGrappleable))  //if(Physics.Raycast(ropeStartPoint.position , cam.forward, out hit, maxDist, whatIsGrappleable))
         {
             rope.gameObject.SetActive(true);
 

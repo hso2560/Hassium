@@ -67,6 +67,7 @@ public class TimeSkill : Skill
             transform.rotation = prInfo.rotation;
             player.hp = prInfo.hp;
             player.stamina = prInfo.stamina;
+            UIManager.Instance.AdjustFillAmound(UIType.HPFILL, player.hp, player.MaxHp);
 
             prevInfos.RemoveAt(prevInfos.Count - 1);
         }

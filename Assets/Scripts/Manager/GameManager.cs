@@ -64,13 +64,17 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //°× ½ÃÀÛ
         keyToVoidFunction.Add(LoadingType.PLAYERDEATH, () =>
         {
             PlayerScript p = playerList.Find(p => !p.isDie);
-            if (p != null) ChangeCharacter(p.Id, true);
+            if (p != null)
+            {
+                ChangeCharacter(p.Id, true);
+                Inventory.Instance.ViewCharacterInfo(p.Id);
+            }
             else
             {
-                LoadingFuncEvent += ()=> player.RecoveryHp(player.pData.defaultRespawnHp);
-                LoadingFuncEvent+=()=> player.transform.parent.gameObject.SetActive(false);
+                LoadingFuncEvent += () => player.RecoveryHp(player.pData.defaultRespawnHp);
+                LoadingFuncEvent += () => player.transform.parent.gameObject.SetActive(false);
                 LoadingFuncEvent += keyToVoidFunction[LoadingType.RESPAWN];
-                LoadingFuncEvent+=()=>player.transform.parent.gameObject.SetActive(true);
+                LoadingFuncEvent += () => player.transform.parent.gameObject.SetActive(true);
                 UIManager.Instance.LoadingFade(false);
             }
             DeathEvent?.Invoke();
@@ -164,6 +168,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //°× ½ÃÀÛ
             ps.AddInfo();
             saveData.userInfo.currentChar = saveData.userInfo.characters[0];
 
+            saveData.userInfo.startDate = DateTime.Now.ToString();
             saveData.userInfo.isFirstStart = false;
         }
         else
@@ -243,7 +248,9 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //°× ½ÃÀÛ
         SkillManager.Instance.playerSkills.Add(_ps.skill);
         _ps.parent.SetActive(false);
 
-        Inventory.Instance.charChangeBtns[(int)(_ps.Id * 0.1f - 1)].gameObject.SetActive(true);
+        GameObject btn = Inventory.Instance.charChangeBtns[(int)(_ps.Id * 0.1f - 1)].gameObject;
+        btn.SetActive(true);
+        btn.transform.GetChild(0).GetComponent<Text>().text = _ps.CharName;
     }
 
     public void ChangeCharacter(short id, bool respawn=false)  //Ä³¸¯ÅÍ º¯°æ
@@ -343,6 +350,11 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //°× ½ÃÀÛ
         camMove.player = player;
 
         ActionFuncHandle();
+    }
+
+    public void OpenChest(ChestData chestData)
+    {
+        saveData.userInfo.myChestList.Add(new ChestData(chestData));
     }
 
     public void ActionFuncHandle()
