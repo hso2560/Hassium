@@ -49,12 +49,12 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
         filePath = GetFilePath(saveFileName_1);
         saveData = new SaveData();
         Load();
-        CreatePool();  //이걸 여기다가 할지 밑에 씬 변경 때마다 할지는 나중에 실험해보고 결정함
     }
 
     private void InitData()
     {
         infoSaveObjs = sceneObjs.infoSaveObjs;
+        CreatePool();  
 
         idToMyPlayer = new Dictionary<short, PlayerScript>();
         playerList = new List<PlayerScript>();
@@ -307,7 +307,10 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
 
     private void CreatePool()  //풀링 필요한 오브젝트들 소환
     {
-        
+        if (sceneObjs.ScType == SceneType.MAIN)
+        {
+            PoolManager.CreatePool<Meteor>(sceneObjs.prefabs[0], sceneObjs.environMentGroup, 4);
+        }
     }   
     
     public void Loading(int index=0)  //로딩중에 일을 처리함
@@ -397,6 +400,10 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
         {
             ChangeCharacter(30);
         }
+        else if (Input.GetKeyDown(KeyCode.H))
+        {
+            PoolManager.GetItem<Meteor>();
+        }
     }
 
     private void OnApplicationQuit()
@@ -422,7 +429,8 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
     {
         Save();
         sceneObjs.AllReadyFalse();
-        //풀 삭제(사운드 등)
+
+        PoolManager.ClearItem<Meteor>();
 
         SceneManager.LoadScene(name);
     }

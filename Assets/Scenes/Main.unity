@@ -4447,8 +4447,11 @@ MonoBehaviour:
   - {fileID: 973903963}
   - {fileID: 307069294}
   - {fileID: 605951661}
+  prefabs:
+  - {fileID: 8221356493712152673, guid: 2e5a3438581e8394493b284f4a9229b4, type: 3}
   ScType: 2
   ManagerGroup: {fileID: 1754604885}
+  environMentGroup: {fileID: 190168336}
   poolTrm: {fileID: 1932186163}
   gameBtns:
   - {fileID: 1272202838}
@@ -22749,6 +22752,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneObjs: {fileID: 0}
   isReady: 0
+  dayAndNight: {fileID: 705507996}
   isDevMode: 1
 --- !u!1 &580992661
 GameObject:
@@ -24124,6 +24128,7 @@ GameObject:
   m_Component:
   - component: {fileID: 705507995}
   - component: {fileID: 705507994}
+  - component: {fileID: 705507997}
   - component: {fileID: 705507996}
   m_Layer: 0
   m_Name: Main Directional Light
@@ -24202,7 +24207,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 705507993}
   m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
-  m_LocalPosition: {x: 6.372723, y: 10.244246, z: -0.4092095}
+  m_LocalPosition: {x: 119.8, y: 118.1, z: -0.4092095}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 190168336}
@@ -24221,8 +24226,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   secondPerRealTimeSecond: 60
+  isNight: 0
   fogDensityCalc: 0.07
   nightFogDensity: 0.05
+--- !u!123 &705507997
+LensFlare:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 705507993}
+  m_Enabled: 1
+  m_Flare: {fileID: 12100000, guid: 54fbbf098d116effa00081aba8ad6659, type: 2}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.043137256}
+  m_Brightness: 7
+  m_FadeSpeed: 3
+  m_IgnoreLayers:
+    serializedVersion: 2
+    m_Bits: 6
+  m_Directional: 0
 --- !u!1 &707206068
 GameObject:
   m_ObjectHideFlags: 0
@@ -27676,6 +27698,7 @@ GameObject:
   - component: {fileID: 963194227}
   - component: {fileID: 963194229}
   - component: {fileID: 963194226}
+  - component: {fileID: 963194230}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -27805,6 +27828,14 @@ MonoBehaviour:
   zDistMax: -6
   defaultCamDist: -4
   isPCModeRotateCam: 1
+--- !u!124 &963194230
+Behaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
 --- !u!1 &965227888
 GameObject:
   m_ObjectHideFlags: 0

@@ -5,7 +5,7 @@ using UnityEngine;
 public class DayAndNight : MonoBehaviour
 {
     [SerializeField] private float secondPerRealTimeSecond;  //현실 1초 == 해당 변수 (초)  (게임 속 하루(24시간) = 360도 회전)
-    private bool isNight = false;
+    [HideInInspector] public bool isNight = false;
     private float speed;
 
     [SerializeField] private float fogDensityCalc;
@@ -17,7 +17,7 @@ public class DayAndNight : MonoBehaviour
     private void Start()
     {
         dayFogDensity = RenderSettings.fogDensity;
-        speed = 240/secondPerRealTimeSecond;  //1도 회전하는 시간 (86400/secondPerRealTimeSecond/360) (86400초=24시간)
+        speed = 1/240f*secondPerRealTimeSecond;  //1도 회전하는 시간 (86400/secondPerRealTimeSecond/360) (86400초=24시간) (360도=하루) (1도에 240초) (1초에 1/240도)
     }
 
     private void Update()
@@ -28,7 +28,7 @@ public class DayAndNight : MonoBehaviour
 
     private void RotateSun()
     {
-        transform.Rotate(Vector3.right, 0.1f * speed * Time.deltaTime);
+        transform.Rotate(Vector3.right, speed * Time.deltaTime);
 
         if (transform.eulerAngles.x >= 170)
         {
@@ -38,6 +38,8 @@ public class DayAndNight : MonoBehaviour
         {
             isNight = false;
         }
+
+        //transform.RotateAround(GameManager.Instance.PlayerSc.transform.position, Vector3.right, transform.eulerAngles.x);
     }
 
     private void Fog()

@@ -16,9 +16,10 @@ public class SceneObjects : MonoBehaviour  //해당 씬마다 필요한 오브젝트들을 모�
 {
     private List<ISceneDataLoad> managers = new List<ISceneDataLoad>();
     public List<GameObject> ui;
+    public GameObject[] prefabs;
 
     public SceneType ScType;
-    public Transform ManagerGroup;
+    public Transform ManagerGroup, environMentGroup;
     public Transform poolTrm;
 
     public Button[] gameBtns;
