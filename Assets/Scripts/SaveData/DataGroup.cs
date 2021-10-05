@@ -44,3 +44,16 @@ public class InfoPanelData
     public Button mainBtn;
     public InputField mainInput;
 }
+
+[Serializable]
+public class EnemyMapData
+{
+    public short id;
+
+    public int maxCount;
+    public int currentCount;
+
+    public int delayH; //리스폰 대기 시간 (단위: 시간)
+
+    public string lastDate;  //마지막 접속 종료 날짜
+}

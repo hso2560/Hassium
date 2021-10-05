@@ -10,6 +10,7 @@ public class SaveData
     public SaveClass1<int, bool> objActiveInfo = new SaveClass1<int, bool>();
     public List<SaveObjData> saveObjDatas = new List<SaveObjData>();
     public SaveClass1<short, NPCInfo> npcInfo = new SaveClass1<short, NPCInfo>();
+    public SaveClass1<short, EnemyMapData> enemyMapData = new SaveClass1<short, EnemyMapData>();
 }
 
 [Serializable]

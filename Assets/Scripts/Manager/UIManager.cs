@@ -22,6 +22,8 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
     //[HideInInspector] public Image infoPanel;
     [HideInInspector] public List<InteractionBtn> interactionBtns;
 
+    [HideInInspector] public Text objExplainText;
+
     public List<GameObject> beforeItrObjs = new List<GameObject>();
     public List<GameObject> stackUI = new List<GameObject>();
     public List<Color> uiColors;
@@ -106,6 +108,13 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
         interBtn.data = od;
         beforeItrObjs.Add(od.gameObject);
         interBtn.transform.GetChild(0).GetComponent<Text>().text = od.objName;
+
+        if (od.transform.CompareTag("Object"))
+        {
+            objExplainText.gameObject.SetActive(true);
+            objExplainText.text = od.explain;
+        }
+
         interBtn.gameObject.SetActive(true);
         interBtn.cvs.DOFade(1, 0.4f);
     }
@@ -134,6 +143,8 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
                     OffInterBtn(interactionBtns[i]);
             }
         }
+
+        if (objExplainText.gameObject.activeSelf) objExplainText.gameObject.SetActive(false);
     }
 
     public void DisableItrBtn(Collider[] cols)
