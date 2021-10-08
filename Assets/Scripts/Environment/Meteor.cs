@@ -18,16 +18,13 @@ public class Meteor : MonoBehaviour
         flare = lensFlare.flare;
     }
 
-    Vector3 GetRandomVector(Vector3 a, Vector3 b) => new Vector3(Random.Range(a.x, b.x), Random.Range(a.y, b.y), Random.Range(a.z, b.z));
-    
-
     private void OnEnable()
     {
         //transform.position = data.startPoints[Random.Range(0, data.startPoints.Length)];
         //target = data.endPoints[Random.Range(0, data.endPoints.Length)];
 
-        transform.position = GetRandomVector(data.startPoints[0], data.startPoints[1]);
-        target = GetRandomVector(data.endPoints[0], data.endPoints[1]);
+        transform.position = FunctionGroup.GetRandomVector(data.startPoints[0], data.startPoints[1]);
+        target = FunctionGroup.GetRandomVector(data.endPoints[0], data.endPoints[1]);
 
         lensFlare.flare = flare;
         speed = Random.Range(data.minSpeed, data.maxSpeed);

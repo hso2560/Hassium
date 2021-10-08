@@ -1740,6 +1740,7 @@ MonoBehaviour:
     name: 
     explain: 
     count: 0
+    spritePath: 
     sprite: {fileID: 0}
     itemType: 0
 --- !u!114 &65108743
@@ -1996,6 +1997,7 @@ MonoBehaviour:
     name: 
     explain: 
     count: 0
+    spritePath: 
     sprite: {fileID: 0}
     itemType: 0
 --- !u!114 &90673674
@@ -2096,6 +2098,7 @@ MonoBehaviour:
     name: 
     explain: 
     count: 0
+    spritePath: 
     sprite: {fileID: 0}
     itemType: 0
 --- !u!114 &113751162
@@ -2937,6 +2940,7 @@ MonoBehaviour:
     name: 
     explain: 
     count: 0
+    spritePath: 
     sprite: {fileID: 0}
     itemType: 0
 --- !u!114 &181880564
@@ -4179,6 +4183,7 @@ MonoBehaviour:
     name: 
     explain: 
     count: 0
+    spritePath: 
     sprite: {fileID: 0}
     itemType: 0
 --- !u!114 &261552791
@@ -4476,6 +4481,7 @@ MonoBehaviour:
   - {fileID: 13500988}
   gameTexts:
   - {fileID: 1581365816}
+  - {fileID: 1770798038}
   camSlider: {fileID: 376514109}
   joystickCtrl: {fileID: 1788705722}
   camMove: {fileID: 963194229}
@@ -4590,6 +4596,42 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 280061989}
   m_CullTransparentMesh: 1
+--- !u!1 &282327499
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 282327500}
+  m_Layer: 5
+  m_Name: InfoRect
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &282327500
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 282327499}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1770798041}
+  m_Father: {fileID: 1761759788}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &285553273
 GameObject:
   m_ObjectHideFlags: 0
@@ -19755,6 +19797,7 @@ MonoBehaviour:
     name: 
     explain: 
     count: 0
+    spritePath: 
     sprite: {fileID: 0}
     itemType: 0
 --- !u!114 &338205590
@@ -21876,6 +21919,7 @@ MonoBehaviour:
     name: 
     explain: 
     count: 0
+    spritePath: 
     sprite: {fileID: 0}
     itemType: 0
 --- !u!114 &504235202
@@ -23186,6 +23230,7 @@ MonoBehaviour:
     name: 
     explain: 
     count: 0
+    spritePath: 
     sprite: {fileID: 0}
     itemType: 0
 --- !u!114 &623878757
@@ -23675,6 +23720,7 @@ MonoBehaviour:
     name: 
     explain: 
     count: 0
+    spritePath: 
     sprite: {fileID: 0}
     itemType: 0
 --- !u!114 &667009479
@@ -26257,6 +26303,7 @@ MonoBehaviour:
     name: 
     explain: 
     count: 0
+    spritePath: 
     sprite: {fileID: 0}
     itemType: 0
 --- !u!114 &833917676
@@ -26357,6 +26404,7 @@ MonoBehaviour:
     name: 
     explain: 
     count: 0
+    spritePath: 
     sprite: {fileID: 0}
     itemType: 0
 --- !u!114 &834430185
@@ -26882,6 +26930,7 @@ MonoBehaviour:
     name: 
     explain: 
     count: 0
+    spritePath: 
     sprite: {fileID: 0}
     itemType: 0
 --- !u!114 &879602015
@@ -27162,6 +27211,7 @@ MonoBehaviour:
     name: 
     explain: 
     count: 0
+    spritePath: 
     sprite: {fileID: 0}
     itemType: 0
 --- !u!114 &900747370
@@ -27262,6 +27312,7 @@ MonoBehaviour:
     name: 
     explain: 
     count: 0
+    spritePath: 
     sprite: {fileID: 0}
     itemType: 0
 --- !u!114 &908654722
@@ -28330,6 +28381,7 @@ MonoBehaviour:
     name: "\uC4F0\uB808\uAE30"
     explain: "\uADF8\uB0E5 \uD3C9\uBC94\uD55C \uC4F0\uB808\uAE30"
     count: 0
+    spritePath: garbageSpr
     sprite: {fileID: 21300000, guid: 6b2e742f9f1503949bbce3f774388ea0, type: 3}
     itemType: 2
 --- !u!1 &982580405
@@ -29741,6 +29793,7 @@ MonoBehaviour:
     name: 
     explain: 
     count: 0
+    spritePath: 
     sprite: {fileID: 0}
     itemType: 0
 --- !u!114 &1052851186
@@ -31278,6 +31331,7 @@ MonoBehaviour:
     name: 
     explain: 
     count: 0
+    spritePath: 
     sprite: {fileID: 0}
     itemType: 0
 --- !u!114 &1202963418
@@ -37218,6 +37272,7 @@ MonoBehaviour:
     name: 
     explain: 
     count: 0
+    spritePath: 
     sprite: {fileID: 0}
     itemType: 0
 --- !u!114 &1246811179
@@ -38087,6 +38142,7 @@ MonoBehaviour:
     name: 
     explain: 
     count: 0
+    spritePath: 
     sprite: {fileID: 0}
     itemType: 0
 --- !u!114 &1298682372
@@ -39083,6 +39139,7 @@ MonoBehaviour:
     name: 
     explain: 
     count: 0
+    spritePath: 
     sprite: {fileID: 0}
     itemType: 0
 --- !u!114 &1362671128
@@ -39485,6 +39542,7 @@ MonoBehaviour:
     name: 
     explain: 
     count: 0
+    spritePath: 
     sprite: {fileID: 0}
     itemType: 0
 --- !u!114 &1386295431
@@ -39697,6 +39755,7 @@ MonoBehaviour:
     name: 
     explain: 
     count: 0
+    spritePath: 
     sprite: {fileID: 0}
     itemType: 0
 --- !u!114 &1405872987
@@ -40090,6 +40149,7 @@ MonoBehaviour:
     name: 
     explain: 
     count: 0
+    spritePath: 
     sprite: {fileID: 0}
     itemType: 0
 --- !u!114 &1436372876
@@ -41162,6 +41222,7 @@ MonoBehaviour:
     name: 
     explain: 
     count: 0
+    spritePath: 
     sprite: {fileID: 0}
     itemType: 0
 --- !u!114 &1492197821
@@ -41619,6 +41680,7 @@ MonoBehaviour:
     name: 
     explain: 
     count: 0
+    spritePath: 
     sprite: {fileID: 0}
     itemType: 0
 --- !u!114 &1508426239
@@ -42947,6 +43009,7 @@ MonoBehaviour:
     name: 
     explain: 
     count: 0
+    spritePath: 
     sprite: {fileID: 0}
     itemType: 0
 --- !u!114 &1561188643
@@ -43126,6 +43189,7 @@ MonoBehaviour:
     name: 
     explain: 
     count: 0
+    spritePath: 
     sprite: {fileID: 0}
     itemType: 0
 --- !u!114 &1585365281
@@ -43647,6 +43711,7 @@ MonoBehaviour:
     name: 
     explain: 
     count: 0
+    spritePath: 
     sprite: {fileID: 0}
     itemType: 0
 --- !u!114 &1639879167
@@ -43785,6 +43850,7 @@ MonoBehaviour:
     name: 
     explain: 
     count: 0
+    spritePath: 
     sprite: {fileID: 0}
     itemType: 0
 --- !u!1 &1643022899
@@ -45075,6 +45141,7 @@ MonoBehaviour:
     name: 
     explain: 
     count: 0
+    spritePath: 
     sprite: {fileID: 0}
     itemType: 0
 --- !u!114 &1737109124
@@ -45146,7 +45213,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1761759788}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -45477,6 +45544,7 @@ MonoBehaviour:
     name: 
     explain: 
     count: 0
+    spritePath: 
     sprite: {fileID: 0}
     itemType: 0
 --- !u!114 &1756488205
@@ -45629,6 +45697,7 @@ RectTransform:
   m_Children:
   - {fileID: 1789544933}
   - {fileID: 1432794184}
+  - {fileID: 282327500}
   - {fileID: 1745675551}
   m_Father: {fileID: 1518615848}
   m_RootOrder: 1
@@ -45847,6 +45916,101 @@ MonoBehaviour:
   m_EffectColor: {r: 1, g: 0.5566255, b: 0.40943396, a: 0.5}
   m_EffectDistance: {x: 1, y: -1}
   m_UseGraphicAlpha: 1
+--- !u!1 &1770798037
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1770798041}
+  - component: {fileID: 1770798040}
+  - component: {fileID: 1770798038}
+  - component: {fileID: 1770798039}
+  m_Layer: 5
+  m_Name: ObjExplainTxt
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &1770798038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1770798037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: ffb4175f4b4803a439a36683007a1cb2, type: 3}
+    m_FontSize: 45
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 0
+    m_MaxSize: 60
+    m_Alignment: 4
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 1
+    m_LineSpacing: 1
+  m_Text: 
+--- !u!114 &1770798039
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1770798037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 1, g: 1, b: 1, a: 0.5}
+  m_EffectDistance: {x: 2, y: 0}
+  m_UseGraphicAlpha: 1
+--- !u!222 &1770798040
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1770798037}
+  m_CullTransparentMesh: 1
+--- !u!224 &1770798041
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1770798037}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 282327500}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: -884.6, y: 0}
+  m_SizeDelta: {x: 700, y: 200}
+  m_Pivot: {x: 0, y: 0.5}
 --- !u!1 &1787151077
 GameObject:
   m_ObjectHideFlags: 0
@@ -45907,6 +46071,7 @@ MonoBehaviour:
     name: 
     explain: 
     count: 0
+    spritePath: 
     sprite: {fileID: 0}
     itemType: 0
 --- !u!114 &1787151080
@@ -46970,6 +47135,7 @@ MonoBehaviour:
     name: 
     explain: 
     count: 0
+    spritePath: 
     sprite: {fileID: 0}
     itemType: 0
 --- !u!114 &1838465335
@@ -47834,6 +48000,7 @@ MonoBehaviour:
     name: 
     explain: 
     count: 0
+    spritePath: 
     sprite: {fileID: 0}
     itemType: 0
 --- !u!114 &1894450034
@@ -48128,6 +48295,7 @@ MonoBehaviour:
     name: 
     explain: 
     count: 0
+    spritePath: 
     sprite: {fileID: 0}
     itemType: 0
 --- !u!114 &1924268647
@@ -48429,6 +48597,7 @@ MonoBehaviour:
     name: 
     explain: 
     count: 0
+    spritePath: 
     sprite: {fileID: 0}
     itemType: 0
 --- !u!114 &1944410096
@@ -48640,6 +48809,7 @@ MonoBehaviour:
     name: 
     explain: 
     count: 0
+    spritePath: 
     sprite: {fileID: 0}
     itemType: 0
 --- !u!114 &1954705704
@@ -49166,6 +49336,7 @@ MonoBehaviour:
     name: 
     explain: 
     count: 0
+    spritePath: 
     sprite: {fileID: 0}
     itemType: 0
 --- !u!114 &2004011203
@@ -50699,6 +50870,7 @@ MonoBehaviour:
     name: 
     explain: 
     count: 0
+    spritePath: 
     sprite: {fileID: 0}
     itemType: 0
 --- !u!114 &2094130809
@@ -51401,6 +51573,7 @@ MonoBehaviour:
     name: 
     explain: 
     count: 0
+    spritePath: 
     sprite: {fileID: 0}
     itemType: 0
 --- !u!114 &2130825177
@@ -71839,6 +72012,7 @@ MonoBehaviour:
     name: 
     explain: 
     count: 0
+    spritePath: 
     sprite: {fileID: 0}
     itemType: 0
 --- !u!4 &1620801115977488008

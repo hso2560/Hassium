@@ -113,6 +113,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
         {
             objExplainText.gameObject.SetActive(true);
             objExplainText.text = od.explain;
+            objExplainText.transform.DOScaleX(1, 0.3f);
         }
 
         interBtn.gameObject.SetActive(true);
@@ -144,7 +145,10 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
             }
         }
 
-        if (objExplainText.gameObject.activeSelf) objExplainText.gameObject.SetActive(false);
+        if (objExplainText.gameObject.activeSelf)
+        {
+            objExplainText.transform.DOScaleX(0, 0.3f).OnComplete(()=> objExplainText.gameObject.SetActive(false));
+        }
     }
 
     public void DisableItrBtn(Collider[] cols)
@@ -288,6 +292,8 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
             infoCvs = this.sceneObjs.cvses[2];
             camSlider = this.sceneObjs.camSlider;
             curMenuPanel = this.sceneObjs.ui[1];
+
+            objExplainText = this.sceneObjs.gameTexts[1];
 
             interactionBtns = new List<InteractionBtn>(this.sceneObjs.itrBtns);
             uiColors = new List<Color>(this.sceneObjs.gameColors);

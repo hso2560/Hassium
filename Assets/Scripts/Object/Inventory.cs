@@ -58,6 +58,7 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad
 
         for(int i=0; i<items.Count; i++)
         {
+            items[i].sprite = Resources.Load<Sprite>("Sprites/Item/" + items[i].spritePath);
             idToItem.Add(items[i].id, items[i]);
             itemSlots[i].SetData(items[i]);
         }

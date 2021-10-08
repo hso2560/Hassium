@@ -17,6 +17,7 @@ public class ItemData
     public string explain;
 
     public int count; //현재 count개 가지고 있음
+    public string spritePath; //템 이미지 경로
     public Sprite sprite; //템 이미지
 
     public ItemType itemType;
@@ -28,7 +29,7 @@ public class ItemData
         name = data.name;
         explain = data.explain;
         count = data.count;
-        sprite = data.sprite;
+        spritePath = data.spritePath;
         itemType = data.itemType;
     }
 }
