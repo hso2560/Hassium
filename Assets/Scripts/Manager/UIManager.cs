@@ -126,15 +126,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
         {
             beforeItrObjs.Remove(ib.data.gameObject);
             ib.data = null;
-
-            Sequence seq = DOTween.Sequence();
-
-            seq.Append(ib.cvs.DOFade(0, 0.3f));
-            seq.AppendCallback(() =>
-            {
-                ib.gameObject.SetActive(false);
-            });
-            seq.Play();
+            ib.cvs.DOFade(0, 0.3f).OnComplete(() => ib.gameObject.SetActive(false));
         }
         else
         {

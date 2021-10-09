@@ -125,6 +125,8 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad
 
     public void Exchange(ItemSlot i)  
     {
+        if (i == beginSlot) return;
+
         ItemData data1 = new ItemData(i.Item_Data);
         ItemData data2 = new ItemData(beginSlot.Item_Data);
 

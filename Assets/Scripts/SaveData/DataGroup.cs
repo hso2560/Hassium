@@ -31,6 +31,7 @@ public class ItemData
         count = data.count;
         spritePath = data.spritePath;
         itemType = data.itemType;
+        sprite = data.sprite;
     }
 }
 

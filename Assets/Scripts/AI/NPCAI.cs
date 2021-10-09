@@ -8,6 +8,8 @@ public class NPCAI : ObjData
 
     private void Start()
     {
+        objName = info.name;
+
         if(GameManager.Instance.savedData.npcInfo.objActiveKeys.Contains(info.id))
         {
             info = GameManager.Instance.savedData.npcInfo[info.id];

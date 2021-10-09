@@ -42,6 +42,9 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
 
     [HideInInspector] public CameraMove camMove;
 
+    [SerializeField] private int maxSystemMsgCount = 5;
+    private int systemMsgCount = 0;
+
     public string GetFilePath(string fileName) => string.Concat(Application.persistentDataPath, "/", fileName);
 
     private void Awake()  //문제점(1): 카메라 콜라이더 없어서 벽을 뚫음.
@@ -310,6 +313,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
         if (sceneObjs.ScType == SceneType.MAIN)
         {
             PoolManager.CreatePool<Meteor>(sceneObjs.prefabs[0], sceneObjs.environMentGroup, 4);
+            PoolManager.CreatePool<SystemTxt>(sceneObjs.prefabs[1],sceneObjs.systemMsgParent, 3);
         }
     }   
     
@@ -358,6 +362,14 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
     public void OpenChest(ChestData chestData)
     {
         saveData.userInfo.myChestList.Add(new ChestData(chestData));
+    }
+
+    public void OnSystemMsg(string msg,float time=3f ,int size=50)
+    {
+        if (systemMsgCount == maxSystemMsgCount) return;
+
+        systemMsgCount++;
+        PoolManager.GetItem<SystemTxt>().OnText(msg, time, size, () => systemMsgCount--);
     }
 
     public void ActionFuncHandle()

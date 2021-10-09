@@ -19,7 +19,7 @@ public class SceneObjects : MonoBehaviour  //해당 씬마다 필요한 오브젝트들을 모�
     public GameObject[] prefabs;
 
     public SceneType ScType;
-    public Transform ManagerGroup, environMentGroup;
+    public Transform ManagerGroup, environMentGroup, systemMsgParent;
     public Transform poolTrm;
 
     public Button[] gameBtns;
