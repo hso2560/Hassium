@@ -61,6 +61,7 @@ public class PlayerScript : MonoBehaviour, IDamageable
 
     private float checkTime;  //너무 빨리 CheckObj함수 호출하는 것을 방지해줌
     private bool isDamageableByFall;  //높은 곳에서 떨어져서 데미지를 받을 수 있는 상태인지
+    public bool IsDamageableByFall { set { isDamageableByFall = value; } get { return isDamageableByFall; } }
     private bool isInvincible = false;  //무적상태인가
     public bool IsInvincible { get { return isInvincible; } set { isInvincible = value; } }
     private bool isStart; //한 번이라도 시작했나

@@ -14,22 +14,37 @@ public class ColumnAPuzzle : MonoBehaviour
 
     private bool isMove = false;
     public bool IsMove { get { return isMove; } }
-    ColumnA representativeCol;
+    ColumnA representativeCol, resetObj;
+
+    [SerializeField] private short id;
 
     private void Awake()
     {
         columns = new List<ColumnA>(GetComponentsInChildren<ColumnA>());
         columns[0].Representative = true;
         representativeCol = columns[0];
+
+        ColumnA r = columns.Find(x => x.IsResetBtn);
+        resetObj = r;
+        columns.Remove(r);
     }
 
-    public void Move()
+    public void Move(bool reset=false)
     {
         if (isMove) return;
 
         isMove = true;
 
         columns.ForEach(x => x.active = false);
+
+        if (reset)
+        {
+            foreach(ColumnA c in columns)
+            {
+                c.ResetMove();
+            }
+        }
+
         Invoke("ActiveCol", moveTime + 0.3f);
     }
 
@@ -47,7 +62,8 @@ public class ColumnAPuzzle : MonoBehaviour
         }
 
         representativeCol.Save();
-        
+        resetObj.active = false;
+        PuzzleReward.RequestReward(id);
     }
 
     public void AllColActiveState(bool active)
@@ -64,6 +80,7 @@ public class ColumnAPuzzle : MonoBehaviour
                 columns[i].transform.localScale = tr.localScale;
                 columns[i].mesh.material = representativeCol.mesh.material;
             }
+            resetObj.active = false;
         }
     }
 

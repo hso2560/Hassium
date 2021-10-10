@@ -31,6 +31,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //°× ½ÃÀÛ
     //public Dictionary<int, Action> idToAction;
     public event Action objActionHandle;
     public event Action DeathEvent;
+    public event Action quitEvent;
 
     private PlayerScript player;
     public PlayerScript PlayerSc { get { return player; } }
@@ -57,13 +58,21 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //°× ½ÃÀÛ
     private void InitData()
     {
         infoSaveObjs = sceneObjs.infoSaveObjs;
-        CreatePool();  
+        CreatePool();
 
         idToMyPlayer = new Dictionary<short, PlayerScript>();
         playerList = new List<PlayerScript>();
         keyToVoidFunction = new Dictionary<LoadingType, LoadingFunc>();
 
-        keyToVoidFunction.Add(LoadingType.RESPAWN, () => player.transform.position = MapManager.Instance.mapCenterDict[saveData.userInfo.mapIndex].position);
+        keyToVoidFunction.Add(LoadingType.RESPAWN, () => {
+            if (player.IsDamageableByFall)
+            {
+                player.IsDamageableByFall = false;
+                player.hp -= Mathf.Clamp(player.hp - 1, 0, 100);
+                UIManager.Instance.AdjustFillAmound(UIType.HPFILL, player.hp, player.MaxHp);
+            }
+            player.transform.position = MapManager.Instance.mapCenterDict[saveData.userInfo.mapIndex].position;
+        });
         keyToVoidFunction.Add(LoadingType.PLAYERDEATH, () =>
         {
             PlayerScript p = playerList.Find(p => !p.isDie);
@@ -420,6 +429,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //°× ½ÃÀÛ
 
     private void OnApplicationQuit()
     {
+        quitEvent?.Invoke();
         Save();
     }
     private void OnApplicationFocus(bool focus)

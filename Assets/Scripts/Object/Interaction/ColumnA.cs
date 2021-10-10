@@ -3,6 +3,8 @@ using DG.Tweening;
 
 public class ColumnA : ObjData  
 {
+    [SerializeField] private bool isResetButton;
+    public bool IsResetBtn { get { return isResetButton; } }
     private ColumnAPuzzle rule;
     private bool representative; //true인 놈만 현재 material과 active상태를 체크하고 변경되어 있으면 rule을 통해 전부 변경시킨다
                                   //0번째인 놈이 true임
@@ -11,11 +13,13 @@ public class ColumnA : ObjData
     [SerializeField] private bool[] increase;
 
     [HideInInspector] public MeshRenderer mesh;
+    private float startY;
 
     private void Awake()
     {
         rule = transform.parent.GetComponent<ColumnAPuzzle>();
         mesh = transform.GetChild(0).GetComponent<MeshRenderer>();
+        startY = transform.localScale.y;
     }
 
     private void Start()
@@ -32,6 +36,13 @@ public class ColumnA : ObjData
     public override void Interaction()
     {
         if (rule.IsMove) return;
+
+        if(isResetButton)
+        {
+            rule.Move(true);
+            mesh.GetComponent<Animator>().SetTrigger("move");
+            return;
+        }
 
         int i;
 
@@ -52,6 +63,11 @@ public class ColumnA : ObjData
         }
 
         rule.Move();
+    }
+
+    public void ResetMove()
+    {
+        transform.DOScaleY(startY, rule.moveTime);
     }
 
     public void Save()
