@@ -23,6 +23,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
     [HideInInspector] public List<InteractionBtn> interactionBtns;
 
     [HideInInspector] public Text objExplainText;
+    private Text hpText;
 
     public List<GameObject> beforeItrObjs = new List<GameObject>();
     public List<GameObject> stackUI = new List<GameObject>();
@@ -208,6 +209,8 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
                 else if (current < max / 2) hpFillImg.color = uiColors[1];
                 else hpFillImg.color = uiColors[0];
 
+                hpText.text = string.Format("HP: {0}/{1}", current, max);
+
                 break;
         }
     }
@@ -229,6 +232,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
 
         GameObject o = sceneObjs.ui[num];
         GameUI gu = o.GetComponent<GameUI>();
+        SpecificProcessing(num);
 
         if(!o.activeSelf)
         {
@@ -262,6 +266,16 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
         if (uiChangeQueue.Count > 0) uiChangeQueue.Dequeue();
     }
 
+    private void SpecificProcessing(int num)
+    {
+        switch(num)
+        {
+            case 0:
+                Inventory.Instance.UpdateCharInfoUI();
+                break;
+        }
+    }
+
     public void ManagerDataLoad(GameObject sceneObjs)
     {
         UIManager[] managers = FindObjectsOfType<UIManager>();
@@ -277,6 +291,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
             crosshairImg = this.sceneObjs.gameImgs[1];
             hpFillImg = this.sceneObjs.gameImgs[3];
             hpFillCvsg = hpFillImg.GetComponent<CanvasGroup>();
+            hpText = hpFillImg.transform.parent.GetChild(1).GetComponent<Text>();
             //infoPanel = this.sceneObjs.gameImgs[2];
 
             mainCvs = this.sceneObjs.cvses[0];

@@ -11,7 +11,7 @@ public class JoystickControl : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     public Color bgAfter, joystickAfter;
     private Color bgBefore, joystickBefore;
     private Image bgImg, joystickImg;
-    [SerializeField] private Image staminaGauge;
+    [SerializeField] private Image staminaGauge, skillGauge;
     [SerializeField] private CanvasGroup staminaGaugeCvg;
     [SerializeField] private Color defaultGaugeColor, shortageGaugeColor;
     private bool isShortage = false;  //스태미나 부족 상태
@@ -57,6 +57,7 @@ public class JoystickControl : MonoBehaviour, IPointerDownHandler, IPointerUpHan
         joystickBefore = joystickImg.color;
 
         jumpBtnCvsGroup = jumpBtn.GetComponent<CanvasGroup>();
+        skillGauge = skillBtn.transform.GetChild(0).GetComponent<Image>();
 
         //trigger = skillBtn.GetComponent<EventTrigger>();
         //entry1.eventID = EventTriggerType.PointerDown;
@@ -109,6 +110,7 @@ public class JoystickControl : MonoBehaviour, IPointerDownHandler, IPointerUpHan
         if (player != null)
         {
             CheckJoystickState();
+            CheckSkillCool();
         }
 
         PC_MoveDir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
@@ -208,6 +210,18 @@ public class JoystickControl : MonoBehaviour, IPointerDownHandler, IPointerUpHan
             isShortage = false;
             staminaGaugeCvg.DOKill();
             staminaGaugeCvg.DOFade(1, 0.3f);
+        }
+    }
+
+    private void CheckSkillCool()
+    {
+        if (player.skill.isUsedSkill)
+        {
+            skillGauge.fillAmount = (player.skill.skillRechargeTime - Time.time) / player.skill.coolTime;
+        }
+        else
+        {
+            skillGauge.fillAmount = player.skill.isUsingSkill ? 1 : 0;
         }
     }
     #endregion
