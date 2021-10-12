@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class PuzzleReward : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class PuzzleReward : MonoBehaviour
 
     [SerializeField] private NPCAI[] npc;
     [SerializeField] private GameObject[] objects;
+    [SerializeField] private Vector3[] vectors;
 
     private void Awake()
     {
@@ -17,20 +19,21 @@ public class PuzzleReward : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public static void RequestReward(short id)
+    public static void RequestReward(short id, bool running=true)
     {
-        instance.StartCoroutine(instance.RewardCo(id));
+        instance.StartCoroutine(instance.RewardCo(id,running));
     }
 
-    public IEnumerator RewardCo(short id)
+    public IEnumerator RewardCo(short id, bool running)
     {
         yield return null;
         switch (id)
         {
             case 10:
-                npc[0].info.talkId++;
-                //오브젝트 위치 저장
-                //오브젝트 움직임
+                if(running)
+                   npc[0].info.talkId++;
+                objects[0].SetActive(true);
+                objects[0].transform.DOMove(Vector3.zero, running ? 4f : 0);
                 break;
 
             default:

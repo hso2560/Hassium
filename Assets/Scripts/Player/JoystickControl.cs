@@ -113,7 +113,7 @@ public class JoystickControl : MonoBehaviour, IPointerDownHandler, IPointerUpHan
             CheckSkillCool();
         }
 
-        PC_MoveDir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
+        PC_MoveDir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;
     }
 
     #region 버튼 처리

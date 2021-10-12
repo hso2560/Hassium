@@ -81,6 +81,7 @@ public class ColumnAPuzzle : MonoBehaviour
                 columns[i].mesh.material = representativeCol.mesh.material;
             }
             resetObj.active = false;
+            PuzzleReward.RequestReward(id,false);
         }
     }
 

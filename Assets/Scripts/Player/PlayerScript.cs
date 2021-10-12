@@ -73,6 +73,7 @@ public class PlayerScript : MonoBehaviour, IDamageable
 
     private IEnumerator IEhit, IEdeath;
     private WaitForSeconds hitWs = new WaitForSeconds(.3f);
+    private bool jumpTry;
                                             
     private void Start() //문제점(2): 점프 애니메이션이 위치까지 가져와지면서 움직임이 어색함. 착지 애니메이션 때문에 점프하다가 가끔씩 맛나가고 점프가 짧게 실행되고 끊김.
     {                               // --> 땅 체크 레이가 발에서 나가는 것으로 반해결.             --> 제자리 점프일 때만 그래서 어색. => fixed duration을 줘서 반해결
@@ -147,7 +148,23 @@ public class PlayerScript : MonoBehaviour, IDamageable
     {
         Move();
         GroundHit();
+        RigidHandle();
+    }
+
+    private void RigidHandle()
+    {
         rigid.angularVelocity = Vector3.zero;
+
+        if(ani.GetFloat(speedFloat)==0 && !isJumping && !jumpTry)   //ani.GetCurrentAnimatorStateInfo(0).nameHash==Animator.StringToHash("Base Layer.Run")
+        {
+            if(rigid.drag<10)
+               rigid.drag = 55;
+        }
+        else
+        {
+            if (rigid.drag > 10)
+                rigid.drag = 0.5f;
+        }
     }
 
     private void Move()
@@ -227,9 +244,13 @@ public class PlayerScript : MonoBehaviour, IDamageable
     {
         if(!isJumping && isMovable && !noControl)
         {
+            rigid.drag = 0.5f;
+            jumpTry = true;
+            Invoke("DelayHandling", 0.3f);
+
             ani.SetTrigger(jumpTrigger);
             rigid.velocity = Vector3.up * jumpPower;
-
+            
             if (joystickCtrl.isRun) stamina -= staminaDecJAR;
         }
     }
@@ -298,6 +319,11 @@ public class PlayerScript : MonoBehaviour, IDamageable
         {
             UIManager.Instance.OffInterBtn();
         }
+    }
+
+    private void DelayHandling()
+    {
+        jumpTry = false;
     }
 
     private void CheckHp()
