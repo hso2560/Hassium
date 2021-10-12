@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class PlayerScript : MonoBehaviour, IDamageable
+public class PlayerScript : MonoBehaviour, IDamageable, IAttackable   //부모 스크립트 만들고 그걸 상속받는게 나았겠다
 {
     public PSkillType skillType;
     public Rigidbody rigid;
@@ -9,8 +9,10 @@ public class PlayerScript : MonoBehaviour, IDamageable
     public Collider col;
     public Skill skill;
     public PlayerData pData;
+    public Attack attack;
 
     [HideInInspector] public JoystickControl joystickCtrl;
+
 
     //저장/로드 할 정보들은 차라리 저장할 때의 클래스로 가져와서 클래스 접근을 통해 값을 쓰고 바꾸고 하는게 나았을듯.....
     [SerializeField] private float speed = 8.5f;
@@ -23,11 +25,13 @@ public class PlayerScript : MonoBehaviour, IDamageable
     [SerializeField] private float staminaDownSpeed=7f;  //스테미나 감소 속도
     [SerializeField] private float staminaDecJAR = 10f;  //달리는 중에 점프할 때의 스테미나 감소 수치
     
+
     //[SerializeField] private float groundRayDist=3f;  //플레이어가 땅위를 밟고 있는지 체크하는 레이의 길이
     public float rotateSpeed = 3.5f;
     [SerializeField] private float needStaminaMin;  //스테미나 바닥난 후에 다시 런하기 위해서 필요한 최소 스테미나
     public float staminaRecoverySpeed;  //스테미나 회복 속도
     //[SerializeField] private float interactionRadius = 3.5f;  //오브젝트와 상호작용 가능한 범위
+
 
     [Header("고유 값")] [SerializeField] private short id;
     public short Id { get { return id; } }
@@ -43,12 +47,20 @@ public class PlayerScript : MonoBehaviour, IDamageable
     public int MaxExp { get { return currentMaxExp; } set { currentMaxExp = value; } }
     [Header("고유 값")] [SerializeField] private string resoName;  //Resources폴더에서 꺼낼 때의 파일 이름(부모)
 
+
     private Vector3 moveDir, worldDir;  //움직임 방향, 움직임 월드 방향
     public int hp;
     public float stamina;
+
     [SerializeField] private int fallDamage; //해당 변수 * 높이에 따른 값
     private float rigidVelY; //점프로 데미지 입을 때 rigid.velocity의 Y의 절댓값이 가장 큰 값을 저장
     public bool isDie, isJumping;
+
+    [SerializeField] private float atkDelay=.9f;
+    [SerializeField] private float existAtkTime = .5f;
+    private float lastAtkTime;
+    private bool isAttacking;
+    private int attackStatePhase = 0;
     
     [HideInInspector] public bool isStamina0;  //스테미나가 0인지 체크
     public Transform center;  //플레이어 오브젝트에서의 중심 부분
@@ -56,8 +68,11 @@ public class PlayerScript : MonoBehaviour, IDamageable
     public Transform footCenter, footCenter2;  //하나로 하려했더니 여러 문제가 생겨서 갑작스럽게 2를 추가함
     //public LayerMask whatIsGround, whatIsObj;
     public GameObject parent;
+
     private int speedFloat;  //움직임 애니메이션 처리할 애니메이션 이름의 아이디
     private int jumpTrigger, landingTrigger;
+    private int attackInt;
+    private int attackTrigger;
 
     private float checkTime;  //너무 빨리 CheckObj함수 호출하는 것을 방지해줌
     private bool isDamageableByFall;  //높은 곳에서 떨어져서 데미지를 받을 수 있는 상태인지
@@ -70,6 +85,7 @@ public class PlayerScript : MonoBehaviour, IDamageable
     [HideInInspector] public bool isMovable = true;  //움직일 수 없는 상태  (중력도 사라짐)
     private bool noControl = false; //제어할 수 없는 상태 (중력은 적용 됨)
     public bool NoControl { get { return noControl; } set { noControl = value; } }
+
 
     private IEnumerator IEhit, IEdeath;
     private WaitForSeconds hitWs = new WaitForSeconds(.3f);
@@ -87,7 +103,9 @@ public class PlayerScript : MonoBehaviour, IDamageable
         speedFloat = Animator.StringToHash("moveSpeed");
         jumpTrigger = Animator.StringToHash("jump");
         landingTrigger = Animator.StringToHash("landing");
-        
+        attackInt = Animator.StringToHash("attack");
+        attackTrigger = Animator.StringToHash("atk");
+
         gameChar = new GameCharacter();
         //IEhit = HitCo();
         //IEdeath = DeathCo();
@@ -118,6 +136,7 @@ public class PlayerScript : MonoBehaviour, IDamageable
         StaminaRecovery();
         Rotate();
         CheckObj();
+        CheckAttack();
         joystickCtrl?.CheckStamina(stamina,maxStamina,needStaminaMin);
 
         _Input();
@@ -269,7 +288,7 @@ public class PlayerScript : MonoBehaviour, IDamageable
                 if (isDamageableByFall)
                 {
                     isDamageableByFall = false;
-                    OnDamaged(fallDamage * (int)-rigidVelY / 20, Vector3.zero, 0);
+                    OnDamaged(fallDamage * (int)-rigidVelY / 20, Vector3.zero, 0, false);
                 }
                 rigidVelY = 0;
             }
@@ -332,11 +351,32 @@ public class PlayerScript : MonoBehaviour, IDamageable
         if (hp <= 0) Death();
     }
 
-    public void OnDamaged(int damage, Vector3 hitNormal, float force)
+    private void CheckAttack()
+    {
+        if (isAttacking)
+        {
+            if (lastAtkTime + existAtkTime < Time.time)
+            {
+                if(attack.gameObject.activeSelf)
+                   attack.gameObject.SetActive(false);
+            }
+            if(lastAtkTime+atkDelay < Time.time)
+            {
+                attackStatePhase = 0;
+                isAttacking = false;
+            }
+        }
+    }
+
+    public void OnDamaged(int damage, Vector3 hitNormal, float force, bool useDef)
     {
         if (isDie || isInvincible) return;
         
-        hp -= damage;
+        if(!useDef) hp -= damage;
+        else
+        {
+            hp -= (int)(damage - ((float)damage * def / 250f));
+        }
         //rigid.AddForce(hitNormal * force, ForceMode.VelocityChange);
         //rigid.velocity = hitNormal * force;
         CheckHp();
@@ -349,6 +389,29 @@ public class PlayerScript : MonoBehaviour, IDamageable
             StartCoroutine(IEhit);
         }
         //ani.SetInteger(hitInt, Random.Range(1, 3));
+    }
+
+    public void Attack()
+    {
+        if (isJumping || noControl || !isMovable) return;
+
+        if (!isAttacking)
+        {
+            isAttacking = true;
+        }
+        else
+        {
+            if(attackStatePhase!=1 || attack.gameObject.activeSelf)
+            {
+                return;
+            }
+        }
+
+        attackStatePhase++;
+        ani.SetTrigger(attackTrigger);
+        ani.SetInteger(attackInt, attackStatePhase);
+        attack.gameObject.SetActive(true);
+        lastAtkTime = Time.time;
     }
 
     public void Death()
@@ -457,5 +520,4 @@ public class PlayerScript : MonoBehaviour, IDamageable
 
     public void AddInfo()  //플레이어 추가
       => GameManager.Instance.savedData.userInfo.characters.Add(new GameCharacter(id, str, def, maxHp, maxStamina, runSpeed, jumpPower, staminaRecoverySpeed, charName, resoName));
-    
 }

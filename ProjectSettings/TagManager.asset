@@ -12,6 +12,7 @@ TagManager:
   - Out
   - JoinObj
   - NPC
+  - Attack
   layers:
   - Default
   - TransparentFX
@@ -27,7 +28,7 @@ TagManager:
   - Item
   - NPC
   - UIView
-  - 
+  - Attack
   - 
   - 
   - 

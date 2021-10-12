@@ -20,6 +20,7 @@ public class JoystickControl : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     public Button jumpBtn;
     public Button skillBtn;
     public Button aimBtn;
+    public Button attackBtn;
     
     private CanvasGroup jumpBtnCvsGroup;
     [SerializeField] private CanvasGroup runBtnCvg;
@@ -50,6 +51,10 @@ public class JoystickControl : MonoBehaviour, IPointerDownHandler, IPointerUpHan
         jumpBtn.onClick.AddListener(Jump);
         skillBtn.onClick.AddListener(ClickSkill);
         aimBtn.onClick.AddListener(Aim);
+        attackBtn.onClick.AddListener(() =>
+        {
+            player.Attack();
+        });
 
         bgImg = GetComponent<Image>();
         joystickImg = transform.GetChild(0).GetComponent<Image>();
@@ -57,7 +62,7 @@ public class JoystickControl : MonoBehaviour, IPointerDownHandler, IPointerUpHan
         joystickBefore = joystickImg.color;
 
         jumpBtnCvsGroup = jumpBtn.GetComponent<CanvasGroup>();
-        skillGauge = skillBtn.transform.GetChild(0).GetComponent<Image>();
+        //skillGauge = skillBtn.transform.GetChild(0).GetComponent<Image>();
 
         //trigger = skillBtn.GetComponent<EventTrigger>();
         //entry1.eventID = EventTriggerType.PointerDown;
@@ -164,6 +169,9 @@ public class JoystickControl : MonoBehaviour, IPointerDownHandler, IPointerUpHan
         jumpBtnCvsGroup.alpha = !jumpCheck ? 1 : 0.3f;
         jumpBtnCvsGroup.blocksRaycasts = !jumpCheck ? true : false;
         jumpBtnCvsGroup.interactable = !jumpCheck ? true : false;
+
+        //공격 버튼
+        attackBtn.GetComponent<CanvasGroup>().alpha = !player.isJumping ? 1 : 0.4f;
     }
 
     public void CheckRunBtnState(bool zero)
