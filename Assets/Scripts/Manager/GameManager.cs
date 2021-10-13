@@ -393,6 +393,8 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //°× ½ÃÀÛ
         }
     }
 
+    public bool ContainKeyActiveId(int id) => saveData.objActiveInfo.objActiveKeys.Contains(id);
+
     private void Update()  
     {
         TestInput();

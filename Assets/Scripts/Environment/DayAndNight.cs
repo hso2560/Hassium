@@ -14,6 +14,8 @@ public class DayAndNight : MonoBehaviour
     private float dayFogDensity;
     private float currentFogDensity;
 
+    public Material[] skyMaterials;
+
     private void Start()
     {
         dayFogDensity = RenderSettings.fogDensity;

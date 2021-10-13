@@ -57,4 +57,9 @@ public class MapManager : MonoSingleton<MapManager>, ISceneDataLoad
 
         isReady = true;
     }
+
+    public void ChangeSky(int index)
+    {
+        RenderSettings.skybox = dayAndNight.skyMaterials[index];
+    }
 }

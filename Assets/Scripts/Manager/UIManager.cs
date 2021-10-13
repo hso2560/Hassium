@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using System;
 
 public enum UIType
 {
@@ -22,13 +23,18 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
     //[HideInInspector] public Image infoPanel;
     [HideInInspector] public List<InteractionBtn> interactionBtns;
 
+    public event Action timeOverEvent;
+    public event Action clearEvent;
+    private bool isTimer;
+    private float remainingTime;
+
     [HideInInspector] public Text objExplainText;
-    private Text hpText;
+    private Text hpText, timerText;
 
     public List<GameObject> beforeItrObjs = new List<GameObject>();
     public List<GameObject> stackUI = new List<GameObject>();
     public List<Color> uiColors;
-    public GameObject curMenuPanel;
+    public GameObject curMenuPanel, timerParent;
 
     private Canvas mainCvs, touchCvs, infoCvs;
     private CanvasGroup hpFillCvsg;
@@ -301,12 +307,14 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
             curMenuPanel = this.sceneObjs.ui[1];
 
             objExplainText = this.sceneObjs.gameTexts[1];
+            timerText = this.sceneObjs.gameTexts[2];
 
             interactionBtns = new List<InteractionBtn>(this.sceneObjs.itrBtns);
             uiColors = new List<Color>(this.sceneObjs.gameColors);
             menuBtn = this.sceneObjs.gameBtns[0];
 
             camMove = this.sceneObjs.camMove;
+            timerParent = timerText.transform.parent.gameObject;
 
             InitData();
         }
@@ -346,6 +354,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
     private void Update()
     {
         _Input();
+        Timer();
         //deleteValue = uiChangeQueue.Count;
     }
 
@@ -370,6 +379,57 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
         Text t = sceneObjs.ui[6].transform.GetChild(0).GetComponent<Text>();
         t.text = msg;
         t.fontSize = fontSize;
+    }
+
+    public void OnTimer(int time, bool off=false)
+    {
+        if (off)
+        {
+            isTimer = false;
+            timerParent.SetActive(false);
+
+            foreach(Action a in timeOverEvent.GetInvocationList())
+            {
+                timeOverEvent -= a;
+            }
+            foreach(Action a in clearEvent.GetInvocationList())
+            {
+                clearEvent -= a;
+            }
+
+            return;
+        }
+
+        if (!isTimer)
+        {
+            isTimer = true;
+            remainingTime = time;
+            timerParent.SetActive(true);
+            timerText.text = ((int)remainingTime).ToString();
+        }
+    }
+
+    private void Timer()
+    {
+        if (isTimer)
+        {
+            remainingTime -= Time.deltaTime;
+            timerText.text = ((int)remainingTime).ToString();
+
+            if (remainingTime <= 0)
+            {
+                timeOverEvent?.Invoke();
+                OnTimer(0, true);
+            }
+        }
+    }
+
+    public void TimeAttackMission(bool clear)
+    {
+        if (clear) clearEvent?.Invoke();
+        else timeOverEvent?.Invoke();
+
+        OnTimer(0, true);
     }
 
     public void SaveData()
