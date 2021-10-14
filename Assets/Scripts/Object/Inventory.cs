@@ -189,7 +189,7 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad
         }
     }
 
-    private void ClickSetting(bool active)
+    private void ClickSetting(bool active) //아이템 클릭시 정보 뜨는거
     {
         if (!active) clickedSlot = null;
         infoPanelData.infoPanel.gameObject.SetActive(active);

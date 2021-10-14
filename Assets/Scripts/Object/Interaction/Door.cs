@@ -32,6 +32,9 @@ public class Door : ObjData  //문 열릴 때 ScaleX값을 0.003으로 바꿔야하는데(저장
     public bool useDoorBtnScr;  //DoorButton스크립트의 Interation함수 쓸지
     public DoorButton doorBtnData;  //DoorButton스크립트 담음
 
+    public bool needKey = false;
+    public int needKeyId;
+
     private void Awake()
     {
         if(isDOT)  //다트윈으로 움직일 경우 초기 위치들을 저장해둔다
@@ -50,7 +53,7 @@ public class Door : ObjData  //문 열릴 때 ScaleX값을 0.003으로 바꿔야하는데(저장
     {
         if (doorType == DoorType.ONLYONCE)  //ONLYONCE타입일 경우 시작할 때 이 값의 액티브 상태를 불러와서 대입한다
         {
-            if (GameManager.Instance.savedData.objActiveInfo.objActiveKeys.Contains(saveActiveStateId))
+            if (GameManager.Instance.ContainKeyActiveId(saveActiveStateId))
             {
                 active = GameManager.Instance.savedData.objActiveInfo[saveActiveStateId];
             }
@@ -59,6 +62,11 @@ public class Door : ObjData  //문 열릴 때 ScaleX값을 0.003으로 바꿔야하는데(저장
 
     public override void Interaction()
     {
+        if (needKey)
+        {
+            
+        }
+
         if (useDoorBtnScr)
         {
             doorBtnData.Interaction();  //DoorButton의 Interation함수 호출
@@ -101,7 +109,14 @@ public class Door : ObjData  //문 열릴 때 ScaleX값을 0.003으로 바꿔야하는데(저장
             for(int i=0; i<obj.Length; i++)  //오브젝트 위치 정보 저장
                 GameManager.Instance.savedData.saveObjDatas.Add(new SaveObjData(objIndex[i], soit, targetPos[i], obj[i].transform.rotation, obj[i].transform.localScale));
 
-            base.Interaction();  
+            base.Interaction();
+
+            switch (id)
+            {
+                case 20:
+
+                    break;
+            }
         }
     }
 }
