@@ -171,7 +171,7 @@ public class JoystickControl : MonoBehaviour, IPointerDownHandler, IPointerUpHan
         jumpBtnCvsGroup.interactable = !jumpCheck ? true : false;
 
         //공격 버튼
-        attackBtn.GetComponent<CanvasGroup>().alpha = !player.isJumping ? 1 : 0.4f;
+        attackBtn.GetComponent<CanvasGroup>().alpha = (player.isJumping || isTouch) ? 0.4f : 1;
     }
 
     public void CheckRunBtnState(bool zero)

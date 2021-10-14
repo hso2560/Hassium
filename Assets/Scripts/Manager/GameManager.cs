@@ -230,6 +230,19 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
         Save();
     }
 
+    public void SaveObjActiveInfo(int index,bool active) //오브젝트 액티브 상태 저장 (만약 이미 저장한 오브젝트면 bool값만 바꾼다)
+    {
+        SaveObjData sod = saveData.saveObjDatas.Find(x => x.index == index);
+        if (sod != null)
+        {
+            sod.active = active;
+        }
+        else
+        {
+            saveData.saveObjDatas.Add(new SaveObjData(index, SaveObjInfoType.ACTIVE, active));
+        }
+    }
+
     #endregion
 
     #region 캐릭터

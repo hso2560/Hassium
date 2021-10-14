@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad
 {
@@ -38,11 +39,13 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad
     public Button[] charChangeBtns;
 
     private PlayerScript ps;
+    public event Action acquisitionEvent;
 
     private void Awake()
     {
         btnSelectPanelPos = btnSelectPanel.GetComponent<RectTransform>();
         slotHalfWidth = itemSlots[0].GetComponent<RectTransform>().rect.width * 0.5f;
+        acquisitionEvent += () => { };
         throwBtn.onClick.AddListener(() => 
         {
             dumpPanelInfo.objImage.sprite = clickedSlot.Item_Data.sprite;
@@ -75,6 +78,8 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad
 
         ps = GameManager.Instance.PlayerSc;
     }
+
+    public bool ExistItem(int id) => idToItem.ContainsKey(id);
 
     public void GetItem(Item itemObj) //≈€ »πµÊ
     {
@@ -109,6 +114,7 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad
 
         itemObj.gameObject.SetActive(false);
         GameManager.Instance.savedData.saveObjDatas.Add(new SaveObjData(itemObj.index, SaveObjInfoType.ACTIVE, false));
+        acquisitionEvent();
     }
 
     public void BeginDrg(bool active, ItemSlot i = null)  

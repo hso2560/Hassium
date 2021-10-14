@@ -1,9 +1,10 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TreeA : Tree
 {
     private TreeAPuzzle rule;
+
+    public bool active = false;
 
     private void Awake()
     {
@@ -12,7 +13,7 @@ public class TreeA : Tree
 
     public override void AddWork()
     {
-        if (rule.IsStart)
+        if (rule.IsStart && active)
         {
 
         }

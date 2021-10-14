@@ -9,6 +9,11 @@ public class TrmPoint : MonoBehaviour
 
     [SerializeField] private short mapIdx;
 
+    [SerializeField] private MapType mapType;
+    [SerializeField] private Transform mapCenter;
+
+    public Vector3 camMinPos, camMaxPos;
+
     private void Start()
     {
         gameManager = GameManager.Instance;
@@ -33,12 +38,29 @@ public class TrmPoint : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(id==-10)  //이곳에 닿으면 유저의 맵 포인트를 바꿈 (mapIdx로)
+        switch (id)  //전체에 other.CompareTag("Player") 조건문 달 수도 있겠지만 다른 옵젝 닿았을 때 뭔가를 처리하는 게 나올 수도 있으니 일단 이렇게
         {
-            if(other.CompareTag("Player"))
-            {
-                gameManager.savedData.userInfo.mapIndex = mapIdx;
-            }
+            case -10:
+                if (other.CompareTag("Player"))  //이곳에 닿으면 유저의 맵 포인트를 바꿈 (mapIdx로)
+                {
+                    gameManager.savedData.userInfo.mapIndex = mapIdx;
+                }
+                break;
+
+            case -100:
+                if(other.CompareTag("Player"))
+                {
+                    gameManager.LoadingFuncEvent += () =>
+                    {
+                        MapManager.Instance.ActiveMap(mapType);
+                        gameManager.savedData.userInfo.mapIndex = mapIdx;
+                        gameManager.camMove.camMinPos = camMinPos;
+                        gameManager.camMove.camMaxPos = camMaxPos;
+                        other.transform.position = mapCenter.position;
+                    };
+                    UIManager.Instance.LoadingFade(false);
+                }
+                break;
         }
     }
 }

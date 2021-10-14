@@ -393,7 +393,7 @@ public class PlayerScript : MonoBehaviour, IDamageable, IAttackable   //ºÎ¸ð ½ºÅ
 
     public void Attack()
     {
-        if (isJumping || noControl || !isMovable) return;
+        if (joystickCtrl.isTouch || isJumping || noControl || !isMovable) return;
 
         if (!isAttacking)
         {

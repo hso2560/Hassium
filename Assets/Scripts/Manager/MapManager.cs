@@ -2,6 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum MapType  //mapList와 순서를 맞춘다
+{
+    TUTORIAL,
+    MAINMAP
+}
+
 public class MapManager : MonoSingleton<MapManager>, ISceneDataLoad
 {
     public bool GetReadyState { get { return isReady; } set { isReady = value; } }
@@ -10,12 +16,26 @@ public class MapManager : MonoSingleton<MapManager>, ISceneDataLoad
     public DayAndNight dayAndNight;
     private IEnumerator MeteorIE=null;
 
+    public List<GameObject> mapList;
+    public List<int> mapObjIndexList; //mapList의 게임 오브젝트 순서와 SceneSaveObjects의 obj에서 그 옵젝에 해당하는 인덱스 값 순서대로 한다
+
     [SerializeField] private bool isDevMode;
 
     private void InitData()
     {
         MeteorIE = MeteorCo();
         StartCoroutine(MeteorIE);
+    }
+
+    public void ActiveMap(MapType type)
+    {
+        for(int i=0; i<mapList.Count; i++)
+        {
+            bool active = (i == (int)type);
+
+            mapList[i].SetActive(active);
+            GameManager.Instance.SaveObjActiveInfo(mapObjIndexList[i], active);
+        }
     }
 
     private IEnumerator MeteorCo()
