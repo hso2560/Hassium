@@ -13,14 +13,17 @@ public class TrmPoint : MonoBehaviour
     [SerializeField] private Transform mapCenter;
 
     public Vector3 camMinPos, camMaxPos;
+    [SerializeField] private int eventId;
 
     private void Start()
     {
         gameManager = GameManager.Instance;
         uiManager = UIManager.Instance;
 
-        if(id>=0)
-           MapManager.Instance.mapCenterDict.Add(id, transform);
+        if (id >= 0)
+            MapManager.Instance.mapCenterDict.Add(id, transform);
+        else if (id == -50)
+            SaveActive(true);
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -47,8 +50,16 @@ public class TrmPoint : MonoBehaviour
                 }
                 break;
 
+            case -50:
+                if (other.CompareTag("Player"))
+                {
+                    gameManager.eventPointAction[eventId]();
+                    SaveActive(false);
+                }
+                break;
+
             case -100:
-                if(other.CompareTag("Player"))
+                if(other.CompareTag("Player")) //맵 전환
                 {
                     gameManager.LoadingFuncEvent += () =>
                     {
@@ -63,4 +74,22 @@ public class TrmPoint : MonoBehaviour
                 break;
         }
     }
+
+    private void SaveActive(bool active)
+    {
+        GameManager.Instance.SaveObjActiveInfo(mapIdx, active); //mapIdx가 objIndex를 대신한다(변수명)
+        if (!active) gameObject.SetActive(active);
+    }
+
+    /*private void OnEnable()
+    {
+        if (id == -50)
+            GameManager.Instance.SaveObjActiveInfo(mapIdx, true); 
+    }
+
+    private void OnDisable()
+    {
+        if (id == -50)
+            GameManager.Instance.SaveObjActiveInfo(mapIdx, false); 
+    }*/
 }

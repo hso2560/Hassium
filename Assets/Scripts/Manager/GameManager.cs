@@ -24,14 +24,16 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
     [SerializeField] private float playTime;
 
     [HideInInspector] public SceneSaveObjects infoSaveObjs;  
+
     public delegate void LoadingFunc();  //이 부분 주석치고 밑의 LoadingFunc를 Action으로 바꿔서 할 수 있다.  //Action<매개변수,매개변수,매개변수...> Func<매개변수..., 반환값>  매개변수 없이도 가능
     //public LoadingFunc loadingFunc;
     public event LoadingFunc LoadingFuncEvent;  //로딩, 확인버튼 등으로 어떤 함수를 처리할 때 여기에 넣어서 씀
     public Dictionary<LoadingType, LoadingFunc> keyToVoidFunction;
     //public Dictionary<int, Action> idToAction;
-    public event Action objActionHandle;
+    public event Action objActionHandle;  //사실 얜 없어도 될듯
     public event Action DeathEvent;
     public event Action quitEvent;
+    public Dictionary<int, Action> eventPointAction = new Dictionary<int, Action>();
 
     private PlayerScript player;
     public PlayerScript PlayerSc { get { return player; } }
@@ -48,7 +50,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
 
     public string GetFilePath(string fileName) => string.Concat(Application.persistentDataPath, "/", fileName);
 
-    private void Awake()  //문제점(1): 카메라 콜라이더 없어서 벽을 뚫음.
+    private void Awake()  
     {
         filePath = GetFilePath(saveFileName_1);
         saveData = new SaveData();

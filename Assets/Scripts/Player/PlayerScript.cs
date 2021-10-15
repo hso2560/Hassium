@@ -90,6 +90,7 @@ public class PlayerScript : MonoBehaviour, IDamageable, IAttackable   //ºÎ¸ð ½ºÅ
     private IEnumerator IEhit, IEdeath;
     private WaitForSeconds hitWs = new WaitForSeconds(.3f);
     private bool jumpTry;
+    private Transform joinTr;
                                             
     private void Start() //¹®Á¦Á¡(2): Á¡ÇÁ ¾Ö´Ï¸ÞÀÌ¼ÇÀÌ À§Ä¡±îÁö °¡Á®¿ÍÁö¸é¼­ ¿òÁ÷ÀÓÀÌ ¾î»öÇÔ. ÂøÁö ¾Ö´Ï¸ÞÀÌ¼Ç ¶§¹®¿¡ Á¡ÇÁÇÏ´Ù°¡ °¡²û¾¿ ¸À³ª°¡°í Á¡ÇÁ°¡ Âª°Ô ½ÇÇàµÇ°í ²÷±è.
     {                               // --> ¶¥ Ã¼Å© ·¹ÀÌ°¡ ¹ß¿¡¼­ ³ª°¡´Â °ÍÀ¸·Î ¹ÝÇØ°á.             --> Á¦ÀÚ¸® Á¡ÇÁÀÏ ¶§¸¸ ±×·¡¼­ ¾î»ö. => fixed durationÀ» Áà¼­ ¹ÝÇØ°á
@@ -278,8 +279,9 @@ public class PlayerScript : MonoBehaviour, IDamageable, IAttackable   //ºÎ¸ð ½ºÅ
     {
         //Debug.DrawRay(footCenter.position, Vector3.down * groundRayDist, Color.blue);
         //Debug.DrawRay(footCenter2.position, Vector3.down * groundRayDist, Color.blue);
-        if(Physics.Raycast(footCenter.position, Vector3.down, pData.groundRayDist,pData.whatIsGround) 
-            || Physics.Raycast(footCenter2.position, Vector3.down, pData.groundRayDist,pData.whatIsGround))  //Á¡ÇÁ ¾Ö´Ï¸ÞÀÌ¼Ç¿¡¼­ À§Ä¡±îÁö °­Á¦ ÀÌµ¿µÅ¼­ ÄÚµåµµ ÀÌ»óÇØÁö°í Á¡ÇÁ ¸ð¼Çµµ Á» ¾î»öÇÔ (ÀÓÆ÷Æ®ÇÑ ¿¡¼ÂÀÇ Á¡ÇÁ°¡ À§Ä¡±îÁö °¡Á®¿Í¼­ ¸Å¿ì ±ÍÂú¾ÆÁü)
+        RaycastHit hit;
+        if(Physics.Raycast(footCenter.position, Vector3.down,out hit ,pData.groundRayDist,pData.whatIsGround) 
+            || Physics.Raycast(footCenter2.position, Vector3.down,out hit ,pData.groundRayDist,pData.whatIsGround))  //Á¡ÇÁ ¾Ö´Ï¸ÞÀÌ¼Ç¿¡¼­ À§Ä¡±îÁö °­Á¦ ÀÌµ¿µÅ¼­ ÄÚµåµµ ÀÌ»óÇØÁö°í Á¡ÇÁ ¸ð¼Çµµ Á» ¾î»öÇÔ (ÀÓÆ÷Æ®ÇÑ ¿¡¼ÂÀÇ Á¡ÇÁ°¡ À§Ä¡±îÁö °¡Á®¿Í¼­ ¸Å¿ì ±ÍÂú¾ÆÁü)
         {
             if (isJumping)
             {
@@ -291,6 +293,22 @@ public class PlayerScript : MonoBehaviour, IDamageable, IAttackable   //ºÎ¸ð ½ºÅ
                     OnDamaged(fallDamage * (int)-rigidVelY / 20, Vector3.zero, 0, false);
                 }
                 rigidVelY = 0;
+            }
+            if (hit.transform.CompareTag("JoinObj")) //ÀÌ ¶§ Ä³¸¯ÅÍ Ã¼ÀÎÁö³ª »ç¸Á½Ã ¿¹¿ÜÃ³¸® ÇÊ¿ä
+            {
+                if (joinTr != hit.transform)
+                {
+                    joinTr = hit.transform;
+                    transform.parent = joinTr;
+                }
+            }
+            else
+            {
+                if (joinTr != null)
+                {
+                    joinTr = null;
+                    transform.parent = parent.transform;
+                }
             }
         }
         else
@@ -347,6 +365,7 @@ public class PlayerScript : MonoBehaviour, IDamageable, IAttackable   //ºÎ¸ð ½ºÅ
 
     private void CheckHp()
     {
+        hp = Mathf.Clamp(hp, 0, maxHp);
         UIManager.Instance.AdjustFillAmound(UIType.HPFILL, hp, maxHp);
         if (hp <= 0) Death();
     }
@@ -371,8 +390,8 @@ public class PlayerScript : MonoBehaviour, IDamageable, IAttackable   //ºÎ¸ð ½ºÅ
     public void OnDamaged(int damage, Vector3 hitNormal, float force, bool useDef)
     {
         if (isDie || isInvincible) return;
-        
-        if(!useDef) hp -= damage;
+
+        if (!useDef) hp -= damage;
         else
         {
             hp -= (int)(damage - ((float)damage * def / 250f));
