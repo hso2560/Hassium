@@ -83,10 +83,13 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //°× ½ÃÀÛ
             }
             else
             {
-                LoadingFuncEvent += () => player.RecoveryHp(player.pData.defaultRespawnHp);
-                LoadingFuncEvent += () => player.transform.parent.gameObject.SetActive(false);
-                LoadingFuncEvent += keyToVoidFunction[LoadingType.RESPAWN];
-                LoadingFuncEvent += () => player.transform.parent.gameObject.SetActive(true);
+                LoadingFuncEvent += () =>
+                {
+                    player.RecoveryHp(player.pData.defaultRespawnHp);
+                    player.transform.parent.gameObject.SetActive(false);
+                    keyToVoidFunction[LoadingType.RESPAWN]();
+                    player.transform.parent.gameObject.SetActive(true);
+                };
                 UIManager.Instance.LoadingFade(false);
             }
             DeathEvent?.Invoke();
