@@ -66,9 +66,12 @@ public class Door : ObjData  //문 열릴 때 ScaleX값을 0.003으로 바꿔야하는데(저장
         {
             if (!Inventory.Instance.ExistItem(needKeyId))
             {
-                UIManager.Instance.OnSystemPanel("열쇠가 필요합니다.");
-
+                PoolManager.GetItem<SystemTxt>().OnText("열쇠가 필요합니다.",2);
                 return;
+            }
+            else
+            {
+                Inventory.Instance.UseItem(needKeyId);
             }
         }
 

@@ -65,7 +65,20 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
         idToMyPlayer = new Dictionary<short, PlayerScript>();
         playerList = new List<PlayerScript>();
         keyToVoidFunction = new Dictionary<LoadingType, LoadingFunc>();
+        SetKeyAndFunc();
+        SetEvent_Point();
 
+        camMove = sceneObjs.camMove;
+        for(int i=0; i<saveData.saveObjDatas.Count; i++)
+        {
+            int idx = saveData.saveObjDatas[i].index;
+            saveData.saveObjDatas[i].SetData(infoSaveObjs.objs[idx]);
+            //infoSaveObjs.objDatas[idx].active = false;
+        }
+    }
+
+    private void SetKeyAndFunc()
+    {
         keyToVoidFunction.Add(LoadingType.RESPAWN, () => {
             if (player.IsDamageableByFall)
             {
@@ -96,15 +109,11 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
             }
             DeathEvent?.Invoke();
         });
+    }
 
-        camMove = sceneObjs.camMove;
-
-        for(int i=0; i<saveData.saveObjDatas.Count; i++)
-        {
-            int idx = saveData.saveObjDatas[i].index;
-            saveData.saveObjDatas[i].SetData(infoSaveObjs.objs[idx]);
-            //infoSaveObjs.objDatas[idx].active = false;
-        }
+    private void SetEvent_Point()
+    {
+        eventPointAction[0] = () => { };
     }
 
     private void Start()
@@ -386,9 +395,35 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
         ActionFuncHandle();
     }
 
-    public void OpenChest(ChestData chestData)
+    public void OpenChest(ChestData chestData, long money, int exp, ItemData[] rewards) //상자를 열고 보상 받는다. 열은 상자 정보도 저장
     {
         saveData.userInfo.myChestList.Add(new ChestData(chestData));
+
+        saveData.userInfo.money += money;
+        sceneObjs.gameTexts[0].text = saveData.userInfo.money.ToString();
+        player.GetExp(exp);
+
+        StringBuilder sb = new StringBuilder();
+        {
+            sb.Append(money.ToString());
+            sb.Append("골드, ");
+            sb.Append(exp.ToString());
+            sb.Append("경험치, ");
+        }
+
+        for (int i=0; i<rewards.Length; i++)
+        {
+            Inventory.Instance.GetItem(rewards[i]);
+            sb.Append(rewards[i].name);
+            sb.Append("×1");
+            if (i != rewards.Length - 1)
+            {
+                sb.Append(", ");
+            }
+        }
+        sb.Append(" 획득");
+
+        PoolManager.GetItem<SystemTxt>().OnText(sb.ToString());
     }
 
     public void OnSystemMsg(string msg,float time=3f ,int size=50)

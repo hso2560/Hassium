@@ -10,7 +10,6 @@ public class TrmPoint : MonoBehaviour
     [SerializeField] private short mapIdx;
 
     [SerializeField] private MapType mapType;
-    [SerializeField] private Transform mapCenter;
 
     public Vector3 camMinPos, camMaxPos;
     [SerializeField] private int eventId;
@@ -67,7 +66,7 @@ public class TrmPoint : MonoBehaviour
                         gameManager.savedData.userInfo.mapIndex = mapIdx;
                         gameManager.camMove.camMinPos = camMinPos;
                         gameManager.camMove.camMaxPos = camMaxPos;
-                        other.transform.position = mapCenter.position;
+                        GameManager.Instance.keyToVoidFunction[LoadingType.RESPAWN]();
                     };
                     UIManager.Instance.LoadingFade(false);
                 }

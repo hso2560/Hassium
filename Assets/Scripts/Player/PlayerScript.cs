@@ -24,6 +24,7 @@ public class PlayerScript : MonoBehaviour, IDamageable, IAttackable   //ºÎ¸ð ½ºÅ
     public float MaxStamina { get { return maxStamina; } set { maxStamina = value; } }
     [SerializeField] private float staminaDownSpeed=7f;  //½ºÅ×¹Ì³ª °¨¼Ò ¼Óµµ
     [SerializeField] private float staminaDecJAR = 10f;  //´Þ¸®´Â Áß¿¡ Á¡ÇÁÇÒ ¶§ÀÇ ½ºÅ×¹Ì³ª °¨¼Ò ¼öÄ¡
+    private int statPoint = 0;  //½ºÅÈ Æ÷ÀÎÆ® (´É·ÂÄ¡ ¿Ã¸®´Â Æ÷ÀÎÆ®)
     
 
     //[SerializeField] private float groundRayDist=3f;  //ÇÃ·¹ÀÌ¾î°¡ ¶¥À§¸¦ ¹â°í ÀÖ´ÂÁö Ã¼Å©ÇÏ´Â ·¹ÀÌÀÇ ±æÀÌ
@@ -300,14 +301,20 @@ public class PlayerScript : MonoBehaviour, IDamageable, IAttackable   //ºÎ¸ð ½ºÅ
                 {
                     joinTr = hit.transform;
                     transform.parent = joinTr;
+
+                    GameManager.Instance.ActionFuncHandle();
+                    GameManager.Instance.objActionHandle += () =>
+                    {
+                        joinTr = null;
+                        transform.parent = parent.transform;
+                    };
                 }
             }
             else
             {
                 if (joinTr != null)
                 {
-                    joinTr = null;
-                    transform.parent = parent.transform;
+                    GameManager.Instance.ActionFuncHandle();
                 }
             }
         }
@@ -508,6 +515,7 @@ public class PlayerScript : MonoBehaviour, IDamageable, IAttackable   //ºÎ¸ð ½ºÅ
         runSpeed = gameChar.runSpeed;
         jumpPower = gameChar.jumpPower;
         staminaRecoverySpeed = gameChar.staminaRecoverySpeed;
+        statPoint = gameChar.statPoint;
 
         joystickCtrl = jc;
         joystickCtrl.player = this;
@@ -533,8 +541,32 @@ public class PlayerScript : MonoBehaviour, IDamageable, IAttackable   //ºÎ¸ð ½ºÅ
         gameChar.hp = hp;
         gameChar.isDie = isDie;
         gameChar.currentMaxExp = currentMaxExp;
+        gameChar.statPoint = statPoint;
 
         GameManager.Instance.savedData.userInfo.currentChar = gameChar;
+    }
+
+    public void GetExp(int exp)
+    {
+        this.exp += exp;
+
+        if (this.exp >= currentMaxExp)
+        {
+            if (level == pData.maxLevel)
+            {
+                this.exp = currentMaxExp;
+                return;
+            }
+
+            level++;
+            int remainder = this.exp - currentMaxExp;
+            this.exp = 0;
+
+            statPoint += 2;
+            currentMaxExp += 150;
+
+            GetExp(remainder);
+        }
     }
 
     public void AddInfo()  //ÇÃ·¹ÀÌ¾î Ãß°¡

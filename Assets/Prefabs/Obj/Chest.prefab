@@ -1080,7 +1080,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 10
+      scalar: 20
       minScalar: 10
       maxCurve:
         serializedVersion: 2
@@ -9922,6 +9922,9 @@ MonoBehaviour:
     name: 
     explain: 
     date: 
-    sprite: {fileID: 0}
   animator: {fileID: 473641061694517568}
   index: 0
+  rotateY: -179
+  rewardItems: []
+  rewardMoney: 0
+  rewardExp: 0

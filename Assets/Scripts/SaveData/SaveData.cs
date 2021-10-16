@@ -32,6 +32,7 @@ public class UserInfo
     public short mapIndex = 0;
     public int playTime = 0;
     //public int chestCount = 0;
+    //public int maxItemSlotCount = 30;
 
     public List<ItemData> itemList = new List<ItemData>();
     public List<GameCharacter> characters = new List<GameCharacter>();
@@ -60,7 +61,9 @@ public class GameCharacter
     public int str;  
     public int def;  
     public int hp;  
-    public int maxHp;  
+    public int maxHp;
+
+    public int statPoint;  //statistics
 
     public float stamina;  
     public float maxStamina;  
@@ -81,6 +84,7 @@ public class GameCharacter
         level = 1;
         exp = 0;
         currentMaxExp = 400;
+        statPoint = 0;
 
         this.id = id;
         this.str = str;

@@ -88,7 +88,7 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad
         {
             if(items.Count==maxItemSlotCnt)
             {
-                //획득 불가능 메시지 띄우기
+                PoolManager.GetItem<SystemTxt>().OnText("인벤토리가 가득 찼습니다.");
 
                 return;
             }
@@ -117,6 +117,61 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad
         acquisitionEvent();
     }
 
+    public void GetItem(ItemData data)
+    {
+        if (!idToItem.ContainsKey(data.id))  
+        {
+            if (items.Count == maxItemSlotCnt)
+            {
+                //이 경우는 아마 발생하지 않을거임
+                PoolManager.GetItem<SystemTxt>().OnText("인벤토리가 가득 차서 획득한 아이템이 인벤토리에 표시되지 않을 수도 있습니다.");
+            }
+
+            items.Add(data);
+            idToItem.Add(data.id, data);
+
+            for (int i = 0; i < itemSlots.Count; i++)
+            {
+                if (!itemSlots[i].transform.GetChild(0).gameObject.activeSelf)
+                {
+                    itemSlots[i].SetData(data);
+                    break;
+                }
+            }
+        }
+        else  
+        {
+            idToItem[data.id].count += data.count;
+            itemSlots.Find(x => x.Item_Data.id == data.id).itemCountText.text = idToItem[data.id].count.ToString();
+        }
+    }
+
+    public void UseItem(int id, int count=1)
+    {
+        if (!ExistItem(id)) return;
+
+        ItemData data = idToItem[id];
+        if (data.count < count)
+        {
+            PoolManager.GetItem<SystemTxt>().OnText($"{data.name}의 개수가 부족합니다", 2);
+            return;
+        }
+
+        data.count -= count;
+
+        if (data.count == 0)
+        {
+            items.Remove(data);
+            idToItem.Remove(id);
+            GetItemSlot(id).ResetData();
+        }
+        else
+        {
+            GetItemSlot(id).itemCountText.text = data.count.ToString();
+        }
+    }
+
+    #region 인벤토리 창
     public void BeginDrg(bool active, ItemSlot i = null)  
     {
         dragImage.gameObject.SetActive(active);
@@ -205,7 +260,8 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad
         {
             Vector3 pos = clickedSlot.GetComponent<RectTransform>().position;
             btnSelectPanelPos.position = new Vector3(pos.x+slotHalfWidth,pos.y) + (new Vector3(btnSelectPanelPos.rect.width, btnSelectPanelPos.rect.height) * 0.5f);
-            useBtn.gameObject.SetActive(clickedSlot.Item_Data.itemType != ItemType.ETC); 
+            useBtn.gameObject.SetActive(clickedSlot.Item_Data.itemType != ItemType.ETC);
+            throwBtn.gameObject.SetActive(!clickedSlot.Item_Data.cannotDump);
         }
     }
 
@@ -228,6 +284,11 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad
         UIManager.Instance.OnClickUIButton(7);
     }
 
+    public ItemSlot GetItemSlot(int id) => itemSlots.Find(x => x.gameObject.activeSelf && x.Item_Data.id == id);
+    
+    #endregion
+
+    #region 캐릭터 창
     public void ClickCharacterPanel(bool on)
     {
         noRenderingZone.SetActive(on);
@@ -267,6 +328,14 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad
         }
     }
 
+    public void ChangeCharacter(int id)
+    {
+        GameManager.Instance.ChangeCharacter((short)id);
+        ViewCharacterInfo((short)id);
+        UIManager.Instance.OnClickUIButton(9);
+    }
+    #endregion
+
     public void ManagerDataLoad(GameObject sceneObjs)
     {
         Inventory[] managers = FindObjectsOfType<Inventory>();
@@ -277,12 +346,6 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad
         isReady = true;
     }
 
-    public void ChangeCharacter(int id)
-    {
-        GameManager.Instance.ChangeCharacter((short)id);
-        ViewCharacterInfo((short)id);
-        UIManager.Instance.OnClickUIButton(9);
-    }
 }
 
 public enum ItemType

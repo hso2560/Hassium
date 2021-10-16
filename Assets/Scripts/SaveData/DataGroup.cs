@@ -12,6 +12,8 @@ public class StringListClass
 [Serializable]
 public class ItemData
 {
+    public bool cannotDump;
+
     public int id;
     public string name;
     public string explain;
@@ -25,6 +27,7 @@ public class ItemData
     public ItemData() { }
     public ItemData(ItemData data)
     {
+        cannotDump = data.cannotDump;
         id = data.id;
         name = data.name;
         explain = data.explain;
