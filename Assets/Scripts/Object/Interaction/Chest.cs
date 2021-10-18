@@ -21,7 +21,7 @@ public class Chest : ObjData
     {
         //if (autoIndexFind) index = GameManager.Instance.infoSaveObjs.objs.IndexOf(gameObject);
         chestData.id = id;
-        chestData.name = name;
+        chestData.name = objName;
         //chestData.explain = explain;
         GameManager.Instance.SaveObjActiveInfo(index, true);
     }

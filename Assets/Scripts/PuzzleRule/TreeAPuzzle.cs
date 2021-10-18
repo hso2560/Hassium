@@ -7,9 +7,17 @@ public class TreeAPuzzle : ObjData
     [SerializeField] private float limitTime;
 
     [SerializeField] private List<TreeA> treeList;
+    private List<TreeA> questTrees = new List<TreeA>();  //변해진 나무(때려야되는 나무들)
+    private float changeTime;
+    [SerializeField] private float changeDelay = 24f;
+    public Material changeMat;
 
-    public GameObject dropObject;
-    public List<GameObject> dropObjList = new List<GameObject>();
+    /*public GameObject dropObject;
+    public List<GameObject> dropObjList = new List<GameObject>();*/
+    [SerializeField] private int catchMaxCount = 14; //나무를 총 몇 번 바꾸어야 하는가
+    private int currentCatchCount = 0;
+    [SerializeField] private int maxHp = 5;  //나무 체력
+    public int MaxHp { get { return maxHp; } }
 
     public string startObjName = "시작";
     public string resetObjName = "초기화";
@@ -22,7 +30,7 @@ public class TreeAPuzzle : ObjData
         }
         if (active)
         {
-            dropObjList = FunctionGroup.CreatePoolList(dropObject, transform, 6);
+            //dropObjList = FunctionGroup.CreatePoolList(dropObject, transform, 6);
             treeList = new List<TreeA>(transform.parent.GetComponentsInChildren<TreeA>());
         }
     }
@@ -36,13 +44,15 @@ public class TreeAPuzzle : ObjData
         }
 
         {
-            foreach (int x in FunctionGroup.GetRandomList(treeList.Count, 2))
+            foreach (int x in FunctionGroup.GetRandomList(treeList.Count, 3))
             {
                 treeList[x].active = true;
+                treeList[x].mainMesh.material = changeMat;
+                questTrees.Add(treeList[x]);
             }
-
             IsStart = true;
             objName = resetObjName;
+            changeTime = Time.time + changeDelay;
         }
 
         {
@@ -54,12 +64,34 @@ public class TreeAPuzzle : ObjData
             };
             UIManager.Instance.timeOverEvent += () =>
             {
-                treeList.ForEach(x => x.active = false);
+                treeList.ForEach(x => x.ResetData());
                 objName = startObjName;
+                currentCatchCount = 0;
+                questTrees.Clear();
                 IsStart = false;
             };
 
             UIManager.Instance.OnTimer((int)limitTime);
+        }
+    }
+
+    private void Update()
+    {
+        if (IsStart)
+        {
+            if (changeTime < Time.time)
+            {
+                questTrees.ForEach(x => x.ResetData());
+                questTrees.Clear();
+                foreach (int x in FunctionGroup.GetRandomList(treeList.Count, 4))
+                {
+                    treeList[x].active = true;
+                    treeList[x].mainMesh.material = changeMat;
+                    questTrees.Add(treeList[x]);
+                }
+
+                changeTime = Time.time + changeDelay;
+            }
         }
     }
 }

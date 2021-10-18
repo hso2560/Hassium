@@ -9,7 +9,8 @@ public enum SoundEffectType
     FADEOUT,  //FADEINÀº º¸·ù
     MENUCLICK,
     INTERACTION,
-    SYSTEMINFOMSG
+    SYSTEMINFOMSG,
+    MOVEDOOR
 }
 
 public class SoundManager : MonoSingleton<SoundManager>, ISceneDataLoad

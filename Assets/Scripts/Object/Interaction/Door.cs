@@ -103,7 +103,8 @@ public class Door : ObjData  //문 열릴 때 ScaleX값을 0.003으로 바꿔야하는데(저장
             ani.Play(isOpen?"Close":"Open");
         }
 
-        isOpen = !isOpen;     
+        isOpen = !isOpen;
+        SoundManager.Instance.PlaySoundEffect(SoundEffectType.MOVEDOOR, time[0]);
 
         if (isChangeCamRange)    //문이 열리고 카메라의 범위가 바뀔 때
         {

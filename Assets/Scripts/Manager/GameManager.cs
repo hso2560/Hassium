@@ -47,6 +47,9 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //°× ½ÃÀÛ
 
     [SerializeField] private int maxSystemMsgCount = 5;
     private int systemMsgCount = 0;
+    private readonly float autoMoneyDelay = 100f;  //autoMoneyDelayÃÊ¿¡ autoMoney°ñµå¸¸Å­ ÀÚµ¿À¸·Î ¹úÀ½
+    private WaitForSeconds ammWs;
+    private readonly long autoMoney = 2;
 
     public string GetFilePath(string fileName) => string.Concat(Application.persistentDataPath, "/", fileName);
 
@@ -75,6 +78,8 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //°× ½ÃÀÛ
             saveData.saveObjDatas[i].SetData(infoSaveObjs.objs[idx]);
             //infoSaveObjs.objDatas[idx].active = false;
         }
+
+        ammWs = new WaitForSeconds(autoMoneyDelay);
     }
 
     private void SetKeyAndFunc()
@@ -521,12 +526,24 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //°× ½ÃÀÛ
 
         this.sceneObjs = sceneObjs.GetComponent<SceneObjects>();
 
+        StopAllCoroutines();
         if (this.sceneObjs.ScType == SceneType.MAIN)
         {
             InitData();
             SpawnPlayer();
+            StartCoroutine(AutoMakeMoneyCo());
         }
 
         isReady = true;
+    }
+
+    private IEnumerator AutoMakeMoneyCo()
+    {
+        while (true)
+        {
+            yield return ammWs;  
+            saveData.userInfo.money += autoMoney;
+            sceneObjs.gameTexts[0].text = saveData.userInfo.money.ToString();
+        }
     }
 }
