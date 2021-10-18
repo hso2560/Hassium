@@ -39,15 +39,6 @@ public class CameraMove : MonoBehaviour
         return Mathf.Clamp(angle, min, max);
     }
 
-    public void PositionLimit()
-    {
-        float X = Mathf.Clamp(transform.position.x, camMinPos.x, camMaxPos.x);
-        float Y = Mathf.Clamp(transform.position.y, camMinPos.y, camMaxPos.y);
-        float Z = Mathf.Clamp(transform.position.z, camMinPos.z, camMaxPos.z);
-
-        transform.position = new Vector3(X, Y, Z);
-    }
-
     private void Start()  
     {
         Vector3 angles = transform.eulerAngles;
@@ -66,7 +57,7 @@ public class CameraMove : MonoBehaviour
         {
             CamMove();
             PlayerRotation();
-            PositionLimit();
+            transform.position = FunctionGroup.PositionLimit(transform.position, camMinPos, camMaxPos);
         }
     }
 

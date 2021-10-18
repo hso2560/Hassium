@@ -4,7 +4,7 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 
-public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad
+public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //걍 메뉴 안의 다른 UI들도 관리하게 됨
 {
     public bool GetReadyState { get { return isReady; } set { isReady = value; } }
 
@@ -41,6 +41,10 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad
     private PlayerScript ps;
     public event Action acquisitionEvent;
 
+    //보물 창 관련 변수
+    public GameObject treasureUIPrefab;
+    public Transform treasureUIParent;
+
     private void Awake()
     {
         btnSelectPanelPos = btnSelectPanel.GetComponent<RectTransform>();
@@ -76,6 +80,7 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad
             }
         }
 
+        LoadTreasure();
         ps = GameManager.Instance.PlayerSc;
     }
 
@@ -334,6 +339,62 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad
         ViewCharacterInfo((short)id);
         UIManager.Instance.OnClickUIButton(9);
     }
+
+    //능력치 강화
+    public void AddStat(int number)
+    {
+        if(GameManager.Instance.PlayerSc.StatPoint==0)
+        {
+            PoolManager.GetItem<SystemTxt>().OnText("스탯 포인트가 부족합니다.");
+            return;
+        }
+
+        switch (number)  //차례로 공, 방, 최대 체, 최대 스테미나
+        {
+            case 1:
+                GameManager.Instance.PlayerSc.str += 2;
+                break;
+            case 2:
+                GameManager.Instance.PlayerSc.def += 4;
+                break;
+            case 3:
+                GameManager.Instance.PlayerSc.MaxHp += 50;
+                break;
+            case 4:
+                GameManager.Instance.PlayerSc.MaxStamina += 5;
+                break;
+        }
+        GameManager.Instance.PlayerSc.StatPoint--;
+    }
+
+    public void OnClickReinforceBtn()
+    {
+        //강화 캐릭터: GameManager.Instance.PlayerSc.CharName  ==> 이거 뜨게 한다
+        //스탯 포인트: GameManager.Instance.PlayerSc.StatPoint ==> 표시하기
+    }
+
+    #endregion
+
+    #region 보물창
+
+    public void AddTreasure(ChestData data)
+    {
+        GameObject o = Instantiate(treasureUIPrefab, treasureUIParent);
+        o.transform.GetChild(1).GetComponent<Text>().text = data.name;
+        o.transform.GetChild(2).GetComponent<Text>().text = data.date;
+    }
+
+    public void LoadTreasure()
+    {
+        List<ChestData> list = GameManager.Instance.savedData.userInfo.myChestList;
+        for(int i=0; i < list.Count; ++i)
+        {
+            GameObject o = Instantiate(treasureUIPrefab, treasureUIParent);
+            o.transform.GetChild(1).GetComponent<Text>().text = list[i].name;
+            o.transform.GetChild(2).GetComponent<Text>().text = list[i].date;
+        }
+    }
+
     #endregion
 
     public void ManagerDataLoad(GameObject sceneObjs)

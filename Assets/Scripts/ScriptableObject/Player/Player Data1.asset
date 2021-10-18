@@ -12,11 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80421dbd5953d8f428b2b1f758c7ae45, type: 3}
   m_Name: Player Data1
   m_EditorClassIdentifier: 
+  rotateSpeed: 13
   gravity: 0.6
   groundRayDist: 0.58
   interactionRadius: 1.8
   DamagedByFallNeedHeight: 17.5
   defaultRespawnHp: 350
+  maxLevel: 10
   whatIsGround:
     serializedVersion: 2
     m_Bits: 896

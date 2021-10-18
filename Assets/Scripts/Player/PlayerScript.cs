@@ -25,7 +25,7 @@ public class PlayerScript : MonoBehaviour, IDamageable, IAttackable   //ºÎ¸ð ½ºÅ
     [SerializeField] private float staminaDownSpeed=7f;  //½ºÅ×¹Ì³ª °¨¼Ò ¼Óµµ
     [SerializeField] private float staminaDecJAR = 10f;  //´Þ¸®´Â Áß¿¡ Á¡ÇÁÇÒ ¶§ÀÇ ½ºÅ×¹Ì³ª °¨¼Ò ¼öÄ¡
     private int statPoint = 0;  //½ºÅÈ Æ÷ÀÎÆ® (´É·ÂÄ¡ ¿Ã¸®´Â Æ÷ÀÎÆ®)
-    
+    public int StatPoint { get { return statPoint; } set { statPoint = value; } }
 
     //[SerializeField] private float groundRayDist=3f;  //ÇÃ·¹ÀÌ¾î°¡ ¶¥À§¸¦ ¹â°í ÀÖ´ÂÁö Ã¼Å©ÇÏ´Â ·¹ÀÌÀÇ ±æÀÌ
     public float rotateSpeed = 3.5f;
@@ -228,7 +228,7 @@ public class PlayerScript : MonoBehaviour, IDamageable, IAttackable   //ºÎ¸ð ½ºÅ
 
         float angle = Mathf.Atan2(worldDir.x, worldDir.z) * Mathf.Rad2Deg;
 
-        playerModel.rotation = Quaternion.Slerp(playerModel.rotation, Quaternion.Euler(0, angle, 0), Time.deltaTime * rotateSpeed);
+        playerModel.rotation = Quaternion.Slerp(playerModel.rotation, Quaternion.Euler(0, angle, 0), Time.deltaTime * pData.rotateSpeed);
         
     }
 
@@ -271,6 +271,7 @@ public class PlayerScript : MonoBehaviour, IDamageable, IAttackable   //ºÎ¸ð ½ºÅ
 
             ani.SetTrigger(jumpTrigger);
             rigid.velocity = Vector3.up * jumpPower;
+            SoundManager.Instance.PlaySoundEffect(SoundEffectType.JUMP);
             
             if (joystickCtrl.isRun) stamina -= staminaDecJAR;
         }
@@ -295,7 +296,7 @@ public class PlayerScript : MonoBehaviour, IDamageable, IAttackable   //ºÎ¸ð ½ºÅ
                 }
                 rigidVelY = 0;
             }
-            if (hit.transform.CompareTag("JoinObj")) //ÀÌ ¶§ Ä³¸¯ÅÍ Ã¼ÀÎÁö³ª »ç¸Á½Ã ¿¹¿ÜÃ³¸® ÇÊ¿ä
+            if (hit.transform.CompareTag("JoinObj")) 
             {
                 if (joinTr != hit.transform)
                 {
@@ -438,6 +439,7 @@ public class PlayerScript : MonoBehaviour, IDamageable, IAttackable   //ºÎ¸ð ½ºÅ
         ani.SetInteger(attackInt, attackStatePhase);
         attack.gameObject.SetActive(true);
         lastAtkTime = Time.time;
+        SoundManager.Instance.PlaySoundEffect(SoundEffectType.ATTACK);
     }
 
     public void Death()

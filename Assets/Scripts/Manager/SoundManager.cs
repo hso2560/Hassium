@@ -3,8 +3,13 @@ using UnityEngine;
 
 public enum SoundEffectType
 {
-    FADEIN=0,
-    FADEOUT=1
+    WALK,
+    JUMP,
+    ATTACK,
+    FADEOUT,  //FADEINÀº º¸·ù
+    MENUCLICK,
+    INTERACTION,
+    SYSTEMINFOMSG
 }
 
 public class SoundManager : MonoSingleton<SoundManager>, ISceneDataLoad
@@ -13,14 +18,13 @@ public class SoundManager : MonoSingleton<SoundManager>, ISceneDataLoad
 
     public bool GetReadyState { get { return isReady; } set { isReady = value; } }
 
-    public void PlaySoundEffect(SoundEffectType set)
+    public void PlaySoundEffect(SoundEffectType set, float time = -1f)
     {
         Option op = GameManager.Instance.savedData.option;
 
         if (op.masterSoundSize <= 0 || op.soundEffectSize <= 0) return;
 
-        SoundPrefab sp = PoolManager.GetItem<SoundPrefab>();
-        sp.SoundPlay(gameSoundEffectList[(int)set]);
+        PoolManager.GetItem<SoundPrefab>().SoundPlay(gameSoundEffectList[(int)set], time);
     }
 
     public void ManagerDataLoad(GameObject sceneObjs)

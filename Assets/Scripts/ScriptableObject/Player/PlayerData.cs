@@ -3,6 +3,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName ="Player Data", menuName ="Scriptable Object/Player Data")]
 public class PlayerData : ScriptableObject
 {
+    public float rotateSpeed = 10f;
     public float gravity = 0.5f; //중력
     public float groundRayDist = 0.58f;  //플레이어가 땅위를 밟고 있는지 체크하는 레이의 길이
     public float interactionRadius = 1.8f; //오브젝트와 상호작용 가능한 범위

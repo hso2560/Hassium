@@ -13,6 +13,7 @@ public class InteractionBtn : MonoBehaviour
         {
             if(data!=null && data.gameObject.activeSelf && data.active)
             {
+                SoundManager.Instance.PlaySoundEffect(SoundEffectType.INTERACTION);
                 data.Interaction();
             }
         });

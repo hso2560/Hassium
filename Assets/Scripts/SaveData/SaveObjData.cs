@@ -12,8 +12,9 @@ public enum SaveObjInfoType
 public enum NPCType
 {
     INFORMATION, //일방적으로 정보만 준다
-    ONLYTALK,  //대화만 가능
+    //ONLYTALK,  //대화만 가능
     CANNOTFIGHT,  //싸울 수 없음(일방적으로 맞을 수는 있음)
+    CANRUNAWAY,  //CANNOTFIGHT와 다를것 없지만 도망가는 기능 추가
     CANFIGHT //싸울 수 있다
 }
 
@@ -132,6 +133,7 @@ public class NPCInfo
 
     public NPCType npcType;
     public bool dead = false;
+    public bool bRunaway = false;
     public bool isFighting = false;
 }
 

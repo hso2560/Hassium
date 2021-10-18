@@ -19134,7 +19134,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &3117959993699122843
 Transform:
   m_ObjectHideFlags: 0
@@ -20370,6 +20370,7 @@ MonoBehaviour:
     def: 0
     hp: 0
     maxHp: 0
+    statPoint: 0
     stamina: 0
     maxStamina: 0
     runSpeed: 0
@@ -27322,7 +27323,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1587814716252970976
 Transform:
   m_ObjectHideFlags: 0

@@ -22,6 +22,15 @@ public class FunctionGroup
         return randomList;
     }
 
+    public static Vector3 PositionLimit(Vector3 targetVec, Vector3 minVec, Vector3 maxVec)
+    {
+        float X = Mathf.Clamp(targetVec.x, minVec.x, maxVec.x);
+        float Y = Mathf.Clamp(targetVec.y, minVec.y, maxVec.y);
+        float Z = Mathf.Clamp(targetVec.z, minVec.z, maxVec.z);
+
+        return new Vector3(X, Y, Z);
+    }
+
     #region 따로 스크립트 붙이기 애매한 풀링 필요한 옵젝들은 일단 이렇게 처리함
     public static List<GameObject> CreatePoolList(GameObject prefab, Transform parent, int count)
     {

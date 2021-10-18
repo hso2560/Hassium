@@ -61,6 +61,13 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
         LoadingImg.gameObject.SetActive(true);
 
         seq.Append(LoadingImg.DOColor(isFadeIn ? noColor : Color.black, 1).SetEase(gameEases[index]));
+        seq.InsertCallback(0.2f, () =>
+        {
+            if (!isFadeIn)
+            {
+                SoundManager.Instance.PlaySoundEffect(SoundEffectType.FADEOUT);
+            }
+        });
         seq.AppendCallback(() =>
         {
             if(isFadeIn)
@@ -259,6 +266,8 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
                 UIQueue();
             }
         }
+
+        SoundManager.Instance.PlaySoundEffect(SoundEffectType.MENUCLICK);
     }
 
     public void UIQueue(bool enqueue=false)

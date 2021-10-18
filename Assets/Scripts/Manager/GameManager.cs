@@ -350,6 +350,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
         {
             PoolManager.CreatePool<Meteor>(sceneObjs.prefabs[0], sceneObjs.environMentGroup, 4);
             PoolManager.CreatePool<SystemTxt>(sceneObjs.prefabs[1],sceneObjs.systemMsgParent, 3);
+            PoolManager.CreatePool<SoundPrefab>(sceneObjs.prefabs[2], sceneObjs.poolTrm, 10);
         }
     }   
     
@@ -398,6 +399,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
     public void OpenChest(ChestData chestData, long money, int exp, ItemData[] rewards) //상자를 열고 보상 받는다. 열은 상자 정보도 저장
     {
         saveData.userInfo.myChestList.Add(new ChestData(chestData));
+        Inventory.Instance.AddTreasure(chestData);
 
         saveData.userInfo.money += money;
         sceneObjs.gameTexts[0].text = saveData.userInfo.money.ToString();
