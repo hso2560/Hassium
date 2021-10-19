@@ -17,6 +17,7 @@ public class TalkManager : MonoSingleton<TalkManager>, ISceneDataLoad
     public GameObject interBtnsPanel, talkEndMark;
 
     private int index, talkCount;
+    [Range(0.05f,1f)]
     public float talkTextTime = 0.1f;  //한 글자당 나오는 시간
     private NPCInfo currentNpc;
     private bool isTalking; //텍스트가 다 나왔는지

@@ -31,6 +31,7 @@ public class UserInfo
     public long money;
     public short mapIndex = 0;
     public int playTime = 0;
+    public int skyIndex = 3;
     //public int chestCount = 0;
     //public int maxItemSlotCount = 30;
 

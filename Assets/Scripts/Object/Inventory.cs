@@ -8,6 +8,7 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //°Á ¸Þ´º ¾ÈÀ
 {
     public bool GetReadyState { get { return isReady; } set { isReady = value; } }
 
+    public PlayerData pData;
     public List<ItemData> items;
     public Dictionary<int, ItemData> idToItem = new Dictionary<int, ItemData>(); 
     private int maxItemSlotCnt = 40; // 5 * 8
@@ -44,6 +45,12 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //°Á ¸Þ´º ¾ÈÀ
     //º¸¹° Ã¢ °ü·Ã º¯¼ö
     public GameObject treasureUIPrefab;
     public Transform treasureUIParent;
+
+    //Ä³¸¯ÅÍ °­È­ Ã¢
+    public Text reinfNameText, statPointText;
+    public Text[] statTexts;
+    public Text reinforceVerifyText;
+    private int selectedReinfStatNumber;
 
     private void Awake()
     {
@@ -341,7 +348,7 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //°Á ¸Þ´º ¾ÈÀ
     }
 
     //´É·ÂÄ¡ °­È­
-    public void AddStat(int number)
+    public void AddStat()
     {
         if(GameManager.Instance.PlayerSc.StatPoint==0)
         {
@@ -349,28 +356,61 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //°Á ¸Þ´º ¾ÈÀ
             return;
         }
 
-        switch (number)  //Â÷·Ê·Î °ø, ¹æ, ÃÖ´ë Ã¼, ÃÖ´ë ½ºÅ×¹Ì³ª
+        switch (selectedReinfStatNumber)  //Â÷·Ê·Î °ø, ¹æ, ÃÖ´ë Ã¼, ÃÖ´ë ½ºÅ×¹Ì³ª
         {
             case 1:
-                GameManager.Instance.PlayerSc.str += 2;
+                GameManager.Instance.PlayerSc.str += pData.addStr;
                 break;
             case 2:
-                GameManager.Instance.PlayerSc.def += 4;
+                GameManager.Instance.PlayerSc.def += pData.addDef;
                 break;
             case 3:
-                GameManager.Instance.PlayerSc.MaxHp += 50;
+                GameManager.Instance.PlayerSc.MaxHp += pData.addMaxHp;
                 break;
             case 4:
-                GameManager.Instance.PlayerSc.MaxStamina += 5;
+                GameManager.Instance.PlayerSc.MaxStamina += pData.addMaxStamina;
                 break;
         }
         GameManager.Instance.PlayerSc.StatPoint--;
+        ShowStatUpVerify(-1);
+        OnClickReinforceBtn();
+    }
+
+    public void ShowStatUpVerify(int number)
+    {
+        if (number != -1)
+        {
+            UIManager.Instance.OnClickUIButton(11);
+            selectedReinfStatNumber = number;
+        }
+        else number = selectedReinfStatNumber;
+        switch (number)  
+        {
+            case 1:
+                reinforceVerifyText.text = $"<b>[°ø°Ý·Â]</b>\n\nÇöÀç: {GameManager.Instance.PlayerSc.str}\n´ÙÀ½: <color=#27009A>{GameManager.Instance.PlayerSc.str+pData.addStr}</color>\n(¼Ò¸ð Æ÷ÀÎÆ®: 1)";
+                break;
+            case 2:
+                reinforceVerifyText.text = $"<b>[¹æ¾î·Â]</b>\n\nÇöÀç: {GameManager.Instance.PlayerSc.def}\n´ÙÀ½: <color=#27009A>{GameManager.Instance.PlayerSc.def + pData.addDef}</color>\n(¼Ò¸ð Æ÷ÀÎÆ®: 1)";
+                break;
+            case 3:
+                reinforceVerifyText.text = $"<b>[ÃÖ´ë Ã¼·Â]</b>\n\nÇöÀç: {GameManager.Instance.PlayerSc.MaxHp}\n´ÙÀ½: <color=#27009A>{GameManager.Instance.PlayerSc.MaxHp + pData.addMaxHp}</color>\n(¼Ò¸ð Æ÷ÀÎÆ®: 1)";
+                break;
+            case 4:
+                reinforceVerifyText.text = $"<b>[ÃÖ´ë ½ºÅ×¹Ì³ª]</b>\n\nÇöÀç: {GameManager.Instance.PlayerSc.MaxStamina}\n´ÙÀ½: <color=#27009A>{GameManager.Instance.PlayerSc.MaxStamina + pData.addMaxStamina}</color>\n(¼Ò¸ð Æ÷ÀÎÆ®: 1)";
+                break;
+        }
     }
 
     public void OnClickReinforceBtn()
     {
-        //°­È­ Ä³¸¯ÅÍ: GameManager.Instance.PlayerSc.CharName  ==> ÀÌ°Å ¶ß°Ô ÇÑ´Ù
-        //½ºÅÈ Æ÷ÀÎÆ®: GameManager.Instance.PlayerSc.StatPoint ==> Ç¥½ÃÇÏ±â
+        PlayerScript p = GameManager.Instance.PlayerSc;
+        reinfNameText.text = "°­È­ Ä³¸¯ÅÍ: " + p.CharName;
+        statPointText.text = "½ºÅÈ Æ÷ÀÎÆ®: " + p.StatPoint.ToString();
+
+        statTexts[0].text = string.Concat("°ø°Ý·Â: ", p.str);
+        statTexts[1].text = string.Concat("¹æ¾î·Â: ", p.def);
+        statTexts[2].text = string.Concat("ÃÖ´ë Ã¼·Â: ", p.MaxHp);
+        statTexts[3].text = string.Concat("ÃÖ´ë ½ºÅ×¹Ì³ª: ", p.MaxStamina);
     }
 
     #endregion

@@ -13,6 +13,7 @@ public class PlayerScript : MonoBehaviour, IDamageable, IAttackable   //ºÎ¸ð ½ºÅ
 
     [HideInInspector] public JoystickControl joystickCtrl;
 
+    #region Á¤º¸
     //ÀúÀå/·Îµå ÇÒ Á¤º¸µé(´É·ÂÄ¡)Àº Â÷¶ó¸® ÀúÀåÇÒ ¶§ÀÇ Å¬·¡½º·Î °¡Á®¿Í¼­ Å¬·¡½º Á¢±ÙÀ» ÅëÇØ °ªÀ» ¾²°í ¹Ù²Ù°í ÇÏ´Â°Ô ³ª¾ÒÀ»µí.....¾Æ´Ï¸é °¡µ¶¼ºÀÌ¶óµµ ³ôÀÌ°Ô Àú°Íµé ´ã´Â Å¬·¡½º ¹º°¡ ¸¸µé°Å³ª
     [SerializeField] private float speed = 8.5f;
     public float runSpeed = 17.8f;
@@ -23,7 +24,7 @@ public class PlayerScript : MonoBehaviour, IDamageable, IAttackable   //ºÎ¸ð ½ºÅ
     public float MaxStamina { get { return maxStamina; } set { maxStamina = value; } }
     [SerializeField] private float staminaDownSpeed=7f;  //½ºÅ×¹Ì³ª °¨¼Ò ¼Óµµ
     [SerializeField] private float staminaDecJAR = 10f;  //´Þ¸®´Â Áß¿¡ Á¡ÇÁÇÒ ¶§ÀÇ ½ºÅ×¹Ì³ª °¨¼Ò ¼öÄ¡
-    private int statPoint = 0;  //½ºÅÈ Æ÷ÀÎÆ® (´É·ÂÄ¡ ¿Ã¸®´Â Æ÷ÀÎÆ®)
+    [SerializeField] private int statPoint = 0;  //½ºÅÈ Æ÷ÀÎÆ® (´É·ÂÄ¡ ¿Ã¸®´Â Æ÷ÀÎÆ®)
     public int StatPoint { get { return statPoint; } set { statPoint = value; } }
 
     //[SerializeField] private float groundRayDist=3f;  //ÇÃ·¹ÀÌ¾î°¡ ¶¥À§¸¦ ¹â°í ÀÖ´ÂÁö Ã¼Å©ÇÏ´Â ·¹ÀÌÀÇ ±æÀÌ
@@ -46,6 +47,7 @@ public class PlayerScript : MonoBehaviour, IDamageable, IAttackable   //ºÎ¸ð ½ºÅ
     public int Exp { get { return exp; } set { exp = value; } }
     public int MaxExp { get { return currentMaxExp; } set { currentMaxExp = value; } }
     [Header("°íÀ¯ °ª")] [SerializeField] private string resoName;  //ResourcesÆú´õ¿¡¼­ ²¨³¾ ¶§ÀÇ ÆÄÀÏ ÀÌ¸§(ºÎ¸ð)
+    #endregion
 
 
     private Vector3 moveDir, worldDir;  //¿òÁ÷ÀÓ ¹æÇâ, ¿òÁ÷ÀÓ ¿ùµå ¹æÇâ
@@ -563,8 +565,8 @@ public class PlayerScript : MonoBehaviour, IDamageable, IAttackable   //ºÎ¸ð ½ºÅ
             int remainder = this.exp - currentMaxExp;
             this.exp = 0;
 
-            statPoint += 2;
-            currentMaxExp += 150;
+            statPoint += pData.addStatPoint;
+            currentMaxExp += pData.addMaxExp;
 
             GetExp(remainder);
         }

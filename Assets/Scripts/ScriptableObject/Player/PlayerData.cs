@@ -13,4 +13,12 @@ public class PlayerData : ScriptableObject
 
     public LayerMask whatIsGround;
     public LayerMask whatIsObj;
+
+    public int addStr = 2;
+    public int addDef = 4;
+    public int addMaxHp = 50;
+    public float addMaxStamina = 5;
+
+    public int addStatPoint = 2;
+    public int addMaxExp = 150;
 }

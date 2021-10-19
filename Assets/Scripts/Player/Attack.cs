@@ -30,6 +30,12 @@ public class Attack : MonoBehaviour
             if (o != other.gameObject)
             {
                 e.OnDamaged(damage, -(o.transform.position - other.transform.position).normalized, force, true);
+                EffectManager.Instance.OnHitEffect(other.transform.position);
+                /*if (Physics.Raycast(transform.position, Vector3.forward, out RaycastHit hit, 10))
+                {
+                    if(hit.transform!=null)
+                       EffectManager.Instance.OnHitEffect(hit.point);
+                }*/
             }
         }
     }

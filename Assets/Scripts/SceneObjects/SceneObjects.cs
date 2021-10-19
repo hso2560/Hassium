@@ -53,6 +53,7 @@ public class SceneObjects : MonoBehaviour  //해당 씬마다 필요한 오브젝트들을 모�
         MapManager.Instance.ManagerDataLoad(gameObject);
         Inventory.Instance.ManagerDataLoad(gameObject);
         TalkManager.Instance.ManagerDataLoad(gameObject);
+        //EffectManager.Instance.ManagerDataLoad(gameObject);
 
         managers.Add(GameManager.Instance.GetComponent<ISceneDataLoad>());
         managers.Add(UIManager.Instance.GetComponent<ISceneDataLoad>());
@@ -61,13 +62,14 @@ public class SceneObjects : MonoBehaviour  //해당 씬마다 필요한 오브젝트들을 모�
         managers.Add(MapManager.Instance.GetComponent<ISceneDataLoad>());
         managers.Add(Inventory.Instance.GetComponent<ISceneDataLoad>());
         managers.Add(TalkManager.Instance.GetComponent<ISceneDataLoad>());
+        //managers.Add(EffectManager.Instance.GetComponent<ISceneDataLoad>());
 
         StartCoroutine(StartGame());
     }
 
     public IEnumerator StartGame()
     {
-        while (!IsAllReadyManager()) yield return null;
+        while (!IsAllReadyManager()) yield return null; 
 
         UIManager.Instance.LoadingFade(true, 0);
     }

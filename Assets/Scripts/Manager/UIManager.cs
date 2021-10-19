@@ -27,9 +27,11 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
     public event Action clearEvent;
     private bool isTimer;
     private float remainingTime;
+    [HideInInspector] public bool runningMission = false;
+    [HideInInspector] public GameObject missionObj;
 
     [HideInInspector] public Text objExplainText;
-    private Text hpText, timerText;
+    private Text hpText, timerText, missionCntText;
 
     public List<GameObject> beforeItrObjs = new List<GameObject>();
     public List<GameObject> stackUI = new List<GameObject>();
@@ -76,8 +78,10 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
             {
                 GameManager.Instance.Loading();
             }
+            
         });
         seq.Play();
+        
     }
 
     #region IteractionBtn
@@ -288,6 +292,10 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
             case 0:
                 Inventory.Instance.UpdateCharInfoUI();
                 break;
+            case 10:
+                Inventory.Instance.OnClickReinforceBtn();
+                sceneObjs.ui[3].SetActive(sceneObjs.ui[10].activeSelf);
+                break;
         }
     }
 
@@ -317,6 +325,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
 
             objExplainText = this.sceneObjs.gameTexts[1];
             timerText = this.sceneObjs.gameTexts[2];
+            missionCntText = this.sceneObjs.gameTexts[5];
 
             interactionBtns = new List<InteractionBtn>(this.sceneObjs.itrBtns);
             uiColors = new List<Color>(this.sceneObjs.gameColors);
@@ -390,12 +399,13 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
         t.fontSize = fontSize;
     }
 
-    public void OnTimer(int time, bool off=false)
+    public void OnTimer(int time,bool useCnt ,bool off=false)
     {
         if (off)
         {
             isTimer = false;
             timerParent.SetActive(false);
+            missionCntText.gameObject.SetActive(false);
 
             foreach(Action a in timeOverEvent.GetInvocationList())
             {
@@ -411,9 +421,11 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
 
         if (!isTimer)
         {
+            runningMission = true;
             isTimer = true;
             remainingTime = time;
             timerParent.SetActive(true);
+            missionCntText.gameObject.SetActive(useCnt);
             timerText.text = ((int)remainingTime).ToString();
         }
     }
@@ -450,11 +462,16 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
             .Join(resultText.transform.DOScale(Vector3.one, 0.3f))
             .AppendInterval(1)
             .Append(resultText.DOColor(noColor, 0.4f))
-            .AppendCallback(() => resultText.gameObject.SetActive(false))
+            .AppendCallback(() => { resultText.color = c; resultText.gameObject.SetActive(false); runningMission = false; })
             .Play();
         }
 
-        OnTimer(0, true);
+        OnTimer(0, true, true);
+    }
+
+    public void UpdateCountInMission(float cur, float max)
+    {
+        missionCntText.text = string.Concat(cur.ToString(), "/", max.ToString());
     }
 
     public void SaveData()

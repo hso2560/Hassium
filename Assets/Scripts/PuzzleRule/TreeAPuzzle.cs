@@ -37,6 +37,12 @@ public class TreeAPuzzle : ObjData
 
     public override void Interaction()
     {
+        if (UIManager.Instance.runningMission && UIManager.Instance.missionObj != gameObject)
+        {
+            PoolManager.GetItem<SystemTxt>().OnText("현재 다른 미션을 수행중입니다.");
+            return;
+        }
+
         transform.GetChild(0).GetComponent<Animator>().SetTrigger("move");
         if (IsStart)
         {
@@ -45,6 +51,7 @@ public class TreeAPuzzle : ObjData
         }
 
         {
+            UIManager.Instance.missionObj = gameObject;
             foreach (int x in FunctionGroup.GetRandomList(treeList.Count, 3))
             {
                 treeList[x].active = true;
@@ -54,6 +61,7 @@ public class TreeAPuzzle : ObjData
             IsStart = true;
             objName = resetObjName;
             changeTime = Time.time + changeDelay;
+            UIManager.Instance.UpdateCountInMission(currentCatchCount, catchMaxCount);
         }
 
         {
@@ -70,9 +78,11 @@ public class TreeAPuzzle : ObjData
                 currentCatchCount = 0;
                 questTrees.Clear();
                 IsStart = false;
+                active = false;
+                Invoke("DelayActive", 2);
             };
 
-            UIManager.Instance.OnTimer((int)limitTime);
+            UIManager.Instance.OnTimer((int)limitTime,true);
         }
     }
 
@@ -82,6 +92,7 @@ public class TreeAPuzzle : ObjData
         {
             if (changeTime < Time.time)
             {
+                PoolManager.GetItem<SystemTxt>().OnText("나무들에게 변화가 일어납니다.",2);
                 questTrees.ForEach(x => x.ResetData());
                 questTrees.Clear();
                 foreach (int x in FunctionGroup.GetRandomList(treeList.Count, 4))
@@ -99,9 +110,12 @@ public class TreeAPuzzle : ObjData
     public void CheckCount()
     {
         currentCatchCount++;
+        UIManager.Instance.UpdateCountInMission(currentCatchCount, catchMaxCount);
         if(currentCatchCount==catchMaxCount)
         {
             UIManager.Instance.TimeAttackMission(true);
         }
     }
+
+    private void DelayActive() => active = true;
 }

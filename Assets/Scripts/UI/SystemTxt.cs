@@ -24,7 +24,7 @@ public class SystemTxt : MonoBehaviour
         seq.AppendInterval(time);
         seq.Append(transform.DOScale(Vector3.zero, 0.3f).SetEase(ease[1]));
         seq.AppendCallback(() => { EndAction?.Invoke(); gameObject.SetActive(false); });
-        seq.Play();
+        seq.Play().SetUpdate(true);
 
         SoundManager.Instance.PlaySoundEffect(SoundEffectType.SYSTEMINFOMSG);
     }

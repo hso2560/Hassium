@@ -128,6 +128,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
             camMove.camMinPos = saveData.userInfo.camMinRange;
             camMove.camMaxPos = saveData.userInfo.camMaxRange;
         }
+        MapManager.Instance.ChangeSky(saveData.userInfo.skyIndex);
     }
 
     #region 저장/로드
