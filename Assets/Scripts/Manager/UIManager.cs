@@ -438,6 +438,22 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
         if (clear) clearEvent?.Invoke();
         else timeOverEvent?.Invoke();
 
+        {
+            Text resultText = sceneObjs.gameTexts[clear ? 3 : 4];
+            Color c = resultText.color;
+            resultText.color = noColor;
+            resultText.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
+            
+            resultText.gameObject.SetActive(true);
+            Sequence seq = DOTween.Sequence();
+            seq.Append(resultText.DOColor(c, 0.3f))
+            .Join(resultText.transform.DOScale(Vector3.one, 0.3f))
+            .AppendInterval(1)
+            .Append(resultText.DOColor(noColor, 0.4f))
+            .AppendCallback(() => resultText.gameObject.SetActive(false))
+            .Play();
+        }
+
         OnTimer(0, true);
     }
 

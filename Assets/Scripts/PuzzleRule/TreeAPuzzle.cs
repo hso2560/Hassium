@@ -37,6 +37,7 @@ public class TreeAPuzzle : ObjData
 
     public override void Interaction()
     {
+        transform.GetChild(0).GetComponent<Animator>().SetTrigger("move");
         if (IsStart)
         {
             UIManager.Instance.TimeAttackMission(false);
@@ -92,6 +93,15 @@ public class TreeAPuzzle : ObjData
 
                 changeTime = Time.time + changeDelay;
             }
+        }
+    }
+
+    public void CheckCount()
+    {
+        currentCatchCount++;
+        if(currentCatchCount==catchMaxCount)
+        {
+            UIManager.Instance.TimeAttackMission(true);
         }
     }
 }

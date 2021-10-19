@@ -23,6 +23,7 @@ public class TreeA : Tree
             hp--;
             if (hp <= 0)
             {
+                rule.CheckCount();
                 ResetData();
             }
         }

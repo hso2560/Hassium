@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class PlayerScript : MonoBehaviour, IDamageable, IAttackable   //부모 스크립트 만들고 그걸 상속받는게 나았겠다
+public class PlayerScript : MonoBehaviour, IDamageable, IAttackable   //부모 스크립트 만들고 그걸 상속받았어야 했다..
 {
     public PSkillType skillType;
     public Rigidbody rigid;
@@ -13,8 +13,7 @@ public class PlayerScript : MonoBehaviour, IDamageable, IAttackable   //부모 스�
 
     [HideInInspector] public JoystickControl joystickCtrl;
 
-
-    //저장/로드 할 정보들은 차라리 저장할 때의 클래스로 가져와서 클래스 접근을 통해 값을 쓰고 바꾸고 하는게 나았을듯.....
+    //저장/로드 할 정보들(능력치)은 차라리 저장할 때의 클래스로 가져와서 클래스 접근을 통해 값을 쓰고 바꾸고 하는게 나았을듯.....아니면 가독성이라도 높이게 저것들 담는 클래스 뭔가 만들거나
     [SerializeField] private float speed = 8.5f;
     public float runSpeed = 17.8f;
     public float jumpPower = 10f;

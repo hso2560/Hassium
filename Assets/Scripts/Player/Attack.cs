@@ -7,14 +7,14 @@ public class Attack : MonoBehaviour
 
     [SerializeField] private int force = 25;
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        IDamageable e = collision.gameObject.GetComponent<IDamageable>();
+        IDamageable e = other.GetComponent<IDamageable>();
 
         //e?.OnDamaged(1, Vector3.zero, 1);
         if (e != null)
         {
-            GameObject o=null;
+            GameObject o = null;
             int damage;
             if (ps != null)
             {
@@ -27,9 +27,9 @@ public class Attack : MonoBehaviour
                 damage = enemy.Str;
             }
 
-            if (o != collision.gameObject)
+            if (o != other.gameObject)
             {
-                e.OnDamaged(damage, (o.transform.position-collision.transform.position).normalized, force, true);
+                e.OnDamaged(damage, -(o.transform.position - other.transform.position).normalized, force, true);
             }
         }
     }

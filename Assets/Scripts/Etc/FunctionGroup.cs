@@ -16,6 +16,7 @@ public class FunctionGroup
             {
                 random = Random.Range(0, length);
             } while (randomList.Contains(random));
+            randomList.Add(random);
             count--;
         }
 
