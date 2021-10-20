@@ -32,6 +32,16 @@ public class FunctionGroup
         return new Vector3(X, Y, Z);
     }
 
+    public static bool IsContainValue<T>(T[] arr, T value) where T : struct
+    {
+        for(int i=0; i<arr.Length; i++)
+        {
+            //if (arr[i] == value) return true;
+            if (EqualityComparer<T>.Default.Equals(arr[i], value)) return true;
+        }
+        return false;
+    }
+
     #region 따로 스크립트 붙이기 애매한 풀링 필요한 옵젝들은 일단 이렇게 처리함
     public static List<GameObject> CreatePoolList(GameObject prefab, Transform parent, int count)
     {

@@ -152,6 +152,11 @@ public class PRS
         this.rotation = rotation;
         this.scale = scale;
     }
+    public PRS(Vector3 pos, Quaternion rot)
+    {
+        position = pos;
+        rotation = rot;
+    }
 
     public PRS() { }
 }
