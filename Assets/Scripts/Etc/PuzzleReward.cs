@@ -37,6 +37,8 @@ public class PuzzleReward : MonoBehaviour
                 break;
 
             default:
+                objects[1].SetActive(true);
+                EffectManager.Instance.OnEffect(EffectType.APPEARANCE, objects[1].transform.position, 0.7f);
                 break;
         }
     }

@@ -49,8 +49,12 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //°Á ¸Þ´º ¾ÈÀ
     //Ä³¸¯ÅÍ °­È­ Ã¢
     public Text reinfNameText, statPointText;
     public Text[] statTexts;
-    public Text reinforceVerifyText;
+    public Text reinforceVerifyText, statPointTxtInBuyPanel;
     private int selectedReinfStatNumber;
+    [SerializeField] private int statPointPrice = 500;
+  
+
+    private GameManager gameManager;
 
     private void Awake()
     {
@@ -68,7 +72,8 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //°Á ¸Þ´º ¾ÈÀ
 
     private void Start()
     {
-        items = GameManager.Instance.savedData.userInfo.itemList;
+        gameManager = GameManager.Instance;
+        items = gameManager.savedData.userInfo.itemList;
 
         for(int i=0; i<items.Count; i++)
         {
@@ -77,10 +82,10 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //°Á ¸Þ´º ¾ÈÀ
             itemSlots[i].SetData(items[i]);
         }
 
-        for(int i=1; i<=GameManager.Instance.savedData.userInfo.characters.Count; i++)
+        for(int i=1; i<=gameManager.savedData.userInfo.characters.Count; i++)
         {
             short key = (short)(i * 10);
-            if (GameManager.Instance.IsExistCharac(key))
+            if (gameManager.IsExistCharac(key))
             {
                 charChangeBtns[i - 1].gameObject.SetActive(true);
                 charChangeBtns[i - 1].transform.GetChild(0).GetComponent<Text>().text = GameManager.Instance.idToMyPlayer[key].CharName;
@@ -88,7 +93,7 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //°Á ¸Þ´º ¾ÈÀ
         }
 
         LoadTreasure();
-        ps = GameManager.Instance.PlayerSc;
+        ps = gameManager.PlayerSc;
     }
 
     public bool ExistItem(int id) => idToItem.ContainsKey(id);
@@ -125,7 +130,7 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //°Á ¸Þ´º ¾ÈÀ
         }
 
         itemObj.gameObject.SetActive(false);
-        GameManager.Instance.savedData.saveObjDatas.Add(new SaveObjData(itemObj.index, SaveObjInfoType.ACTIVE, false));
+        gameManager.savedData.saveObjDatas.Add(new SaveObjData(itemObj.index, SaveObjInfoType.ACTIVE, false));
         acquisitionEvent();
     }
 
@@ -313,13 +318,13 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //°Á ¸Þ´º ¾ÈÀ
 
     public void ViewCharacterInfo(short id)
     {
-        if (GameManager.Instance.IsExistCharac(id))
+        if (gameManager.IsExistCharac(id))
         {
             if (currentCharInUI != null) currentCharInUI.SetActive(false);
 
             currentCharInUI = playerModelsInUI[(id / 10) - 1];
             currentCharInUI.SetActive(true);
-            ps = GameManager.Instance.idToMyPlayer[id];
+            ps = gameManager.idToMyPlayer[id];
             UpdateCharInfoUI();
         }
     }
@@ -342,7 +347,7 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //°Á ¸Þ´º ¾ÈÀ
 
     public void ChangeCharacter(int id)
     {
-        GameManager.Instance.ChangeCharacter((short)id);
+        gameManager.ChangeCharacter((short)id);
         ViewCharacterInfo((short)id);
         UIManager.Instance.OnClickUIButton(9);
     }
@@ -350,7 +355,7 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //°Á ¸Þ´º ¾ÈÀ
     //´É·ÂÄ¡ °­È­
     public void AddStat()
     {
-        if(GameManager.Instance.PlayerSc.StatPoint==0)
+        if(gameManager.PlayerSc.StatPoint==0)
         {
             PoolManager.GetItem<SystemTxt>().OnText("½ºÅÈ Æ÷ÀÎÆ®°¡ ºÎÁ·ÇÕ´Ï´Ù.");
             return;
@@ -359,19 +364,19 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //°Á ¸Þ´º ¾ÈÀ
         switch (selectedReinfStatNumber)  //Â÷·Ê·Î °ø, ¹æ, ÃÖ´ë Ã¼, ÃÖ´ë ½ºÅ×¹Ì³ª
         {
             case 1:
-                GameManager.Instance.PlayerSc.str += pData.addStr;
+                gameManager.PlayerSc.str += pData.addStr;
                 break;
             case 2:
-                GameManager.Instance.PlayerSc.def += pData.addDef;
+                gameManager.PlayerSc.def += pData.addDef;
                 break;
             case 3:
-                GameManager.Instance.PlayerSc.MaxHp += pData.addMaxHp;
+                gameManager.PlayerSc.MaxHp += pData.addMaxHp;
                 break;
             case 4:
-                GameManager.Instance.PlayerSc.MaxStamina += pData.addMaxStamina;
+                gameManager.PlayerSc.MaxStamina += pData.addMaxStamina;
                 break;
         }
-        GameManager.Instance.PlayerSc.StatPoint--;
+        gameManager.PlayerSc.StatPoint--;
         ShowStatUpVerify(-1);
         OnClickReinforceBtn();
     }
@@ -387,23 +392,23 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //°Á ¸Þ´º ¾ÈÀ
         switch (number)  
         {
             case 1:
-                reinforceVerifyText.text = $"<b>[°ø°Ý·Â]</b>\n\nÇöÀç: {GameManager.Instance.PlayerSc.str}\n´ÙÀ½: <color=#27009A>{GameManager.Instance.PlayerSc.str+pData.addStr}</color>\n(¼Ò¸ð Æ÷ÀÎÆ®: 1)";
+                reinforceVerifyText.text = $"<b>[°ø°Ý·Â]</b>\n\nÇöÀç: {gameManager.PlayerSc.str}\n´ÙÀ½: <color=#27009A>{GameManager.Instance.PlayerSc.str+pData.addStr}</color>\n(¼Ò¸ð Æ÷ÀÎÆ®: 1)";
                 break;
             case 2:
-                reinforceVerifyText.text = $"<b>[¹æ¾î·Â]</b>\n\nÇöÀç: {GameManager.Instance.PlayerSc.def}\n´ÙÀ½: <color=#27009A>{GameManager.Instance.PlayerSc.def + pData.addDef}</color>\n(¼Ò¸ð Æ÷ÀÎÆ®: 1)";
+                reinforceVerifyText.text = $"<b>[¹æ¾î·Â]</b>\n\nÇöÀç: {gameManager.PlayerSc.def}\n´ÙÀ½: <color=#27009A>{GameManager.Instance.PlayerSc.def + pData.addDef}</color>\n(¼Ò¸ð Æ÷ÀÎÆ®: 1)";
                 break;
             case 3:
-                reinforceVerifyText.text = $"<b>[ÃÖ´ë Ã¼·Â]</b>\n\nÇöÀç: {GameManager.Instance.PlayerSc.MaxHp}\n´ÙÀ½: <color=#27009A>{GameManager.Instance.PlayerSc.MaxHp + pData.addMaxHp}</color>\n(¼Ò¸ð Æ÷ÀÎÆ®: 1)";
+                reinforceVerifyText.text = $"<b>[ÃÖ´ë Ã¼·Â]</b>\n\nÇöÀç: {gameManager.PlayerSc.MaxHp}\n´ÙÀ½: <color=#27009A>{GameManager.Instance.PlayerSc.MaxHp + pData.addMaxHp}</color>\n(¼Ò¸ð Æ÷ÀÎÆ®: 1)";
                 break;
             case 4:
-                reinforceVerifyText.text = $"<b>[ÃÖ´ë ½ºÅ×¹Ì³ª]</b>\n\nÇöÀç: {GameManager.Instance.PlayerSc.MaxStamina}\n´ÙÀ½: <color=#27009A>{GameManager.Instance.PlayerSc.MaxStamina + pData.addMaxStamina}</color>\n(¼Ò¸ð Æ÷ÀÎÆ®: 1)";
+                reinforceVerifyText.text = $"<b>[ÃÖ´ë ½ºÅ×¹Ì³ª]</b>\n\nÇöÀç: {gameManager.PlayerSc.MaxStamina}\n´ÙÀ½: <color=#27009A>{GameManager.Instance.PlayerSc.MaxStamina + pData.addMaxStamina}</color>\n(¼Ò¸ð Æ÷ÀÎÆ®: 1)";
                 break;
         }
     }
 
     public void OnClickReinforceBtn()
     {
-        PlayerScript p = GameManager.Instance.PlayerSc;
+        PlayerScript p = gameManager.PlayerSc;
         reinfNameText.text = "°­È­ Ä³¸¯ÅÍ: " + p.CharName;
         statPointText.text = "½ºÅÈ Æ÷ÀÎÆ®: " + p.StatPoint.ToString();
 
@@ -411,6 +416,21 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //°Á ¸Þ´º ¾ÈÀ
         statTexts[1].text = string.Concat("¹æ¾î·Â: ", p.def);
         statTexts[2].text = string.Concat("ÃÖ´ë Ã¼·Â: ", p.MaxHp);
         statTexts[3].text = string.Concat("ÃÖ´ë ½ºÅ×¹Ì³ª: ", p.MaxStamina);
+    }
+
+    public void BuyStatPoint()
+    {
+        if(gameManager.savedData.userInfo.money<statPointPrice)
+        {
+            PoolManager.GetItem<SystemTxt>().OnText("°ñµå°¡ ºÎÁ·ÇÕ´Ï´Ù.");
+            return;
+        }
+        gameManager.savedData.userInfo.money -= statPointPrice;
+        gameManager.PlayerSc.StatPoint++;
+
+        statPointText.text = "½ºÅÈ Æ÷ÀÎÆ®: " + gameManager.PlayerSc.StatPoint.ToString();
+        sceneObjs.gameTexts[0].text = gameManager.savedData.userInfo.money.ToString();
+        statPointTxtInBuyPanel.text = "ÇöÀç " + statPointText.text;
     }
 
     #endregion

@@ -2,6 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum EffectType
+{
+    APPEARANCE
+}
+
 public class EffectManager : MonoSingleton<EffectManager>
 {
     public GameObject[] pSkillEffects;
@@ -9,6 +14,9 @@ public class EffectManager : MonoSingleton<EffectManager>
     //Hit°ü·Ã
     public GameObject hitEffect;
     private List<GameObject> hitEffectList;
+
+    public GameObject appearanceEffect;
+    private List<GameObject> appearanceEffectList;
 
     private void Awake()
     {
@@ -24,6 +32,7 @@ public class EffectManager : MonoSingleton<EffectManager>
     private void CreatePool()
     {
         hitEffectList = FunctionGroup.CreatePoolList(hitEffect, transform, 5);
+        appearanceEffectList = FunctionGroup.CreatePoolList(appearanceEffect, transform, 5);
     }
 
     public void OnHitEffect(Vector3 pos)
@@ -40,6 +49,19 @@ public class EffectManager : MonoSingleton<EffectManager>
         s.SetActive(true);
 
         StartCoroutine(InactiveEffectCo(s, time));
+    }
+
+    public void OnEffect(EffectType type, Vector3 pos, float time=.4f)
+    {
+        GameObject ef = null;
+        switch (type)
+        {
+            case EffectType.APPEARANCE:
+                ef = FunctionGroup.GetPoolItem(appearanceEffectList);
+                break;
+        }
+        ef.transform.position = pos;
+        StartCoroutine(InactiveEffectCo(ef, time));
     }
 
     IEnumerator InactiveEffectCo(GameObject effect, float time)

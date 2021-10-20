@@ -296,6 +296,9 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
                 Inventory.Instance.OnClickReinforceBtn();
                 sceneObjs.ui[3].SetActive(sceneObjs.ui[10].activeSelf);
                 break;
+            case 12:
+                Inventory.Instance.statPointTxtInBuyPanel.text = "현재 스탯 포인트: " + GameManager.Instance.PlayerSc.StatPoint.ToString();
+                break;
         }
     }
 
