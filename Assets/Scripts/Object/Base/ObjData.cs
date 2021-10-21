@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class ObjData : MonoBehaviour
@@ -15,6 +15,22 @@ public class ObjData : MonoBehaviour
         if (saveActiveStateId > -1)  //오브젝트 액티브상태 값 저장
         {
             GameManager.Instance.savedData.objActiveInfo[saveActiveStateId] = false;
+        }
+    }
+
+    public virtual void BaseStart(Action activeFunc=null, Action inactiveFunc=null)
+    {
+        if (GameManager.Instance.ContainKeyActiveId(saveActiveStateId))
+        {
+            active = GameManager.Instance.savedData.objActiveInfo[saveActiveStateId];
+        }
+        if (active)
+        {
+            activeFunc?.Invoke();
+        }
+        else
+        {
+            inactiveFunc?.Invoke();
         }
     }
 }

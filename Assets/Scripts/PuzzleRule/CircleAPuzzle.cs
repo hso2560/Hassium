@@ -19,11 +19,25 @@ public class CircleAPuzzle : ObjData
     private int maxMoveCount; // needMoveCount * dumpCycle
     private int curMoveCnt = 0;
 
+    [SerializeField] private int magnetIndex;
+
     private void Awake()
     {
         orgMagnetPos = movingMagnet.transform.position;
         magnet = movingMagnet.transform.GetChild(0).GetComponent<RigidMagnet>();
         maxMoveCount = needMoveCount * dumpCycle;
+    }
+
+    private void Start()
+    {
+        base.BaseStart(null,() =>
+        {
+            foreach(CircleA a in transform.parent.GetComponentsInChildren<CircleA>())
+            {
+                a.active = false;
+            }
+            
+        });
     }
 
     public void MoveSphere(int id,Transform tr, Vector3 dir)
@@ -43,33 +57,44 @@ public class CircleAPuzzle : ObjData
         curMoveCnt++;
         movingSphere.transform.DOMove(tr.position, 2.5f);
         TweenCallback tc = () => { };
-        //4번에서 1번갈 때 버그 발생
+       
         currentId = tr.parent.GetChild(1).GetComponent<CircleA>().id;
         if (currentId != targetId)
         {
-            if (FunctionGroup.IsContainValue(magnetObjsRemoveIds, currentId))
+            if(curMoveCnt==maxMoveCount)
             {
-                if (curMoveCnt % needMoveCount == 0)
-                {
-                    tc = () =>
-                    {
-                        magnet.RemoveCaughtObj();
-                    };
-                }
-                else
+                tc = () =>
                 {
                     IsMoving = false;
                     Interaction();
-                }
+                };
+            }
+            else if (FunctionGroup.IsContainValue(magnetObjsRemoveIds, currentId))
+            {
+                tc = () =>
+                {
+                    if (curMoveCnt % needMoveCount == 0)
+                    {
+                        magnet.RemoveCaughtObj();
+                    }
+                    else
+                    {
+                        IsMoving = false;
+                        Interaction();
+                    }
+                };
             }
         }
         else  //목적지에 도달했을 때
         {
             tc = () =>
             {
-                if(curMoveCnt==maxMoveCount)
+                if(curMoveCnt==maxMoveCount && magnet.IsClear())
                 {
-
+                    PoolManager.GetItem<SystemTxt>().OnText("보물상자가 나타났습니다!");
+                    base.Interaction();
+                    Transform tm = magnet.transform;
+                    GameManager.Instance.savedData.saveObjDatas.Add(new SaveObjData(magnetIndex, SaveObjInfoType.TRANSFORM, tm.position, tm.rotation, tm.localScale));
                 }
                 else
                 {

@@ -70,4 +70,6 @@ public class RigidMagnet : MonoBehaviour
             attachObjs[i].transform.rotation = prsList[i].rotation;
         }
     }
+
+    public bool IsClear() => removedRigids.Count == attachObjs.Count;
 }

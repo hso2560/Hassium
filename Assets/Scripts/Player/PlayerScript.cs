@@ -404,6 +404,7 @@ public class PlayerScript : MonoBehaviour, IDamageable, IAttackable   //ºÎ¸ð ½ºÅ
         else
         {
             hp -= (int)(damage - ((float)damage * def / 250f));
+            EffectManager.Instance.OnHitEffect(center.position, hitNormal);
         }
         //rigid.AddForce(hitNormal * force, ForceMode.VelocityChange);
         //rigid.velocity = hitNormal * force;

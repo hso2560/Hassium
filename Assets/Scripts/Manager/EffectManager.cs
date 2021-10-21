@@ -35,10 +35,14 @@ public class EffectManager : MonoSingleton<EffectManager>
         appearanceEffectList = FunctionGroup.CreatePoolList(appearanceEffect, transform, 5);
     }
 
-    public void OnHitEffect(Vector3 pos)
+    public void OnHitEffect(Vector3 pos, Vector3 normal)
     {
         GameObject e = FunctionGroup.GetPoolItem(hitEffectList);
         e.transform.position = pos;
+        if(normal!=Vector3.zero)
+        {
+            e.transform.rotation = Quaternion.LookRotation(normal);
+        }
         StartCoroutine(InactiveEffectCo(e, 0.4f));
     }
 

@@ -373,7 +373,9 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //∞¡ ∏ﬁ¥∫ æ»¿
                 gameManager.PlayerSc.MaxHp += pData.addMaxHp;
                 break;
             case 4:
-                gameManager.PlayerSc.MaxStamina += pData.addMaxStamina;
+                PlayerScript _p = gameManager.PlayerSc;
+                _p.MaxStamina += pData.addMaxStamina;
+                UIManager.Instance.AdjustFillAmound(UIType.HPFILL, _p.hp, _p.MaxHp);
                 break;
         }
         gameManager.PlayerSc.StatPoint--;
