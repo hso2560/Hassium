@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class StringListClass 
 {
     public List<string> stringList = new List<string>();
+    public bool endAction; //stringList의 마지막까지 보고나서 대화가 종료될 때 무언가 실행할 함수가 있는가
 }
 
 [Serializable]

@@ -36,9 +36,14 @@ public class PuzzleReward : MonoBehaviour
                 objects[0].transform.DOMove(Vector3.zero, running ? 4f : 0);
                 break;
 
-            default:
+            case 12:
                 objects[1].SetActive(true);
                 EffectManager.Instance.OnEffect(EffectType.APPEARANCE, objects[1].transform.position, 0.7f);
+                break;
+
+            case 16:
+                objects[2].SetActive(true);
+                EffectManager.Instance.OnEffect(EffectType.APPEARANCE, objects[2].transform.position, 0.7f);
                 break;
         }
     }

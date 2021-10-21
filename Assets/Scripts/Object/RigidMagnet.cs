@@ -34,6 +34,7 @@ public class RigidMagnet : MonoBehaviour
             Rigidbody r = other.GetComponent<Rigidbody>();
             if (caughtRigids.Count<catchMaxCount && !caughtRigids.Contains(r) && !removedRigids.Contains(r))
             {
+                r.isKinematic = false;
                 caughtRigids.Add(r);
             }
         }
@@ -44,6 +45,7 @@ public class RigidMagnet : MonoBehaviour
         for (int i = 0; i < caughtRigids.Count; i++)
         {
             removedRigids.Add(caughtRigids[i]);
+            caughtRigids[i].GetComponent<KinematicObj>().colDisable = true;
         }
         caughtRigids.Clear();
     }
@@ -66,10 +68,15 @@ public class RigidMagnet : MonoBehaviour
         removedRigids.Clear();
         for (int i = 0; i < attachObjs.Count; i++)
         {
+            attachObjs[i].GetComponent<KinematicObj>().colDisable = false;
+            attachObjs[i].GetComponent<Rigidbody>().isKinematic = false;
             attachObjs[i].transform.position = prsList[i].position;
             attachObjs[i].transform.rotation = prsList[i].rotation;
+            attachObjs[i].SetActive(true);
         }
     }
 
     public bool IsClear() => removedRigids.Count == attachObjs.Count;
+
+    
 }

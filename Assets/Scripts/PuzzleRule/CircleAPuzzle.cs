@@ -20,6 +20,7 @@ public class CircleAPuzzle : ObjData
     private int curMoveCnt = 0;
 
     [SerializeField] private int magnetIndex;
+    [SerializeField] private int sphereIndex;
 
     private void Awake()
     {
@@ -36,7 +37,7 @@ public class CircleAPuzzle : ObjData
             {
                 a.active = false;
             }
-            
+            magnet.attachObjs.ForEach(x => x.SetActive(false));
         });
     }
 
@@ -89,12 +90,20 @@ public class CircleAPuzzle : ObjData
         {
             tc = () =>
             {
+                magnet.RemoveCaughtObj();
                 if(curMoveCnt==maxMoveCount && magnet.IsClear())
                 {
                     PoolManager.GetItem<SystemTxt>().OnText("보물상자가 나타났습니다!");
                     base.Interaction();
-                    Transform tm = magnet.transform;
+                    active = false;
+                    foreach (CircleA a in transform.parent.GetComponentsInChildren<CircleA>())
+                    {
+                        a.active = false;
+                    }
+                    Transform tm = magnet.transform.parent;
+                    Transform tm2 = movingSphere.transform;
                     GameManager.Instance.savedData.saveObjDatas.Add(new SaveObjData(magnetIndex, SaveObjInfoType.TRANSFORM, tm.position, tm.rotation, tm.localScale));
+                    GameManager.Instance.savedData.saveObjDatas.Add(new SaveObjData(sphereIndex,SaveObjInfoType.TRANSFORM,tm2.position,tm2.rotation,tm2.localScale));
                 }
                 else
                 {

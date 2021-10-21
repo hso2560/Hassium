@@ -180,7 +180,8 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
 
             if (!exist)
             {
-                OffInterBtn(interactionBtns.Find(k => k.data.gameObject == x));
+                OffInterBtn(interactionBtns.Find(k => k.gameObject.activeSelf && k.data.gameObject == x));
+                //반드시 k.gameObject.activeSelf값을 먼저 검사해야함(&&의 왼쪽에 배치)
             }
         });
 

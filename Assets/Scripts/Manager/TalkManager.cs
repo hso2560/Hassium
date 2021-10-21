@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using System;
 
 public class TalkManager : MonoSingleton<TalkManager>, ISceneDataLoad
 {
@@ -23,6 +24,9 @@ public class TalkManager : MonoSingleton<TalkManager>, ISceneDataLoad
     private bool isTalking; //텍스트가 다 나왔는지
     Sequence seq;
     private int closeHash;
+
+    private Dictionary<string, Action> talkEndAction = new Dictionary<string, Action>();
+    private string key = "";
 
     private void Awake()
     {
@@ -95,6 +99,10 @@ public class TalkManager : MonoSingleton<TalkManager>, ISceneDataLoad
 
             if (index == talkCount)
             {
+                if (currentNpc.talkList[currentNpc.talkId].endAction)
+                {
+                    key = string.Concat(currentNpc.id, ",", currentNpc.talkId);
+                }
                 currentNpc = null;
                 talkPanelAni.SetTrigger(closeHash);
                 screenTouchPanel.gameObject.SetActive(false);
@@ -119,6 +127,12 @@ public class TalkManager : MonoSingleton<TalkManager>, ISceneDataLoad
     {
         talkPanelAni.gameObject.SetActive(false);
         interBtnsPanel.SetActive(true);
+
+        if(key!="")
+        {
+            talkEndAction[key]();
+            key = "";
+        }
     }
 
     public void ManagerDataLoad(GameObject sceneObjs)
