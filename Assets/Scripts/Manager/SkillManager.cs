@@ -8,9 +8,6 @@ public class SkillManager : MonoSingleton<SkillManager>, ISceneDataLoad
     //private TimeSpan ts;
     private WaitForSeconds ws = new WaitForSeconds(0.5f);
 
-    private bool isCoWorking = false;
-    private IEnumerator skillCo1, skillCo2;
-
     public bool GetReadyState { get { return isReady; } set { isReady = value; } }
 
     private void Start()
@@ -70,18 +67,12 @@ public class SkillManager : MonoSingleton<SkillManager>, ISceneDataLoad
 
         this.sceneObjs = sceneObjs.GetComponent<SceneObjects>();
 
+        StopAllCoroutines();
+
         if (this.sceneObjs.ScType == SceneType.MAIN)
         {
-            if (!isCoWorking)
-            {
-                skillCo1 = SkillUseManage();
-                skillCo2 = SkillCoolManage();
-
-                StartCoroutine(skillCo1);
-                StartCoroutine(skillCo2);
-
-                isCoWorking = true;
-            }
+            StartCoroutine(SkillUseManage());
+            StartCoroutine(SkillCoolManage());
         }
 
         isReady = true;

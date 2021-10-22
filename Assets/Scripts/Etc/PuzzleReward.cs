@@ -19,12 +19,12 @@ public class PuzzleReward : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public static void RequestReward(short id, bool running=true)
+    public static void RequestReward(int id, bool running=true)
     {
         instance.StartCoroutine(instance.RewardCo(id,running));
     }
 
-    public IEnumerator RewardCo(short id, bool running)
+    public IEnumerator RewardCo(int id, bool running)
     {
         yield return null;
         switch (id)
@@ -37,14 +37,19 @@ public class PuzzleReward : MonoBehaviour
                 break;
 
             case 12:
-                objects[1].SetActive(true);
-                EffectManager.Instance.OnEffect(EffectType.APPEARANCE, objects[1].transform.position, 0.7f);
+                RewardChest(1);
                 break;
 
             case 16:
-                objects[2].SetActive(true);
-                EffectManager.Instance.OnEffect(EffectType.APPEARANCE, objects[2].transform.position, 0.7f);
+                RewardChest(2);
                 break;
         }
+    }
+
+    public void RewardChest(int index)
+    {
+        PoolManager.GetItem<SystemTxt>().OnText("보물상자가 나타났습니다!");
+        objects[index].SetActive(true);
+        EffectManager.Instance.OnEffect(EffectType.APPEARANCE, objects[index].transform.position, 0.7f);
     }
 }

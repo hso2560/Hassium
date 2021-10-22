@@ -70,6 +70,7 @@ public class TreeAPuzzle : ObjData
                 IsStart = false;
                 active = false;
                 base.Interaction();
+                PuzzleReward.RequestReward(id);
             };
             UIManager.Instance.timeOverEvent += () =>
             {

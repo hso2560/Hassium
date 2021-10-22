@@ -93,7 +93,7 @@ public class CircleAPuzzle : ObjData
                 magnet.RemoveCaughtObj();
                 if(curMoveCnt==maxMoveCount && magnet.IsClear())
                 {
-                    PoolManager.GetItem<SystemTxt>().OnText("보물상자가 나타났습니다!");
+                    PuzzleReward.RequestReward(id);
                     base.Interaction();
                     active = false;
                     foreach (CircleA a in transform.parent.GetComponentsInChildren<CircleA>())
