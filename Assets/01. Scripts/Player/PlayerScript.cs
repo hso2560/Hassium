@@ -434,6 +434,19 @@ public class PlayerScript : MonoBehaviour, IDamageable, IAttackable   //ºÎ¸ð ½ºÅ
             }
         }
 
+        Collider[] cols = Physics.OverlapSphere(center.position, pData.interactionRadius);
+        for(int i=0; i<cols.Length; i++)
+        {
+            IDamageable d = null;
+            d = cols[i].GetComponent<IDamageable>();
+            if (d != null)
+            {
+                FunctionGroup.Look(cols[i].transform,transform);
+                playerModel.rotation = transform.rotation;
+                break;
+            }
+        }
+
         attackStatePhase++;
         ani.SetTrigger(attackTrigger);
         ani.SetInteger(attackInt, attackStatePhase);

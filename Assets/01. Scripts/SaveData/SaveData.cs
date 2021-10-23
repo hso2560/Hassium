@@ -32,6 +32,7 @@ public class UserInfo
     public short mapIndex = 0;
     public int playTime = 0;
     public int skyIndex = 3;
+    public int npcKillCount = 0;
     //public int chestCount = 0;
     //public int maxItemSlotCount = 30;
 

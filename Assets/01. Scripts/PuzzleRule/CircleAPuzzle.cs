@@ -143,7 +143,7 @@ public class CircleAPuzzle : ObjData, IReward
 
     public void GetReward()
     {
-        if (GameManager.Instance.IsContainChest(chestId))
+        if (!GameManager.Instance.IsContainChest(chestId))
         {
             PuzzleReward.RequestReward(id);
         }

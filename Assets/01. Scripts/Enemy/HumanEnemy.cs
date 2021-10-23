@@ -149,26 +149,13 @@ public class HumanEnemy : EnemyBase
         rigid.angularVelocity = Vector3.zero;
     }
 
-    /*private void Look()
-    {
-        Vector3 lookPos = target.position - transform.position;
-        lookPos.y = 0;
-        lookPos.Normalize();
-        transform.rotation = Quaternion.LookRotation(lookPos);
-    }*/
-
     public override void Attack()
     {
         if (ableAtkTime<Time.time)
         {
-            ani.enabled = false;
-            model.transform.localPosition = Vector3.zero;
-            model.transform.rotation = Quaternion.identity;
-            ani.enabled = true;
-
             ableAtkTime = Time.time + attackCoolTime;
-            base.SetSpeed(0, true);
-            //Look();
+            base.SetSpeed(0);
+            FunctionGroup.Look(target, transform);
             ani.SetTrigger(atkTrigger);
             //공격처리
         }
@@ -199,6 +186,7 @@ public class HumanEnemy : EnemyBase
 
     public override void StartEnemy()
     {
+        base.StartEnemy();
         npc.info.isFighting = true;
         base.SetSpeed(enemyData.speed);
         agent.destination = target.position;

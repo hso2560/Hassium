@@ -47,6 +47,14 @@ public class FunctionGroup
 
     public static int GetDamageAmount(int damage, int def) => Mathf.Clamp((int)(damage - ((float)damage * def / defCriteria)), 0, damage);
     
+    public static void Look(Transform target, Transform center, bool yZero = true)
+    {
+        Vector3 lookPos = target.position - center.position;
+        if (yZero) lookPos.y = 0;
+        lookPos.Normalize();
+        center.rotation = Quaternion.LookRotation(lookPos);
+    }
+
 
     #region 따로 스크립트 붙이기 애매한 풀링 필요한 옵젝들은 일단 이렇게 처리함
     public static List<GameObject> CreatePoolList(GameObject prefab, Transform parent, int count)

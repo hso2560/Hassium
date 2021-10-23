@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
+using System.Collections.Generic;
+using System.Collections;
 
 public abstract class EnemyBase : MonoBehaviour, IDamageable
 {
@@ -31,6 +33,8 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     protected bool isTrace;
     protected float ableAtkTime;
     [SerializeField] protected float attackCoolTime = 2f;
+
+    public List<NPCHPLowMsg> npcHPLowMsg;
 
     //protected bool isStop, isPatrolling, isRunaway, isAttacking;
     //protected bool addHandler;
@@ -91,7 +95,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         }
     }
 
-    public virtual void SetSpeed(float s, bool attack = false)
+    public virtual void SetSpeed(float s)
     {
         agent.speed = s;
         agent.isStopped = s == 0;
@@ -99,7 +103,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         {
             agent.velocity = Vector3.zero;
         }
-        if(!attack) ani.SetFloat(speedFloat, agent.speed);
+        ani.SetFloat(speedFloat, agent.speed);
     }
 
     public virtual void Runaway()  //µµ¸Á
@@ -157,6 +161,12 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
 
         ani.SetTrigger(hitTrigger);
 
+        if(npcHPLowMsg.Count>0 && currentHp < npcHPLowMsg[0].hp)
+        {
+            PoolManager.GetItem<SystemTxt>().OnText(npcHPLowMsg[0].message, npcHPLowMsg[0].time, npcHPLowMsg[0].fontSize);
+            npcHPLowMsg.RemoveAt(0);
+        }
+
         Damaged();
         CheckHp();
     }
@@ -168,11 +178,12 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
             npc.Death();
         }
 
-        enemyState = EnemyState.DIE;
         currentHp = 0;
+        enemyState = EnemyState.DIE;
         isDie = true;
-        SetSpeed(0, true);
+        SetSpeed(0);
         ani.SetTrigger(deathTrigger);
+        StartCoroutine(DeathCo());
     }
 
     public virtual void Damaged()
@@ -182,6 +193,20 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
 
     public virtual void StartEnemy()
     {
+        if (npc != null)
+        {
+            npc.active = false;
+        }
+    }
 
+    protected IEnumerator DeathCo()
+    {
+        agent.enabled = false;
+        yield return new WaitForSeconds(3);
+        GetComponent<Collider>().enabled = false;
+        rigid.isKinematic = false;
+        yield return new WaitForSeconds(3);
+        //ResetData();
+        gameObject.SetActive(false);
     }
 }

@@ -37,3 +37,12 @@ public enum EnemyState
     ATTACK,
     DIE
 }
+
+[System.Serializable]
+public class NPCHPLowMsg
+{
+    public int hp;
+    public string message;
+    public float time = 3f;
+    public int fontSize = 50;
+}

@@ -43,5 +43,6 @@ public class NPCAI : ObjData
         info.bRunaway = false;
         info.isFighting = false;
         info.dead = true;
+        GameManager.Instance.KillNPC();
     }
 }

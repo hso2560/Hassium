@@ -411,7 +411,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //°× ½ÃÀÛ
         Inventory.Instance.AddTreasure(data);
 
         saveData.userInfo.money += money;
-        sceneObjs.gameTexts[0].text = saveData.userInfo.money.ToString();
+        
         player.GetExp(exp);
 
         StringBuilder sb = new StringBuilder();
@@ -435,6 +435,23 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //°× ½ÃÀÛ
         sb.Append(" È¹µæ");
 
         PoolManager.GetItem<SystemTxt>().OnText(sb.ToString());
+    }
+
+    public void KillNPC()
+    {
+        saveData.userInfo.npcKillCount++;
+        switch (saveData.userInfo.npcKillCount)
+        {
+            case 3:
+                MapManager.Instance.ChangeSky(0);
+                break;
+            case 6:
+                MapManager.Instance.ChangeSky(1);
+                break;
+            case 9:
+                MapManager.Instance.ChangeSky(4);
+                break;
+        }
     }
 
     public void OnSystemMsg(string msg,float time=3f ,int size=50)
@@ -501,6 +518,14 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //°× ½ÃÀÛ
         {
             PoolManager.GetItem<Meteor>();
         }
+        else if (Input.GetKeyDown(KeyCode.P))
+        {
+            saveData.userInfo.mapIndex = 40;
+            MapManager.Instance.ActiveMap(MapType.MAINMAP);
+            transform.position = MapManager.Instance.mapCenterDict[40].position;
+            camMove.camMinPos = new Vector3(-1607, -300, -332);
+            camMove.camMaxPos = new Vector3(-610, 300, 664);
+        }
     }
 
     private void OnApplicationQuit()
@@ -561,7 +586,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //°× ½ÃÀÛ
         {
             yield return ammWs;  
             saveData.userInfo.money += autoMoney;
-            sceneObjs.gameTexts[0].text = saveData.userInfo.money.ToString();
+            
         }
     }
 }

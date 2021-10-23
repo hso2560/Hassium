@@ -293,6 +293,9 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
             case 0:
                 Inventory.Instance.UpdateCharInfoUI();
                 break;
+            case 4:
+                sceneObjs.gameTexts[0].text = GameManager.Instance.savedData.userInfo.money.ToString();
+                break;
             case 10:
                 Inventory.Instance.OnClickReinforceBtn();
                 sceneObjs.ui[3].SetActive(sceneObjs.ui[10].activeSelf);

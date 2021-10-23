@@ -55,6 +55,7 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //°Á ¸Þ´º ¾ÈÀ
   
 
     private GameManager gameManager;
+    private Dictionary<int, Action> itemUseAction = new Dictionary<int, Action>();
 
     private void Awake()
     {
@@ -68,6 +69,40 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //°Á ¸Þ´º ¾ÈÀ
             dumpPanelInfo.explain.text = $"<b>[{clickedSlot.Item_Data.name}]</b> ¸î °³ ¹ö¸®½Ã°Ú½À´Ï±î?\n(º¸À¯ °³¼ö¸¦ ÃÊ°úÇØ¼­ ÀÔ·ÂÇÒ °æ¿ì, ÀÚµ¿À¸·Î º¸À¯°³¼ö·Î ÀÔ·ÂµË´Ï´Ù.)";
             UIManager.Instance.OnClickUIButton(7);
         });
+        useBtn.onClick.AddListener(() =>
+        {
+            UseItem(clickedSlot.Item_Data.id);
+        });
+        SetDict();
+    }
+
+    private void SetDict()  //µû·Î »ç¿ë °¡´É ÅÛ Á¾·ùº°·Î Å¬·¡½º »©¼­ ÀúÀåÇÏ¸é ÆíÇÏ°ÚÁö¸¸ ±ÞÇÏ´Ï±î ÀÌ·¸°Ô ¤¡
+    {
+        itemUseAction.Add(50, () => GetGold(-1, 1000, 2000));
+        itemUseAction.Add(60, () => GetGold(-1, 3000, 4500));
+        itemUseAction.Add(70, () => GetGold(-1, 6000, 8000));
+        itemUseAction.Add(80, () => GetGold(-1, 10000, 15000));
+
+        int u = 200;
+        for (int i = 100; i <= 200; i += 50)
+        {
+            itemUseAction.Add(i, () => gameManager.PlayerSc.RecoveryHp(u));
+            u *= 2;
+        }
+
+        itemUseAction.Add(250, () => gameManager.PlayerSc.RecoveryHp(1200));
+        itemUseAction.Add(300, () => gameManager.PlayerSc.RecoveryHp(3000));
+    }
+
+    public void GetGold(int g, int min=0, int max=0)
+    {
+        int i = g;
+        if(i==-1)
+        {
+            i = UnityEngine.Random.Range(min, max);
+        }
+        gameManager.savedData.userInfo.money += i;
+        PoolManager.GetItem<SystemTxt>().OnText(string.Format("<color=yellow>{0}°ñµå</color>¸¦ È¹µæÇÏ¿´½À´Ï´Ù.", i), 3, 40);
     }
 
     private void Start()
@@ -186,6 +221,12 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //°Á ¸Þ´º ¾ÈÀ
         {
             GetItemSlot(id).itemCountText.text = data.count.ToString();
         }
+
+        if(itemUseAction.ContainsKey(id))
+        {
+            itemUseAction[id]();
+        }
+        ClickSetting(false);
     }
 
     #region ÀÎº¥Åä¸® Ã¢
