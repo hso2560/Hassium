@@ -228,9 +228,7 @@ public class PlayerScript : MonoBehaviour, IDamageable, IAttackable   //부모 스�
         if ((!joystickCtrl.isTouch && joystickCtrl.PC_MoveDir==Vector3.zero) || isJumping || !isMovable || noControl) return;
 
         float angle = Mathf.Atan2(worldDir.x, worldDir.z) * Mathf.Rad2Deg;
-
         playerModel.rotation = Quaternion.Slerp(playerModel.rotation, Quaternion.Euler(0, angle, 0), Time.deltaTime * pData.rotateSpeed);
-        
     }
 
     private void StaminaCheck()  //스테미나 0이하인지 체크와 스테미나 감소 처리

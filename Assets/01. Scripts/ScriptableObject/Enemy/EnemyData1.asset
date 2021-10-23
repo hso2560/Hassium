@@ -17,12 +17,12 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   enemyName: "\uAC74\uAC15\uD55C \uBCD1\uC0AC"
-  maxHp: 3000
+  maxHp: 2600
   speed: 3.6
   traceSpeed: 7.8
   patrolRange: 0
   traceRange: 9
   attackRange: 1
-  viewingAngle: 120
-  movableRange: 50
+  viewingAngle: 160
+  movableRange: 100
   hpUIDistSquare: 169

@@ -6,11 +6,11 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     public EnemyData enemyData;
     public Transform center;
 
-    public bool bViewingAngle360;
+    public bool bViewingAngle360, frontObstacle; //시야각이 360도인가, 플레이어와 자신 사이에 장애물 있으면 추격 안되는가
     protected bool isDie;
     [SerializeField] protected int currentHp;
 
-    protected Vector3 startPoint;
+    protected Vector3 startPoint;  //처음 위치
     [SerializeField] protected int str;
     public int Str { get { return str; } set { str = value; } }
     [SerializeField] protected int def;
@@ -18,55 +18,69 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
 
     [SerializeField] protected NPCAI npc;
     protected NavMeshAgent agent;
+    protected Rigidbody rigid;
     protected HPBar hpBar;
+    protected GameObject model;
 
-    protected Transform target;
+    [SerializeField] protected Transform target;
     protected int speedFloat, hitTrigger, deathTrigger, atkTrigger;
-    //protected bool addHandler;
+    
     protected Animator ani;
-    [SerializeField] protected EnemyState enemyState = EnemyState.STOP;
+    [SerializeField] protected EnemyState enemyState = EnemyState.PATROL;
 
-    protected bool isAttacking;
-    //protected bool isStop, isPatrolling, isTrace, isRunaway;
+    protected bool isTrace;
+    protected float ableAtkTime;
+    [SerializeField] protected float attackCoolTime = 2f;
+
+    //protected bool isStop, isPatrolling, isRunaway, isAttacking;
+    //protected bool addHandler;
 
     protected virtual void Awake()
     {
         ani = transform.GetChild(0).GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
+        rigid = GetComponent<Rigidbody>();
+        model = transform.GetChild(1).gameObject;
         currentHp = enemyData.maxHp;
         speedFloat = Animator.StringToHash("speed");
         hitTrigger = Animator.StringToHash("hit");
         deathTrigger = Animator.StringToHash("death");
         atkTrigger = Animator.StringToHash("attack");
+        startPoint = transform.position;
         SetSpeed(0);
     }
 
     public virtual void Trace()  //추격
     {
         SetSpeed(enemyData.traceSpeed);
-        agent.SetDestination(GameManager.Instance.PlayerSc.transform.position);
+        target = GameManager.Instance.PlayerSc.transform;
+        agent.SetDestination(target.position);
+
        /* if (!addHandler)
         {
             GameManager.Instance.objActionHandle += Handler;
             addHandler = true;
         }*/
+
     }
 
+    #region 주석
     /*public void Handler()
     {
         agent.SetDestination(GameManager.Instance.PlayerSc.transform.position);
     }*/
-    
-    public virtual void ResetData()  //리셋
+
+    /*public virtual void ResetData()  //리셋
     {
-        /*if(addHandler)
+        *//*if(addHandler)
         {
             GameManager.Instance.objActionHandle -= Handler;
             addHandler = false;
-        }*/
+        }*//*
         currentHp = enemyData.maxHp;
         CheckHp();   
-    }
+    }*/
+    #endregion
 
     public virtual void CheckHp()  //HP체크
     {
@@ -91,6 +105,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     public virtual void Runaway()  //도망
     {
         //isRunaway = true;
+
         SetSpeed(enemyData.traceSpeed);
         Vector3 dir = -(GameManager.Instance.PlayerSc.transform.position - transform.position).normalized;
         RaycastHit hit;
@@ -116,6 +131,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     public virtual void Stop()
     {
         //isStop = true;
+
         SetSpeed(0);
     }
 
@@ -152,6 +168,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
             npc.Death();
         }
 
+        enemyState = EnemyState.DIE;
         currentHp = 0;
         isDie = true;
         SetSpeed(0, true);
