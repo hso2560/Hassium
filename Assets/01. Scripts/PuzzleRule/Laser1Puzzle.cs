@@ -1,24 +1,27 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class Laser1Puzzle : ObjData, IReward
 {
     public List<Laser1> lasers;
 
-    public float ratio;
     public float rotateTime;
+    public float laserDist;
 
-    public bool IsMoving { get; set; }
-
-    private void Awake()
+    /*private void Awake()
     {
         lasers = new List<Laser1>(transform.parent.GetComponentsInChildren<Laser1>());
-    }
+    }*/
 
     private void Start()
     {
-        
+        base.BaseStart();
+    }
+
+    public void Rotate(Laser1[] lasers, float[] ratios)
+    {
+
     }
 
     public override void Interaction()
