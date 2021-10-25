@@ -9,8 +9,6 @@ public enum EffectType
 
 public class EffectManager : MonoSingleton<EffectManager>
 {
-    public GameObject[] pSkillEffects;
-
     //Hit°ü·Ã
     public GameObject hitEffect;
     private List<GameObject> hitEffectList;
@@ -20,12 +18,6 @@ public class EffectManager : MonoSingleton<EffectManager>
 
     private void Awake()
     {
-        for(int i=0; i<pSkillEffects.Length; i++)
-        {
-            GameObject o = Instantiate(pSkillEffects[i], transform);
-            o.SetActive(false);
-            pSkillEffects[i] = o;
-        }
         CreatePool();
     }
 
@@ -46,14 +38,14 @@ public class EffectManager : MonoSingleton<EffectManager>
         StartCoroutine(InactiveEffectCo(e, 0.4f));
     }
 
-    public void OnPlayerSkillEffect(PSkillType type,Vector3 pos, float time)
+    /*public void OnPlayerSkillEffect(PSkillType type,Vector3 pos, float time)
     {
         GameObject s = pSkillEffects[(int)type];
         s.gameObject.transform.position = pos;
         s.SetActive(true);
 
         StartCoroutine(InactiveEffectCo(s, time));
-    }
+    }*/
 
     public void OnEffect(EffectType type, Vector3 pos, float time=.4f)
     {

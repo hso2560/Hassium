@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,7 +20,13 @@ public class NPCAI : ObjData
             GameManager.Instance.savedData.npcInfo[info.id] = info;
         }
 
-        if (info.dead) gameObject.SetActive(false);
+        if (info.dead)
+        {
+            enemy.CurrentHp = 0;
+            enemy.isDie = true;
+            enemy.enemyState = EnemyState.DIE;
+            gameObject.SetActive(false);
+        }
 
         if (info.bRunaway || info.isFighting)
         {

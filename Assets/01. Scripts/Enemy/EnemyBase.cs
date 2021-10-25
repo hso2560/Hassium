@@ -9,8 +9,9 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     public Transform center;
 
     public bool bViewingAngle360, frontObstacle; //시야각이 360도인가, 플레이어와 자신 사이에 장애물 있으면 추격 안되는가
-    protected bool isDie;
+    [HideInInspector] public bool isDie;
     [SerializeField] protected int currentHp;
+    public int CurrentHp { set { currentHp = value; } }
 
     protected Vector3 startPoint;  //처음 위치
     [SerializeField] protected int str;
@@ -22,20 +23,26 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     protected NavMeshAgent agent;
     protected Rigidbody rigid;
     protected HPBar hpBar;
-    protected GameObject model;
+    [SerializeField] protected Attack attack;
 
     [SerializeField] protected Transform target;
     protected int speedFloat, hitTrigger, deathTrigger, atkTrigger;
-    
+    [SerializeField] protected float existAtkTime = .5f;
+    protected float disableAtkTime;
+
     protected Animator ani;
-    [SerializeField] protected EnemyState enemyState = EnemyState.PATROL;
+    public EnemyState enemyState = EnemyState.PATROL;
 
     protected bool isTrace;
     protected float ableAtkTime;
     [SerializeField] protected float attackCoolTime = 2f;
 
     public List<NPCHPLowMsg> npcHPLowMsg;
+    public Vector3 msgOffset;
 
+    public Vector3 hpOffset;
+    protected Camera mainCam;
+    protected float uiUpdateTime;
     //protected bool isStop, isPatrolling, isRunaway, isAttacking;
     //protected bool addHandler;
 
@@ -44,7 +51,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         ani = transform.GetChild(0).GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
         rigid = GetComponent<Rigidbody>();
-        model = transform.GetChild(1).gameObject;
+        
         currentHp = enemyData.maxHp;
         speedFloat = Animator.StringToHash("speed");
         hitTrigger = Animator.StringToHash("hit");
@@ -52,6 +59,11 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         atkTrigger = Animator.StringToHash("attack");
         startPoint = transform.position;
         SetSpeed(0);
+    }
+
+    protected virtual void Start()
+    {
+        mainCam = UIManager.Instance.mainCam;
     }
 
     public virtual void Trace()  //추격
@@ -68,23 +80,29 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
 
     }
 
-    #region 주석
     /*public void Handler()
     {
         agent.SetDestination(GameManager.Instance.PlayerSc.transform.position);
     }*/
 
-    /*public virtual void ResetData()  //리셋
+    public virtual void ResetData()  //리셋
     {
-        *//*if(addHandler)
-        {
-            GameManager.Instance.objActionHandle -= Handler;
-            addHandler = false;
-        }*//*
         currentHp = enemyData.maxHp;
-        CheckHp();   
-    }*/
-    #endregion
+        CheckHp();
+    }
+
+    public virtual bool NeedReset()
+    {
+        if(npc!=null)
+        {
+            if (!isDie && (npc.info.bRunaway || npc.info.isFighting)) return true;
+            else return false;
+        }
+        else
+        {
+            return !isDie;
+        }
+    }
 
     public virtual void CheckHp()  //HP체크
     {
@@ -142,6 +160,11 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     public abstract void Patrol();  //보통 상태
     public abstract void Attack();  //공격
 
+    protected virtual void FixedUpdate()
+    {
+        rigid.angularVelocity = Vector3.zero;
+    }
+
     public void OnDamaged(int damage, Vector3 hitNormal, float force, bool useDef)
     {
         if (isDie) return;
@@ -163,7 +186,8 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
 
         if(npcHPLowMsg.Count>0 && currentHp < npcHPLowMsg[0].hp)
         {
-            PoolManager.GetItem<SystemTxt>().OnText(npcHPLowMsg[0].message, npcHPLowMsg[0].time, npcHPLowMsg[0].fontSize);
+            //PoolManager.GetItem<SystemTxt>().OnText(npcHPLowMsg[0].message, npcHPLowMsg[0].time, npcHPLowMsg[0].fontSize);
+            UIManager.Instance.OnNPCMessage(npcHPLowMsg[0], transform, msgOffset);
             npcHPLowMsg.RemoveAt(0);
         }
 
@@ -208,5 +232,23 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         yield return new WaitForSeconds(3);
         //ResetData();
         gameObject.SetActive(false);
+    }
+
+    protected virtual void ShowHP()
+    {
+        if (hpBar != null)
+        {
+            hpBar.transform.position = mainCam.WorldToScreenPoint(transform.position + hpOffset);
+
+            if (uiUpdateTime < Time.time)
+            {
+                uiUpdateTime = Time.time + 1;
+                if ((GameManager.Instance.PlayerSc.transform.position - transform.position).sqrMagnitude > enemyData.hpUIDistSquare)
+                {
+                    hpBar.gameObject.SetActive(false);
+                    hpBar = null;
+                }
+            }
+        }
     }
 }

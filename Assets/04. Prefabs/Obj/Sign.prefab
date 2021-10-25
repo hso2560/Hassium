@@ -16,7 +16,7 @@ GameObject:
   m_TagString: NPC
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &8516088539504213104
 Transform:
@@ -71,7 +71,10 @@ MonoBehaviour:
     talkList: []
     npcType: 0
     dead: 0
+    bRunaway: 0
     isFighting: 0
+  puzzleRuleObj: {fileID: 0}
+  enemy: {fileID: 0}
 --- !u!1 &8516088539760640950
 GameObject:
   m_ObjectHideFlags: 0

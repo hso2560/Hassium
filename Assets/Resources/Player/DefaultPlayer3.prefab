@@ -7741,6 +7741,7 @@ MonoBehaviour:
   maxStamina: 70
   staminaDownSpeed: 7
   staminaDecJAR: 10
+  statPoint: 0
   rotateSpeed: 10
   needStaminaMin: 6
   staminaRecoverySpeed: 6.5
@@ -7796,6 +7797,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08bf753bd3e78e841bc440413bcab304, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  skillExplain: 
   isFirstSkillUseTreat: 1
   isResetIfChangeChar: 1
   isHoldSkill: 0
@@ -7807,11 +7809,12 @@ MonoBehaviour:
   coolTime: 30
   skillOffTime: 0
   skillRechargeTime: 0
+  skillEffect: {fileID: 0}
   ropeStatePhase: 0
   rope: {fileID: 7162513245163962632}
   whatIsGrappleable:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 4736
   ropeStartPoint: {fileID: 1475087997036052629}
   maxDist: 31
   spring: 6.5

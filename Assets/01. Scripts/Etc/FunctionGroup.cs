@@ -73,7 +73,7 @@ public class FunctionGroup
     public static GameObject GetPoolItem(List<GameObject> poolList)
     {
         GameObject o = poolList.Find(x => !x.activeSelf);
-        if (o == null)
+        if (o == null)  //여기까지는 안오게 할거
         {
             poolList[0].SetActive(false);
             o = poolList[0];

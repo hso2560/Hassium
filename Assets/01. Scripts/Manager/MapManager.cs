@@ -18,8 +18,15 @@ public class MapManager : MonoSingleton<MapManager>, ISceneDataLoad
 
     public List<GameObject> mapList;
     public List<int> mapObjIndexList; //mapList의 게임 오브젝트 순서와 SceneSaveObjects의 obj에서 그 옵젝에 해당하는 인덱스 값 순서대로 한다
+    public List<EnemyBase> enemys;
 
     [SerializeField] private bool isDevMode;
+    [SerializeField] GameObject testMark;
+
+    private void Awake()
+    {
+        testMark.SetActive(isDevMode);
+    }
 
     private void InitData()
     {
@@ -36,6 +43,11 @@ public class MapManager : MonoSingleton<MapManager>, ISceneDataLoad
             mapList[i].SetActive(active);
             GameManager.Instance.SaveObjActiveInfo(mapObjIndexList[i], active);
         }
+    }
+
+    public void ResetLivingEnemy()  //살아있는 적들의 상태를 초기화
+    {
+        enemys.FindAll(x => x.NeedReset()).ForEach(a => a.ResetData());
     }
 
     private IEnumerator MeteorCo()

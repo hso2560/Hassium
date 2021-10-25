@@ -7,11 +7,8 @@ public class HumanEnemy : EnemyBase
     public Transform wayPointsGroup;
     private List<Transform> wayPoints;
     private int wayPointIndex = 0;
-    private float uiUpdateTime;
 
     public float judgeDelay = 0.2f;
-    public Vector3 offset;
-    private Camera mainCam;
     private WaitForSeconds ws;
 
     private float checkTime;
@@ -31,9 +28,17 @@ public class HumanEnemy : EnemyBase
         target = wayPoints[0];
     }
 
-    private void Start()
+    public override void ResetData()
     {
-        mainCam = GameManager.Instance.sceneObjs.camMove.GetComponent<Camera>();
+        base.ResetData();
+        if (isTrace)
+        {
+            isTrace = false;
+            target = wayPoints[wayPointIndex % wayPoints.Count];
+            agent.destination = target.position;
+            enemyState = EnemyState.PATROL;
+            return;
+        }
     }
 
     private void Sight()
@@ -91,6 +96,8 @@ public class HumanEnemy : EnemyBase
         if (isTrace)
         {
             isTrace = false;
+            //agent.velocity = Vector3.zero;
+            //base.SetSpeed(enemyData.speed);
             target = wayPoints[wayPointIndex%wayPoints.Count];
             agent.destination = target.position;
             enemyState = EnemyState.PATROL;
@@ -120,33 +127,19 @@ public class HumanEnemy : EnemyBase
     {
         if (npc.info.isFighting && !isDie)
         {
-            if (hpBar != null)
-            {
-                hpBar.transform.position = mainCam.WorldToScreenPoint(transform.position + offset);
-
-                if(uiUpdateTime<Time.time)
-                {
-                    uiUpdateTime = Time.time + 1;
-                    if((GameManager.Instance.PlayerSc.transform.position-transform.position).sqrMagnitude>enemyData.hpUIDistSquare)
-                    {
-                        hpBar.gameObject.SetActive(false);
-                        hpBar = null;
-                    }
-                }
-            }
+            base.ShowHP();
 
             if (checkTime < Time.time)
             {
                 checkTime = Time.time + 0.35f;
                 Sight();
             }
-            //Look();
-        }
-    }
 
-    private void FixedUpdate()
-    {
-        rigid.angularVelocity = Vector3.zero;
+            if(Time.time>disableAtkTime && attack.gameObject.activeSelf)
+            {
+                attack.gameObject.SetActive(false);
+            }
+        }
     }
 
     public override void Attack()
@@ -157,7 +150,8 @@ public class HumanEnemy : EnemyBase
             base.SetSpeed(0);
             FunctionGroup.Look(target, transform);
             ani.SetTrigger(atkTrigger);
-            //공격처리
+            attack.gameObject.SetActive(true);
+            disableAtkTime = Time.time + existAtkTime;
         }
     }
 

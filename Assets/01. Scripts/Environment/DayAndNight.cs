@@ -1,9 +1,14 @@
-using System.Collections;
+using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class DayAndNight : MonoBehaviour
 {
+    Light mainLight;
+    private Color defaultLightColor;
+    public List<Color> lightColors;
+    //private bool doLightColorEffect = false;
+
     [SerializeField] private float secondPerRealTimeSecond;  //현실 1초 == 해당 변수 (초)  (게임 속 하루(24시간) = 360도 회전)
     [HideInInspector] public bool isNight = false;
     private float speed;
@@ -15,6 +20,12 @@ public class DayAndNight : MonoBehaviour
     private float currentFogDensity;
 
     public Material[] skyMaterials;
+
+    private void Awake()
+    {
+        mainLight = GetComponent<Light>();
+        defaultLightColor = mainLight.color;
+    }
 
     private void Start()
     {
@@ -61,6 +72,27 @@ public class DayAndNight : MonoBehaviour
                 currentFogDensity -= 0.1f * fogDensityCalc * Time.deltaTime;
                 RenderSettings.fogDensity = currentFogDensity;
             }
+        }
+    }
+
+    public void OnOffLightEffect(bool on, float time = 1f)
+    {
+        //doLightColorEffect = on;
+        if (on)
+        {
+            int index = -1;
+
+            TweenCallback tc2 = null;
+
+            TweenCallback tc = () => mainLight.DOColor(lightColors[++index % lightColors.Count], time).OnComplete(tc2);
+            tc2 = () => mainLight.DOColor(lightColors[++index % lightColors.Count], time).OnComplete(tc);
+
+            tc();
+        }
+        else
+        {
+            mainLight.DOKill();
+            mainLight.DOColor(defaultLightColor, 1.5f);
         }
     }
 }

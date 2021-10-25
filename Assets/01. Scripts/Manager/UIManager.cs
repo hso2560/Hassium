@@ -47,9 +47,12 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
 
     private InteractionBtn interBtn = null;
     private CameraMove camMove;
+    [HideInInspector] public Camera mainCam;
 
     public Queue<bool> uiChangeQueue = new Queue<bool>();  //화면의 UI 변화, 위치, 애니메이션 등이 실행/변화중인지 체크하기 위함. 비어있어야 변화 가능
-    
+
+    private List<GameObject> npcTalkImgs;
+
     public bool GetReadyState { get { return isReady; } set { isReady = value; } }
 
     private void Awake()
@@ -342,6 +345,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
             menuBtn = this.sceneObjs.gameBtns[0];
 
             camMove = this.sceneObjs.camMove;
+            mainCam = camMove.GetComponent<Camera>();
             timerParent = timerText.transform.parent.gameObject;
 
             InitData();
@@ -360,7 +364,8 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
         {
             AdjustSlider(UIType.DIST_FROM_CAM);
         });
-      
+
+        npcTalkImgs = FunctionGroup.CreatePoolList(sceneObjs.prefabs[4], sceneObjs.trms[0], 6);
     }
 
     private void Start()
@@ -482,6 +487,22 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
     public void UpdateCountInMission(float cur, float max)
     {
         missionCntText.text = string.Concat(cur.ToString(), "/", max.ToString());
+    }
+
+    public void OnNPCMessage(NPCHPLowMsg msg, Transform target, Vector3 offset)
+    {
+        GameObject msgImage = FunctionGroup.GetPoolItem(npcTalkImgs);
+        Text msgText = msgImage.transform.GetChild(1).GetComponent<Text>();
+        msgText.text = msg.message;
+        msgText.fontSize = msg.fontSize;
+
+        CanvasGroup cvg = msgImage.GetComponent<CanvasGroup>();
+        cvg.alpha = 0;
+
+        StartCoroutine(GameManager.Instance.FuncHandlerCo(msg.time,()=>cvg.DOFade(1,0.4f),()=>
+        {
+            msgImage.transform.position = mainCam.WorldToScreenPoint(target.position + offset);
+        }, ()=> msgImage.SetActive(false)) );
     }
 
     public void SaveData()

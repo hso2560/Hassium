@@ -1,7 +1,7 @@
 using DG.Tweening;
 using UnityEngine;
 
-public class CircleAPuzzle : ObjData, IReward
+public class CircleAPuzzle : ObjData, IReward  //원래는 퍼즐 룰 이것도 부모 스크립트 만들고 룰 스크립트들이 그걸 상속받아야함
 {
     private int currentId = 1;
     public GameObject movingSphere, movingMagnet;
@@ -24,6 +24,8 @@ public class CircleAPuzzle : ObjData, IReward
 
     [SerializeField] private int chestId;
     [SerializeField] private NPCAI npc;
+
+    public string npcFightingClearMsg;
 
     private void Awake()
     {
@@ -69,8 +71,7 @@ public class CircleAPuzzle : ObjData, IReward
             {
                 tc = () =>
                 {
-                    IsMoving = false;
-                    Interaction();
+                    Fail();
                 };
             }
             else if (FunctionGroup.IsContainValue(magnetObjsRemoveIds, currentId))
@@ -83,8 +84,7 @@ public class CircleAPuzzle : ObjData, IReward
                     }
                     else
                     {
-                        IsMoving = false;
-                        Interaction();
+                        Fail();
                     }
                 };
             }
@@ -96,7 +96,12 @@ public class CircleAPuzzle : ObjData, IReward
                 magnet.RemoveCaughtObj();
                 if(curMoveCnt==maxMoveCount && magnet.IsClear())
                 {
-                    GetReward();
+                    if (npc != null && !npc.info.dead && (npc.info.isFighting || npc.info.bRunaway))
+                        PoolManager.GetItem<SystemTxt>().OnText(npcFightingClearMsg);
+                    else
+                        GetReward();
+
+                    npc.info.talkId++;
                     base.Interaction();
                     active = false;
                     foreach (CircleA a in transform.parent.GetComponentsInChildren<CircleA>())
@@ -110,8 +115,7 @@ public class CircleAPuzzle : ObjData, IReward
                 }
                 else
                 {
-                    IsMoving = false;
-                    Interaction();
+                    Fail();
                 }
             };
         }
@@ -120,6 +124,13 @@ public class CircleAPuzzle : ObjData, IReward
         dir.y = 0;
         Vector3 target = movingMagnet.transform.position + dir * magnetMoveInterval;
         movingMagnet.transform.DOMove(target, 2.5f).OnComplete(tc);
+    }
+
+    private void Fail()
+    {
+        PoolManager.GetItem<SystemTxt>().OnText("<color=purple>실패</color>", 3.5f, 70);
+        IsMoving = false;
+        Interaction();
     }
 
     public override void Interaction()

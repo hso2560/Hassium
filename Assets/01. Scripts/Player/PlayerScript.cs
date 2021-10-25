@@ -439,7 +439,7 @@ public class PlayerScript : MonoBehaviour, IDamageable, IAttackable   //ºÎ¸ð ½ºÅ
         {
             IDamageable d = null;
             d = cols[i].GetComponent<IDamageable>();
-            if (d != null)
+            if (cols[i].gameObject != gameObject && d != null)
             {
                 FunctionGroup.Look(cols[i].transform,transform);
                 playerModel.rotation = transform.rotation;

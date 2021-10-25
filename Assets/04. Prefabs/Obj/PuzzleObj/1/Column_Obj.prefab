@@ -97,7 +97,7 @@ GameObject:
   m_TagString: Object
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &6615908417832102568
 Transform:
@@ -131,9 +131,10 @@ MonoBehaviour:
   objName: 
   explain: 
   saveActiveStateId: -1
-  representative: 0
+  isResetButton: 0
   relevantCols: []
   increase: 
+  mesh: {fileID: 0}
 --- !u!136 &677713392016809103
 CapsuleCollider:
   m_ObjectHideFlags: 0

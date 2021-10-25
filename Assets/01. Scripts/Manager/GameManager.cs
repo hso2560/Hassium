@@ -51,6 +51,8 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //°× ½ÃÀÛ
     private WaitForSeconds ammWs;
     private readonly long autoMoney = 2;
 
+    [SerializeField] private short testFastMovement;
+
     public string GetFilePath(string fileName) => string.Concat(Application.persistentDataPath, "/", fileName);
 
     private void Awake()  
@@ -110,6 +112,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //°× ½ÃÀÛ
                     player.transform.parent.gameObject.SetActive(false);
                     keyToVoidFunction[LoadingType.RESPAWN]();
                     player.transform.parent.gameObject.SetActive(true);
+                    MapManager.Instance.ResetLivingEnemy();
                 };
                 UIManager.Instance.LoadingFade(false);
             }
@@ -526,6 +529,10 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //°× ½ÃÀÛ
             camMove.camMinPos = new Vector3(-1607, -300, -332);
             camMove.camMaxPos = new Vector3(-610, 300, 664);
         }
+        else if (Input.GetKeyDown(KeyCode.M))
+        {
+            player.transform.position = MapManager.Instance.mapCenterDict[testFastMovement].position;
+        }
     }
 
     private void OnApplicationQuit()
@@ -586,7 +593,19 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //°× ½ÃÀÛ
         {
             yield return ammWs;  
             saveData.userInfo.money += autoMoney;
-            
         }
+    }
+
+    public IEnumerator FuncHandlerCo(float time, Action start ,Action handler, Action complete = null)
+    {
+        float elapsed = 0f;
+        start?.Invoke();
+        while(elapsed<time)
+        {
+            yield return null;
+            elapsed += Time.deltaTime;
+            handler();
+        }
+        complete?.Invoke();
     }
 }
