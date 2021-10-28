@@ -94,10 +94,12 @@ MonoBehaviour:
   itemImg: {fileID: 8281344586259231910}
   itemCountText: {fileID: 4212887138659200025}
   itemData:
+    cannotDump: 0
     id: 0
     name: 
     explain: 
     count: 0
+    spritePath: 
     sprite: {fileID: 0}
     itemType: 0
 --- !u!1 &8958107081753284856
