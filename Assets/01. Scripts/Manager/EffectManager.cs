@@ -27,7 +27,7 @@ public class EffectManager : MonoSingleton<EffectManager>
         appearanceEffectList = FunctionGroup.CreatePoolList(appearanceEffect, transform, 5);
     }
 
-    public void OnHitEffect(Vector3 pos, Vector3 normal)
+    public void OnHitEffect(Vector3 pos, Vector3 normal)  //쳐맞을 때의 이펙트
     {
         GameObject e = FunctionGroup.GetPoolItem(hitEffectList);
         e.transform.position = pos;
@@ -35,7 +35,7 @@ public class EffectManager : MonoSingleton<EffectManager>
         {
             e.transform.rotation = Quaternion.LookRotation(normal);
         }
-        StartCoroutine(InactiveEffectCo(e, 0.4f));
+        StartCoroutine(InactiveEffectCo(e, 0.4f)); 
     }
 
     /*public void OnPlayerSkillEffect(PSkillType type,Vector3 pos, float time)
@@ -47,7 +47,7 @@ public class EffectManager : MonoSingleton<EffectManager>
         StartCoroutine(InactiveEffectCo(s, time));
     }*/
 
-    public void OnEffect(EffectType type, Vector3 pos, float time=.4f)
+    public void OnEffect(EffectType type, Vector3 pos, float time=.4f)  //다른 이펙트들 활성화해줌
     {
         GameObject ef = null;
         switch (type)
@@ -60,7 +60,7 @@ public class EffectManager : MonoSingleton<EffectManager>
         StartCoroutine(InactiveEffectCo(ef, time));
     }
 
-    IEnumerator InactiveEffectCo(GameObject effect, float time)
+    IEnumerator InactiveEffectCo(GameObject effect, float time)  //몇 초후에 해당 이펙트 꺼준다
     {
         yield return new WaitForSeconds(time);
         effect.SetActive(false);

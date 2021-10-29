@@ -85,7 +85,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
         ammWs = new WaitForSeconds(autoMoneyDelay);
     }
 
-    private void SetKeyAndFunc()
+    private void SetKeyAndFunc()  
     {
         keyToVoidFunction.Add(LoadingType.RESPAWN, () => {
             if (player.IsDamageableByFall)
@@ -120,7 +120,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
         });
     }
 
-    private void SetEvent_Point()
+    private void SetEvent_Point()  //어떤 포인트에 닿으면 어떤 이벤트를 실행시킬지 정함
     {
         eventPointAction[0] = () => { };
     }
@@ -399,7 +399,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
         //sceneObjs.thirdPCam.LookAt = player.center;
     }
 
-    public void SetPlayer()
+    public void SetPlayer()  //다른 플레이어 참조하는 스크립트에다가 할당
     {
         camMove.Setting(player.center, player.transform);
         camMove.player = player;
@@ -440,7 +440,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
         PoolManager.GetItem<SystemTxt>().OnText(sb.ToString());
     }
 
-    public void KillNPC()
+    public void KillNPC()  //NPC죽이고 하늘 바뀌는 처리
     {
         saveData.userInfo.npcKillCount++;
         switch (saveData.userInfo.npcKillCount)
@@ -457,7 +457,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
         }
     }
 
-    public void OnSystemMsg(string msg,float time=3f ,int size=50)
+    public void OnSystemMsg(string msg,float time=3f ,int size=50)  //시스템 메시지를 띄움 (개수 제한까지 해줌)
     {
         if (systemMsgCount == maxSystemMsgCount) return;
 
@@ -465,7 +465,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
         PoolManager.GetItem<SystemTxt>().OnText(msg, time, size, () => systemMsgCount--);
     }
 
-    public void ActionFuncHandle()
+    public void ActionFuncHandle()  //objActionHandle호출 (주로 캐릭터 교체시 사용되는 Action)
     {
         if (objActionHandle == null) return;
 
@@ -477,9 +477,9 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
         }
     }
 
-    public bool ContainKeyActiveId(int id) => saveData.objActiveInfo.objActiveKeys.Contains(id);
+    public bool ContainKeyActiveId(int id) => saveData.objActiveInfo.objActiveKeys.Contains(id);  //해당 아이디의 오브젝트의 상호작용 가능 여부를 저장했는지
 
-    public bool IsContainChest(int id)
+    public bool IsContainChest(int id)  //해당 ID의 보물상자를 획득했는지
     {
         for(int i=0; i<saveData.userInfo.myChestList.Count; i++)
         {
@@ -495,7 +495,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
         playTime += Time.deltaTime;
     }
 
-    public void TestInput()
+    public void TestInput()  //개발할 때의 테스트
     {
         if (Input.GetKeyDown(KeyCode.Alpha2))  //Test Code
         {
@@ -587,7 +587,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
         isReady = true;
     }
 
-    private IEnumerator AutoMakeMoneyCo()
+    private IEnumerator AutoMakeMoneyCo()  //자동으로 골드 벌음
     {
         while (true)
         {
@@ -596,7 +596,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
         }
     }
 
-    public IEnumerator FuncHandlerCo(float time, Action start ,Action handler, Action complete = null)
+    public IEnumerator FuncHandlerCo(float time, Action start ,Action handler, Action complete = null)  //뭔가 갑자기 처리해야할 함수 생기면 여기로 해준다
     {
         float elapsed = 0f;
         start?.Invoke();

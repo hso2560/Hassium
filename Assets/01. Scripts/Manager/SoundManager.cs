@@ -19,7 +19,7 @@ public class SoundManager : MonoSingleton<SoundManager>, ISceneDataLoad
 
     public bool GetReadyState { get { return isReady; } set { isReady = value; } }
 
-    public void PlaySoundEffect(SoundEffectType set, float time = -1f)
+    public void PlaySoundEffect(SoundEffectType set, float time = -1f)  //효과음 출력
     {
         Option op = GameManager.Instance.savedData.option;
 

@@ -34,7 +34,7 @@ public class MapManager : MonoSingleton<MapManager>, ISceneDataLoad
         StartCoroutine(MeteorIE);
     }
 
-    public void ActiveMap(MapType type)
+    public void ActiveMap(MapType type)  //맵을 활성화하고 나머지 비활
     {
         for(int i=0; i<mapList.Count; i++)
         {
@@ -50,7 +50,7 @@ public class MapManager : MonoSingleton<MapManager>, ISceneDataLoad
         enemys.FindAll(x => x.NeedReset()).ForEach(a => a.ResetData());
     }
 
-    private IEnumerator MeteorCo()
+    private IEnumerator MeteorCo()  //유성 떨어짐
     {
         while (true)
         {
@@ -90,7 +90,7 @@ public class MapManager : MonoSingleton<MapManager>, ISceneDataLoad
         isReady = true;
     }
 
-    public void ChangeSky(int index)
+    public void ChangeSky(int index)  //하늘 교체
     {
         RenderSettings.skybox = dayAndNight.skyMaterials[index];
         GameManager.Instance.savedData.userInfo.skyIndex = index;

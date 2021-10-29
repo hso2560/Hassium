@@ -88,17 +88,17 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
     }
 
     #region IteractionBtn
-    public void ActiveItrBtn(ObjData od)
+    public void ActiveItrBtn(ObjData od)  //어떤 오브젝트에 대한 상호작용 버튼 띄움
     {
         short i;
 
         if (!od.active)
         {
-            for (i = 0; i < interactionBtns.Count; ++i)
+            for (i = 0; i < interactionBtns.Count; ++i)  
             {
                 if (interactionBtns[i].data == od)
                 {
-                    OffInterBtn(interactionBtns[i]);
+                    OffInterBtn(interactionBtns[i]);   //갑자기 상호작용 불가능 상태 되면 버튼 꺼줌
                     break;
                 }
             }
@@ -111,7 +111,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
 
         for(i=0; i<interactionBtns.Count; ++i)
         {
-            if (interactionBtns[i].data == od) return;
+            if (interactionBtns[i].data == od) return;  //이미 해당 옵젝이 상호작용 버튼들 중 하나에 등록되어있으면 리턴
         }
 
         interBtn = null;
@@ -124,13 +124,13 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
             }
         }
 
-        if (interBtn == null) return;
+        if (interBtn == null) return;  //버튼 자리 없으면 리턴
 
         interBtn.data = od;
         beforeItrObjs.Add(od.gameObject);
         interBtn.transform.GetChild(0).GetComponent<Text>().text = od.objName;
 
-        if (od.transform.CompareTag("Object"))
+        if (od.transform.CompareTag("Object"))  //옵젝 설명 띄워준다
         {
             objExplainText.gameObject.SetActive(true);
             objExplainText.text = od.explain;
@@ -141,15 +141,15 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
         interBtn.cvs.DOFade(1, 0.4f);
     }
 
-    public void OffInterBtn(InteractionBtn ib = null)
+    public void OffInterBtn(InteractionBtn ib = null)  //상호작용 버튼 꺼줌
     {
-        if (ib != null)
+        if (ib != null)  //특정 버튼만 꺼줌
         {
             beforeItrObjs.Remove(ib.data.gameObject);
             ib.data = null;
             ib.cvs.DOFade(0, 0.3f).OnComplete(() => ib.gameObject.SetActive(false));
         }
-        else
+        else  //모든 버튼 꺼줌
         {
             for (short i = 0; i < interactionBtns.Count; i++)
             {
@@ -164,7 +164,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
         }
     }
 
-    public void DisableItrBtn(Collider[] cols)
+    public void DisableItrBtn(Collider[] cols)  //현재 플레이어 주변의 옵젝들과 상호작용 버튼으로 나온 옵젝들을 비교해서 플레이어 주변에 없지만 버튼은 남아있는 것들을 조사해서 꺼준다
     {
         bool exist;
 
@@ -247,7 +247,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
     }
     #endregion
 
-    public void OnClickUIButton(int num)
+    public void OnClickUIButton(int num)  //어떤 버튼을 클릭하면 어떤 UI가 열리나
     {
         if (num < 0 || (uiChangeQueue.Count!=0 && num!=6)) return;
 
@@ -278,7 +278,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
         SoundManager.Instance.PlaySoundEffect(SoundEffectType.MENUCLICK);
     }
 
-    public void UIQueue(bool enqueue=false)
+    public void UIQueue(bool enqueue=false)  //UI애니메이션 적용 중에 다른 UI처리가 가능한 것을 방지하기 위해서 uiChangeQueue가 비어있어야 처리 가능.
     {
         if(enqueue)
         {
@@ -289,7 +289,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
         if (uiChangeQueue.Count > 0) uiChangeQueue.Dequeue();
     }
 
-    private void SpecificProcessing(int num)
+    private void SpecificProcessing(int num)  //UI끄고 킬 때 특정 UI를 끄고 킬 때의 처리
     {
         switch(num)
         {
@@ -297,7 +297,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
                 Inventory.Instance.UpdateCharInfoUI();
                 break;
             case 4:
-                sceneObjs.gameTexts[0].text = GameManager.Instance.savedData.userInfo.money.ToString();
+                sceneObjs.gameTexts[0].text = GameManager.Instance.savedData.userInfo.money.ToString() + " 골드";
                 break;
             case 10:
                 Inventory.Instance.OnClickReinforceBtn();
@@ -381,7 +381,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
 
     public void SetData()
     {
-        sceneObjs.gameTexts[0].text = GameManager.Instance.savedData.userInfo.money.ToString();  //돈 텍스트 업데이트
+        sceneObjs.gameTexts[0].text = GameManager.Instance.savedData.userInfo.money.ToString() + " 골드";  //돈 텍스트 업데이트
     }
 
     private void Update()
@@ -391,7 +391,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
         //deleteValue = uiChangeQueue.Count;
     }
 
-    private void _Input()
+    private void _Input()  //컴용
     {
         if(Input.GetKeyDown(KeyCode.Escape) && uiChangeQueue.Count==0)
         {
@@ -406,7 +406,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
         }
     }
 
-    public void OnSystemPanel(string msg, int fontSize=69)
+    public void OnSystemPanel(string msg, int fontSize=69)  //시스템 패널 띄우고 메시지까지
     {
         OnClickUIButton(6);
         Text t = sceneObjs.ui[6].transform.GetChild(0).GetComponent<Text>();
@@ -414,7 +414,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
         t.fontSize = fontSize;
     }
 
-    public void OnTimer(int time,bool useCnt ,bool off=false)
+    public void OnTimer(int time,bool useCnt ,bool off=false)  //타이머 시작 or 종료
     {
         if (off)
         {
@@ -445,7 +445,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
         }
     }
 
-    private void Timer()
+    private void Timer() //타이머 기능
     {
         if (isTimer)
         {
@@ -460,7 +460,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
         }
     }
 
-    public void TimeAttackMission(bool clear)
+    public void TimeAttackMission(bool clear)  //타임어택 미션 클리어 혹은 실패 했을 때
     {
         if (clear) clearEvent?.Invoke();
         else timeOverEvent?.Invoke();
@@ -484,12 +484,12 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
         OnTimer(0, true, true);
     }
 
-    public void UpdateCountInMission(float cur, float max)
+    public void UpdateCountInMission(float cur, float max)  //미션 중 목표 달성량과 현재 진행도
     {
         missionCntText.text = string.Concat(cur.ToString(), "/", max.ToString());
     }
 
-    public void OnNPCMessage(NPCHPLowMsg msg, Transform target, Vector3 offset)
+    public void OnNPCMessage(NPCHPLowMsg msg, Transform target, Vector3 offset)  //NPC가 일정 HP이하일 때 NPC가 대화창 띄우면서 혼자 말하는 UI
     {
         GameObject msgImage = FunctionGroup.GetPoolItem(npcTalkImgs);
         Text msgText = msgImage.transform.GetChild(1).GetComponent<Text>();
@@ -505,7 +505,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
         }, ()=> msgImage.SetActive(false)) );
     }
 
-    public void SaveData()
+    public void SaveData()  //주로 옵션에서 설정한 값 저장
     {
         Option op = new Option();
         op.distFromCam = camSlider.value;

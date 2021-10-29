@@ -18,7 +18,7 @@ public class SkillManager : MonoSingleton<SkillManager>, ISceneDataLoad
         }
     }
 
-    private IEnumerator SkillUseManage()
+    private IEnumerator SkillUseManage()  //사용중인 스킬 체크하고 시간지나면 쿨타임 시작
     {
         int i;
 
@@ -39,7 +39,7 @@ public class SkillManager : MonoSingleton<SkillManager>, ISceneDataLoad
         }
     }
 
-    private IEnumerator SkillCoolManage()
+    private IEnumerator SkillCoolManage()  //쿨타임 걸린 스킬 체크하고 시간 지나면 다시 사용 가능 상태로
     {
         int j;
 

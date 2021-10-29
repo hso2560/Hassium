@@ -20,7 +20,7 @@ public class NPCAI : ObjData
             GameManager.Instance.savedData.npcInfo[info.id] = info;
         }
 
-        if (info.dead)
+        if (info.dead)  //죽은 애는 없어야하니까
         {
             enemy.CurrentHp = 0;
             enemy.isDie = true;
@@ -28,7 +28,7 @@ public class NPCAI : ObjData
             gameObject.SetActive(false);
         }
 
-        if (info.bRunaway || info.isFighting)
+        if (info.bRunaway || info.isFighting) //공격 받은 상태 이어가기
         {
             active = false;
             enemy.StartEnemy();

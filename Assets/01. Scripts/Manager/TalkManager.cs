@@ -33,7 +33,7 @@ public class TalkManager : MonoSingleton<TalkManager>, ISceneDataLoad
         closeHash = Animator.StringToHash("close");
     }
 
-    public void CvsgFade(CanvasGroup cg, int target, float time)
+    public void CvsgFade(CanvasGroup cg, int target, float time)  //UI처리
     {
         bool b = (target != 0);
         cg.DOFade(target, time);
@@ -41,14 +41,14 @@ public class TalkManager : MonoSingleton<TalkManager>, ISceneDataLoad
         cg.interactable = b;
     }
 
-    private void SetPlayerState(bool talk)
+    private void SetPlayerState(bool talk)  //플레이어 움직임 방지
     {
         GameManager.Instance.PlayerSc.NoControl = talk;
         GameManager.Instance.PlayerSc.IsInvincible = talk;
         //interBtnsPanel.SetActive(!talk);
     }
 
-    public void StartTalk(NPCInfo info)
+    public void StartTalk(NPCInfo info)  //대화 시작
     {
         index = 0;
         seq = DOTween.Sequence();
@@ -80,11 +80,11 @@ public class TalkManager : MonoSingleton<TalkManager>, ISceneDataLoad
         }
     }
 
-    public void DoTalkWithNPC()
+    public void DoTalkWithNPC()  //대화 함
     {
         if (currentNpc == null) return;
 
-        if(isTalking)
+        if(isTalking)  //텍스트 효과 안끝났으면 강제로 끝내준다
         {
             isTalking = false;
             seq.Kill();
@@ -92,12 +92,12 @@ public class TalkManager : MonoSingleton<TalkManager>, ISceneDataLoad
             talkText.text = currentNpc.talkList[currentNpc.talkId].stringList[index];
             talkEndMark.SetActive(true);
         }
-        else
+        else  // 다음 대화 ㄱ
         {
             index++;
             talkEndMark.SetActive(false);
 
-            if (index == talkCount)
+            if (index == talkCount)  //마지막 말까지 들음
             {
                 if (currentNpc.talkList[currentNpc.talkId].endAction)
                 {
@@ -123,14 +123,14 @@ public class TalkManager : MonoSingleton<TalkManager>, ISceneDataLoad
         }
     }
 
-    private void OffTalkPanel()
+    private void OffTalkPanel() //대화 종료
     {
         talkPanelAni.gameObject.SetActive(false);
         interBtnsPanel.SetActive(true);
 
-        if(key!="")
+        if(key!="")  
         {
-            talkEndAction[key]();
+            talkEndAction[key]();  //해당 대화가 끝난 후에 무슨 일을 처리할게 있으면 해준다
             key = "";
         }
     }

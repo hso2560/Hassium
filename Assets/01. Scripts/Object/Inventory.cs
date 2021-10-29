@@ -94,7 +94,7 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //°Á ¸Þ´º ¾ÈÀ
         itemUseAction.Add(300, () => gameManager.PlayerSc.RecoveryHp(3000));
     }
 
-    public void GetGold(int g, int min=0, int max=0)
+    public void GetGold(int g, int min=0, int max=0) //min°úmax»çÀÌ·Î °ñµå È¹µæÇÏ°Å³ª ÀÏÁ¤ °ñµå È¹µæ
     {
         int i = g;
         if(i==-1)
@@ -110,14 +110,14 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //°Á ¸Þ´º ¾ÈÀ
         gameManager = GameManager.Instance;
         items = gameManager.savedData.userInfo.itemList;
 
-        for(int i=0; i<items.Count; i++)
+        for(int i=0; i<items.Count; i++)  //ÀÎº¥Åä¸®¿¡ ¾ÆÀÌÅÛ Á¤º¸ ºÒ·¯¿È
         {
             items[i].sprite = Resources.Load<Sprite>("Sprites/Item/" + items[i].spritePath);
             idToItem.Add(items[i].id, items[i]);
             itemSlots[i].SetData(items[i]);
         }
 
-        for(int i=1; i<=gameManager.savedData.userInfo.characters.Count; i++)
+        for(int i=1; i<=gameManager.savedData.userInfo.characters.Count; i++)  //Ä³ ±³Ã¼ ¹öÆ° È°¼ºÈ­
         {
             short key = (short)(i * 10);
             if (gameManager.IsExistCharac(key))
@@ -198,7 +198,7 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //°Á ¸Þ´º ¾ÈÀ
         }
     }
 
-    public void UseItem(int id, int count=1)
+    public void UseItem(int id, int count=1) //ÅÛ »ç¿ë
     {
         if (!ExistItem(id)) return;
 
@@ -230,7 +230,7 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //°Á ¸Þ´º ¾ÈÀ
     }
 
     #region ÀÎº¥Åä¸® Ã¢
-    public void BeginDrg(bool active, ItemSlot i = null)  
+    public void BeginDrg(bool active, ItemSlot i = null)  //ÅÛ ½½·Ô µå·¡±× ½ÃÀÛ
     {
         dragImage.gameObject.SetActive(active);
         isDragging = active;
@@ -242,7 +242,7 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //°Á ¸Þ´º ¾ÈÀ
         }
     }
 
-    public void Exchange(ItemSlot i)  
+    public void Exchange(ItemSlot i)  //ÅÛ ½½·Ô µÎ°³ÀÇ À§Ä¡ ¹Ù²Þ
     {
         if (i == beginSlot) return;
 
@@ -255,7 +255,7 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //°Á ¸Þ´º ¾ÈÀ
         ClickSetting(false);
     }
 
-    public void Change(ItemSlot i)
+    public void Change(ItemSlot i)  //ÅÛ ½½·Ô ±³Ã¼
     {
         i.SetData(beginSlot.Item_Data);
         beginSlot.ResetData();
@@ -288,7 +288,7 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //°Á ¸Þ´º ¾ÈÀ
         }
     }
 
-    public void ClickItemSlot(ItemSlot ist)
+    public void ClickItemSlot(ItemSlot ist)  //ÅÛ ½½·Ô Å¬¸¯ ½Ã Ã³¸®
     {
         if (clickedSlot == null || ist!=clickedSlot)
         {
@@ -347,7 +347,7 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //°Á ¸Þ´º ¾ÈÀ
     #endregion
 
     #region Ä³¸¯ÅÍ Ã¢
-    public void ClickCharacterPanel(bool on)
+    public void ClickCharacterPanel(bool on)  //Ä³¸¯ÅÍ Ã¢ ´©¸£°Å³ª ¶¿ ‹š 
     {
         noRenderingZone.SetActive(on);
         
@@ -357,7 +357,7 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //°Á ¸Þ´º ¾ÈÀ
         }
     }
 
-    public void ViewCharacterInfo(short id)
+    public void ViewCharacterInfo(short id) //Ä³¸¯Ã¢¿¡ ¶ã ÇÃ·¹ÀÌ¾î ¸ðµ¨ ¶ç¿ò
     {
         if (gameManager.IsExistCharac(id))
         {
@@ -370,7 +370,7 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //°Á ¸Þ´º ¾ÈÀ
         }
     }
 
-    public void UpdateCharInfoUI()
+    public void UpdateCharInfoUI()//ÇöÀç Ä³¸¯ ´É·ÂÄ¡ Á¤º¸ ¶ç¿ò
     {
         if (currentCharInUI != null)
         {
@@ -386,7 +386,7 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //°Á ¸Þ´º ¾ÈÀ
         }
     }
 
-    public void ChangeCharacter(int id)
+    public void ChangeCharacter(int id)  //Ä³ ±³Ã¼
     {
         gameManager.ChangeCharacter((short)id);
         ViewCharacterInfo((short)id);
@@ -394,7 +394,7 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //°Á ¸Þ´º ¾ÈÀ
     }
 
     //´É·ÂÄ¡ °­È­
-    public void AddStat()
+    public void AddStat()  //´É·ÂÄ¡ °­È­
     {
         if (gameManager.PlayerSc.skill.isUsingSkill)
         {
@@ -430,7 +430,7 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //°Á ¸Þ´º ¾ÈÀ
         OnClickReinforceBtn();
     }
 
-    public void ShowStatUpVerify(int number)
+    public void ShowStatUpVerify(int number) //´É·ÂÄ¡ °­È­ È®ÀÎ ÆÐ³Î ¶ç¿ò
     {
         if (number != -1)
         {
@@ -455,7 +455,7 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //°Á ¸Þ´º ¾ÈÀ
         }
     }
 
-    public void OnClickReinforceBtn()
+    public void OnClickReinforceBtn()  //°­È­ ¹öÆ° Å¬¸¯
     {
         PlayerScript p = gameManager.PlayerSc;
         reinfNameText.text = "°­È­ Ä³¸¯ÅÍ: " + p.CharName;
@@ -467,7 +467,7 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //°Á ¸Þ´º ¾ÈÀ
         statTexts[3].text = string.Concat("ÃÖ´ë ½ºÅ×¹Ì³ª: ", p.MaxStamina);
     }
 
-    public void BuyStatPoint()
+    public void BuyStatPoint()  //½ºÅÈÆ÷ÀÎÆ® ±¸¸ÅÇÏ±â
     {
         if(gameManager.savedData.userInfo.money<statPointPrice)
         {
@@ -478,7 +478,7 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //°Á ¸Þ´º ¾ÈÀ
         gameManager.PlayerSc.StatPoint++;
 
         statPointText.text = "½ºÅÈ Æ÷ÀÎÆ®: " + gameManager.PlayerSc.StatPoint.ToString();
-        sceneObjs.gameTexts[0].text = gameManager.savedData.userInfo.money.ToString();
+        sceneObjs.gameTexts[0].text = gameManager.savedData.userInfo.money.ToString() + " °ñµå";
         statPointTxtInBuyPanel.text = "ÇöÀç " + statPointText.text;
     }
 
