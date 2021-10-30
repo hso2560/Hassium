@@ -298,6 +298,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
                 break;
             case 4:
                 sceneObjs.gameTexts[0].text = GameManager.Instance.savedData.userInfo.money.ToString() + " °ñµå";
+                Inventory.Instance.chestCountTxtTmp.text = "¡¿ " + GameManager.Instance.savedData.userInfo.myChestList.Count.ToString();
                 break;
             case 10:
                 Inventory.Instance.OnClickReinforceBtn();

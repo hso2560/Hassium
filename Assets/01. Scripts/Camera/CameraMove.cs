@@ -34,6 +34,7 @@ public class CameraMove : MonoBehaviour
     private List<GameObject> transparentList = new List<GameObject>();
     public LayerMask whatIsWall;
 
+    private List<GameObject> tempList = new List<GameObject>();
 
     private float ClampAngle(float angle, float min, float max)  //카메라 앵글 제한
     {
@@ -194,6 +195,7 @@ public class CameraMove : MonoBehaviour
             hitArr = Physics.RaycastAll(transform.position, (target.position-transform.position).normalized, dist, whatIsWall);
 
             int i, j;
+            tempList.Clear();
 
             transparentList.ForEach(x =>
             {
@@ -213,9 +215,12 @@ public class CameraMove : MonoBehaviour
                     {
                         mrArr[j].enabled = true;
                     }
-                    transparentList.Remove(x);
+                    //transparentList.Remove(x);  //foreach돌리고 있는데 삭제를 해버리니까 Invalid뜸.(작동은 잘 됨) (UIManager의 상호작용 버튼 없애는 부분에서도 나옴)
+                    tempList.Add(x);
                 }
             });
+
+            foreach (GameObject o in tempList) transparentList.Remove(o);
 
             for (i = 0; i < hitArr.Length; i++)
             {

@@ -11,6 +11,8 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     [SerializeField] private ItemData itemData;
     public ItemData Item_Data { get { return itemData; } set { itemData = value; } }
 
+    [HideInInspector] public Image slotImage;
+
     public void SetData(ItemData iData) //버튼에 이미지와 텍스트를 주고 아이템 정보를 준다
     {
         itemImg.gameObject.SetActive(true);
@@ -18,12 +20,34 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         itemData = iData;
         itemImg.sprite = iData.sprite;
         itemCountText.text = iData.count.ToString();
+        try
+        {
+            slotImage.raycastTarget = true;
+        }
+        catch
+        {
+            slotImage = GetComponent<Image>();
+            slotImage.raycastTarget = true;
+        }
     }
     public void ResetData()  //버튼을 빈버튼으로 하고 데이터 없앤다
     {
         itemImg.gameObject.SetActive(false);
         itemCountText.gameObject.SetActive(false);
         itemData = null;
+        slotImage.raycastTarget = false;
+    }
+
+    public void SetRaycastTarget()
+    {
+        if(itemImg.gameObject.activeSelf)
+        {
+            slotImage.raycastTarget = true;
+        }
+        else
+        {
+            slotImage.raycastTarget = false;
+        }
     }
 
     private void Start()

@@ -33,7 +33,7 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //°Á ¸Þ´º ¾ÈÀ
     public GameObject[] playerModelsInUI; //Ä³¸¯ÅÍ Ã¢¿¡¼­ º¸ÀÏ Ä³¸¯ÅÍµé
     private GameObject currentCharInUI;
     public GameObject deathMark;
-    public TextMeshProUGUI charNameTxt; 
+    public TextMeshProUGUI charNameTxt, chestCountTxtTmp; 
     public Text charInfoTxt, expTxt, lvTxt;
     public Image expFill;
 
@@ -230,7 +230,7 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //°Á ¸Þ´º ¾ÈÀ
     }
 
     #region ÀÎº¥Åä¸® Ã¢
-    public void BeginDrg(bool active, ItemSlot i = null)  //ÅÛ ½½·Ô µå·¡±× ½ÃÀÛ
+    public void BeginDrg(bool active, ItemSlot i = null)  //ÅÛ ½½·Ô µå·¡±× ½ÃÀÛ OR µå·¡±× ¹üÀ§ ¹Ù±ù¿¡¼­ µå·¡±× Á¾·á
     {
         dragImage.gameObject.SetActive(active);
         isDragging = active;
@@ -239,6 +239,11 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //°Á ¸Þ´º ¾ÈÀ
         {
             dragImage.sprite = i.Item_Data.sprite;
             beginSlot = i;
+            itemSlots.ForEach(x => x.slotImage.raycastTarget = true);
+        }
+        else
+        {
+            itemSlots.ForEach(x => x.SetRaycastTarget());
         }
     }
 
@@ -253,6 +258,7 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //°Á ¸Þ´º ¾ÈÀ
         i.SetData(data2);
 
         ClickSetting(false);
+        itemSlots.ForEach(x => x.SetRaycastTarget());
     }
 
     public void Change(ItemSlot i)  //ÅÛ ½½·Ô ±³Ã¼
@@ -261,6 +267,7 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //°Á ¸Þ´º ¾ÈÀ
         beginSlot.ResetData();
 
         ClickSetting(false);
+        itemSlots.ForEach(x => x.SetRaycastTarget());
     }
 
     public void SortItemList() //¾ÆÀÌÅÛ Á¤·Ä
