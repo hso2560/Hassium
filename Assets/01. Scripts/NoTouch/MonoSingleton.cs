@@ -13,13 +13,13 @@ public class MonoSingleton<T> : MonoBehaviour where T:MonoBehaviour
     {
         get
         {
-            lock(lockObj)
+            lock (lockObj)
             {
-                if(instance==null)
+                if (instance == null)
                 {
                     instance = FindObjectOfType(typeof(T)) as T;
-                    
-                    if(instance==null)
+
+                    if (instance == null)
                     {
                         instance = new GameObject(typeof(T).ToString(), typeof(T)).GetComponent<T>();
                         //instance = new GameObject(typeof(T).ToString(), typeof(T)).AddComponent<T>();  이렇게 하면 T 스크립트가 오브젝트에 두 개 붙음
@@ -27,9 +27,8 @@ public class MonoSingleton<T> : MonoBehaviour where T:MonoBehaviour
 
                     DontDestroyOnLoad(instance.gameObject);  //이거땜에 종료 시 Some objects where not cleaned up이 뜸. 딱히 이걸로 인한 버그는 안나옴
                 }
-                return instance; 
+                return instance;
             }
         }
     }
-
 }
