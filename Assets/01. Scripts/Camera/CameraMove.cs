@@ -29,12 +29,22 @@ public class CameraMove : MonoBehaviour
 
     public bool isPCModeRotateCam = false;
 
-    private RaycastHit[] hitArr;
-    private float trpTime;
-    private List<GameObject> transparentList = new List<GameObject>();
-    public LayerMask whatIsWall;
+    #region 메쉬 끄는 방식일 때 필요
+    //private RaycastHit[] hitArr;
+    //private float trpTime;
+    //private List<GameObject> transparentList = new List<GameObject>();
+    //public LayerMask whatIsWall;
 
-    private List<GameObject> tempList = new List<GameObject>();
+    //private List<GameObject> tempList = new List<GameObject>();
+    #endregion
+
+    #region 오브젝트 앞으로 가는 방식일 때 필요
+
+    private RaycastHit hit;
+    public LayerMask cullingObj;
+    public float fixDist = 1f;
+
+    #endregion
 
     private float ClampAngle(float angle, float min, float max)  //카메라 앵글 제한
     {
@@ -66,7 +76,8 @@ public class CameraMove : MonoBehaviour
             CamMove();
             PlayerRotation();
             transform.position = FunctionGroup.PositionLimit(transform.position, camMinPos, camMaxPos);
-            ObjectTransparency();
+            //ObjectTransparency();  //메쉬를 끄는 방식
+            FrontObject(); //오브젝트 앞으로 가는 방식
             //Debug.DrawRay(transform.position, (target.position - transform.position).normalized * Vector3.Distance(transform.position, target.position), Color.blue);
         }
     }
@@ -185,14 +196,23 @@ public class CameraMove : MonoBehaviour
         this.rotTarget = rotTarget;
     }
 
-    private void ObjectTransparency()  //카메라와 플레이어 사이의 오브젝트의 메쉬를 꺼준다
+    private void FrontObject()
     {
-        if (trpTime < Time.time)
+        Vector3 dir = (target.position - transform.position).normalized;
+        if (Physics.Raycast(transform.position,dir , out hit, Vector3.Distance(transform.position, target.position),cullingObj))
+        {
+            transform.position = hit.point + dir * fixDist;
+        }
+    }
+
+    /*private void ObjectTransparency()  //카메라와 플레이어 사이의 오브젝트의 메쉬를 꺼준다
+    {
+        if(trpTime < Time.time)
         {
             trpTime = Time.time + 0.1f;
 
             float dist = Vector3.Distance(transform.position, target.position);
-            hitArr = Physics.RaycastAll(transform.position, (target.position-transform.position).normalized, dist, whatIsWall);
+            hitArr = Physics.RaycastAll(transform.position, (target.position - transform.position).normalized, dist, whatIsWall);
 
             int i, j;
             tempList.Clear();
@@ -224,18 +244,18 @@ public class CameraMove : MonoBehaviour
 
             for (i = 0; i < hitArr.Length; i++)
             {
-                if(!transparentList.Contains(hitArr[i].transform.gameObject))
-                   transparentList.Add(hitArr[i].transform.gameObject);
+                if (!transparentList.Contains(hitArr[i].transform.gameObject))
+                    transparentList.Add(hitArr[i].transform.gameObject);
             }
 
-            for(i=0; i<transparentList.Count; i++)
+            for (i = 0; i < transparentList.Count; i++)
             {
                 MeshRenderer[] mrArr = transparentList[i].GetComponentsInChildren<MeshRenderer>();
-                for(j=0; j<mrArr.Length; j++)
+                for (j = 0; j < mrArr.Length; j++)
                 {
                     mrArr[j].enabled = false;
                 }
             }
         }
-    }
+    }*/
 }
