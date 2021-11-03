@@ -373,7 +373,10 @@ public class PlayerScript : MonoBehaviour, IDamageable, IAttackable   //ºÎ¸ð ½ºÅ
     private void CheckHp()
     {
         hp = Mathf.Clamp(hp, 0, maxHp);
-        UIManager.Instance.AdjustFillAmound(UIType.HPFILL, hp, maxHp);
+        if (GameManager.Instance.PlayerSc == this)
+        {
+            UIManager.Instance.AdjustFillAmound(UIType.HPFILL, hp, maxHp);
+        }
         if (hp <= 0) Death();
     }
 

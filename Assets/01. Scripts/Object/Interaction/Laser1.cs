@@ -64,6 +64,7 @@ public class Laser1 : ObjData
             line.gameObject.SetActive(true);
             line.SetPosition(0, laserPoint.InverseTransformPoint(laserPoint.position));
             line.SetPosition(1, line.transform.InverseTransformPoint(pair.laserPoint.position));
+            EffectManager.Instance.OnLightningEffect(transform.position, laserPoint.position, pair.laserPoint.position);
         }
     }
 }

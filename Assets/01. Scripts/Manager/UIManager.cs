@@ -53,11 +53,14 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
 
     private List<GameObject> npcTalkImgs;
 
+    private int ObjectLayer;
+
     public bool GetReadyState { get { return isReady; } set { isReady = value; } }
 
     private void Awake()
     {
         noColor = new Color(0, 0, 0, 0);
+        ObjectLayer = 1<<LayerMask.NameToLayer("Object");
     }
 
     public void LoadingFade(bool isFadeIn, int index=0)  //페이드인 페이드아웃
@@ -130,7 +133,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
         beforeItrObjs.Add(od.gameObject);
         interBtn.transform.GetChild(0).GetComponent<Text>().text = od.objName;
 
-        if (od.transform.CompareTag("Object"))  //옵젝 설명 띄워준다
+        if(1 << od.gameObject.layer == ObjectLayer) //(od.transform.CompareTag("Object"))  //옵젝 설명 띄워준다
         {
             objExplainText.gameObject.SetActive(true);
             objExplainText.text = od.explain;

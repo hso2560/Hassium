@@ -78,7 +78,7 @@ public class CameraMove : MonoBehaviour
             transform.position = FunctionGroup.PositionLimit(transform.position, camMinPos, camMaxPos);
             //ObjectTransparency();  //메쉬를 끄는 방식
             FrontObject(); //오브젝트 앞으로 가는 방식
-            //Debug.DrawRay(transform.position, (target.position - transform.position).normalized * Vector3.Distance(transform.position, target.position), Color.blue);
+            //Debug.DrawRay(transform.position-transform.forward*0.5f, (target.position - transform.position).normalized * Vector3.Distance(transform.position, target.position), Color.blue);
         }
     }
 
@@ -199,7 +199,7 @@ public class CameraMove : MonoBehaviour
     private void FrontObject()
     {
         Vector3 dir = (target.position - transform.position).normalized;
-        if (Physics.Raycast(transform.position,dir , out hit, Vector3.Distance(transform.position, target.position),cullingObj))
+        if (Physics.Raycast(transform.position-transform.forward*0.5f,dir , out hit, Vector3.Distance(transform.position, target.position),cullingObj))
         {
             transform.position = hit.point + dir * fixDist;
         }

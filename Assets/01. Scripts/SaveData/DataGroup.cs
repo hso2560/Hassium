@@ -11,6 +11,31 @@ public class StringListClass
 }
 
 [Serializable]
+public class IndexListClass<T>
+{
+    public int index;
+    public int targetIndex;
+    public List<T> list = new List<T>();
+
+    public T GetCurrentItem { get { return list[index]; } }
+
+    public void NextIndex() => index = ++index % list.Count;
+    
+
+    public T this[int i]
+    {
+        get
+        {
+            return list[i];
+        }
+        set
+        {
+            list[i] = value;
+        }
+    }
+}
+
+[Serializable]
 public class ItemData
 {
     public bool cannotDump;

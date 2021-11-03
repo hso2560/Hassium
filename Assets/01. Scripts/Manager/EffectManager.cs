@@ -16,6 +16,9 @@ public class EffectManager : MonoSingleton<EffectManager>
     public GameObject appearanceEffect;
     private List<GameObject> appearanceEffectList;
 
+    public GameObject lightningEffectPref;
+    private List<GameObject> lightningEffectList;
+
     private void Awake()
     {
         CreatePool();
@@ -25,6 +28,7 @@ public class EffectManager : MonoSingleton<EffectManager>
     {
         hitEffectList = FunctionGroup.CreatePoolList(hitEffect, transform, 5);
         appearanceEffectList = FunctionGroup.CreatePoolList(appearanceEffect, transform, 5);
+        lightningEffectList = FunctionGroup.CreatePoolList(lightningEffectPref, transform, 6);
     }
 
     public void OnHitEffect(Vector3 pos, Vector3 normal)  //쳐맞을 때의 이펙트
@@ -58,6 +62,17 @@ public class EffectManager : MonoSingleton<EffectManager>
         }
         ef.transform.position = pos;
         StartCoroutine(InactiveEffectCo(ef, time));
+    }
+
+    public void OnLightningEffect(Vector3 pos, Vector3 start, Vector3 end, float time=0.35f)
+    {
+        GameObject le = FunctionGroup.GetPoolItem(lightningEffectList);
+        le.transform.position = pos;
+
+        le.transform.GetChild(0).position = start;
+        le.transform.GetChild(1).position = end;
+
+        StartCoroutine(InactiveEffectCo(le, time));
     }
 
     IEnumerator InactiveEffectCo(GameObject effect, float time)  //몇 초후에 해당 이펙트 꺼준다
