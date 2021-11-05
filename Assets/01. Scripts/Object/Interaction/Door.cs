@@ -22,8 +22,8 @@ public class Door : ObjData  //문 열릴 때 ScaleX값을 0.003으로 바꿔야하는데(저장
     public bool isDOT;  //DOTween을 써서 움직이나
     public bool isOpen;  //열린 상태?
     public int[] objIndex;  
-    public bool isChangeCamRange; //카메라 범위 변경 할지
-    public Vector3 camMinPos, camMaxPos;
+    //public bool isChangeCamRange; //카메라 범위 변경 할지
+    //public Vector3 camMinPos, camMaxPos;  //x:-167.627 y:-135 z:-50  x:31.5 y:85 z:80
 
     [SerializeField] private Animator ani;
     private Sequence seq;
@@ -106,11 +106,11 @@ public class Door : ObjData  //문 열릴 때 ScaleX값을 0.003으로 바꿔야하는데(저장
         isOpen = !isOpen;
         SoundManager.Instance.PlaySoundEffect(SoundEffectType.MOVEDOOR, time[0]);
 
-        if (isChangeCamRange)    //문이 열리고 카메라의 범위가 바뀔 때
+        /*if (isChangeCamRange)    //문이 열리고 카메라의 범위가 바뀔 때
         {
             GameManager.Instance.camMove.camMinPos = camMinPos;
             GameManager.Instance.camMove.camMaxPos = camMaxPos;
-        }
+        }*/
         if (doorType == DoorType.ONLYONCE)  //ONLYONCE면
         {
             active = false;  //다시는 상호작용 못하게 해줌

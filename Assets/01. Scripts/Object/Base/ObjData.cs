@@ -10,6 +10,11 @@ public class ObjData : MonoBehaviour
 
     public int saveActiveStateId = -1;
 
+    /*private void Awake()
+    {
+        if (saveActiveStateId > -1) Debug.Log(saveActiveStateId); //확인용
+    }*/
+
     public virtual void Interaction() //버튼 클릭 시
     {
         if (saveActiveStateId > -1)  //오브젝트 액티브상태 값 저장

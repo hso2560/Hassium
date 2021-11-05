@@ -46,8 +46,8 @@ public class UserInfo
     public Quaternion currentRot;
     public Quaternion curModelRot;
 
-    public Vector3 camMinRange;  //카메라 위치의 최소 범위
-    public Vector3 camMaxRange;  //카메라 위치의 최대 범위
+    //public Vector3 camMinRange;  //카메라 위치의 최소 범위
+    //public Vector3 camMaxRange;  //카메라 위치의 최대 범위
 }
 
 [Serializable]

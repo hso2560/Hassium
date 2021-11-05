@@ -25,7 +25,7 @@ public class SoundManager : MonoSingleton<SoundManager>, ISceneDataLoad
 
         if (op.masterSoundSize <= 0 || op.soundEffectSize <= 0) return;
 
-        PoolManager.GetItem<SoundPrefab>().SoundPlay(gameSoundEffectList[(int)set], time);
+        PoolManager.GetItem<SoundPrefab>().SoundPlay(gameSoundEffectList[(int)set], time,op.soundEffectSize);
     }
 
     public void ManagerDataLoad(GameObject sceneObjs)

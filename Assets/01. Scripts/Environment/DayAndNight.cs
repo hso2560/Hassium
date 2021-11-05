@@ -33,11 +33,11 @@ public class DayAndNight : MonoBehaviour
         speed = 1/240f*secondPerRealTimeSecond;  //1도 회전하는 시간 (86400/secondPerRealTimeSecond/360) (86400초=24시간) (360도=하루) (1도에 240초) (1초에 1/240도)
     }
 
-    private void Update()
+    /*private void Update()
     {
-        RotateSun();
-        Fog();
-    }
+        //RotateSun();
+        //Fog();
+    }*/
 
     private void RotateSun()
     {

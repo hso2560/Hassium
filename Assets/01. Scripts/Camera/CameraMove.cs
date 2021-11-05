@@ -4,12 +4,12 @@ using System.Collections.Generic;
 
 public class CameraMove : MonoBehaviour
 {
-    [SerializeField] Vector3 defaultCamMinPos, defaultCamMaxPos;
+    //[SerializeField] Vector3 defaultCamMinPos, defaultCamMaxPos;  // x: -5.6 y: -50 z: 31.5  x:12.6 y: 100 z:49
     [HideInInspector] public Transform target;
     [HideInInspector] public Transform rotTarget;
     [HideInInspector] public PlayerScript player;
     public JoystickControl joystick;
-    public Vector3 camMinPos, camMaxPos;
+    //public Vector3 camMinPos, camMaxPos;
 
     public float xSpeed = 220f, ySpeed = 100f;
     [HideInInspector] public float x, y;
@@ -75,7 +75,7 @@ public class CameraMove : MonoBehaviour
         {
             CamMove();
             PlayerRotation();
-            transform.position = FunctionGroup.PositionLimit(transform.position, camMinPos, camMaxPos);
+            //transform.position = FunctionGroup.PositionLimit(transform.position, camMinPos, camMaxPos);
             //ObjectTransparency();  //메쉬를 끄는 방식
             FrontObject(); //오브젝트 앞으로 가는 방식
             //Debug.DrawRay(transform.position-transform.forward*0.5f, (target.position - transform.position).normalized * Vector3.Distance(transform.position, target.position), Color.blue);
@@ -184,11 +184,11 @@ public class CameraMove : MonoBehaviour
         }
     }
 
-    public void ResetRange()  //카메라 위치 범위 초기화
+    /*public void ResetRange()  //카메라 위치 범위 초기화
     {
         camMinPos = defaultCamMinPos;
         camMaxPos = defaultCamMaxPos;
-    }
+    }*/
 
     public void Setting(Transform target, Transform rotTarget)
     {

@@ -28,7 +28,8 @@ public class TimeSkill : Skill
             skillOffTime = Time.time + skillContnTime;
 
             isRewind = true;
-            MapManager.Instance.dayAndNight.OnOffLightEffect(true);
+            EffectManager.Instance.SkillEffectVolume(PSkillType.TIME, true);
+            //MapManager.Instance.dayAndNight.OnOffLightEffect(true);
         }
     }
 
@@ -36,8 +37,8 @@ public class TimeSkill : Skill
     {
         if (isUsingSkill)
         {
-            MapManager.Instance.dayAndNight.OnOffLightEffect(false);
-
+            //MapManager.Instance.dayAndNight.OnOffLightEffect(false);
+            EffectManager.Instance.SkillEffectVolume(PSkillType.TIME, false);
             player.isMovable = true;
             isRewind = false;
 

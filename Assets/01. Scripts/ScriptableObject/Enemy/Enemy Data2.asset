@@ -17,7 +17,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   enemyName: "\uAC81\uBA39\uC740 \uBCD1\uC0AC"
-  maxHp: 1800
+  maxHp: 800
   speed: 3
   traceSpeed: 8.5
   patrolRange: 0

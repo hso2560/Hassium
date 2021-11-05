@@ -5,6 +5,7 @@ using DG.Tweening;
 public class Laser1Puzzle : ObjData, IReward
 {
     public List<Laser1> laserList;
+    [SerializeField] private int[] saveIndexArr;
 
     public float rotateTime;
     public float laserDist;
@@ -58,7 +59,21 @@ public class Laser1Puzzle : ObjData, IReward
                     CheckLaser();
                     if (IsClear())
                     {
-                        //클리어 처리
+                        if (npc != null && !npc.info.dead && (npc.info.isFighting || npc.info.bRunaway))
+                            PoolManager.GetItem<SystemTxt>().OnText(npcFightingClearMsg);
+                        else
+                            GetReward();
+
+                        npc.info.talkId++;
+                        base.Interaction();
+                        active = false;
+
+                        for(int i=0; i<laserList.Count; i++)
+                        {
+                            laserList[i].active = false;
+                            Transform t = laserList[i].transform;
+                            GameManager.Instance.savedData.saveObjDatas.Add(new SaveObjData(saveIndexArr[i],SaveObjInfoType.TRANSFORM,t.position,t.rotation,t.localScale));
+                        }
                     }
                 }
             });

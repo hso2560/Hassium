@@ -33,6 +33,7 @@ public class ReinforceSkill : Skill
             player.str = AbilUp_Multiple((float)player.str, str);
             player.def = AbilUp_Multiple((float)player.def, def);
             skillEffect.SetActive(true);
+            EffectManager.Instance.SkillEffectVolume(PSkillType.REINFORCE, true);
         }
     }
 
@@ -56,6 +57,8 @@ public class ReinforceSkill : Skill
             isUsedSkill = true;
             skillRechargeTime = Time.time + coolTime;
             skillEffect.SetActive(false);
+
+            EffectManager.Instance.SkillEffectVolume(PSkillType.REINFORCE, false);
         }
     }
 

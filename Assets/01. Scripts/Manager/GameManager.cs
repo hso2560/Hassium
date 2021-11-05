@@ -127,11 +127,11 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //∞◊ Ω√¿€
 
     private void Start()
     {
-        if(saveData.userInfo.camMinRange!=Vector3.zero)
+        /*if(saveData.userInfo.camMinRange!=Vector3.zero)
         {
             camMove.camMinPos = saveData.userInfo.camMinRange;
             camMove.camMaxPos = saveData.userInfo.camMaxRange;
-        }
+        }*/
         MapManager.Instance.ChangeSky(saveData.userInfo.skyIndex);
     }
 
@@ -164,8 +164,8 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //∞◊ Ω√¿€
                 }
             }
 
-            saveData.userInfo.camMinRange = camMove.camMinPos;
-            saveData.userInfo.camMaxRange = camMove.camMaxPos;
+            //saveData.userInfo.camMinRange = camMove.camMinPos;
+            //saveData.userInfo.camMaxRange = camMove.camMaxPos;
 
             UIManager.Instance.SaveData();
         }
@@ -233,7 +233,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //∞◊ Ω√¿€
                 {
                     player.transform.position = MapManager.Instance.mapCenterDict[0].position;
                     saveData = new SaveData();
-                    camMove.ResetRange();
+                    //camMove.ResetRange();
                     //saveData.userInfo.isFirstStart = false;
                     player = null;
                     //æ¿ ¿Ãµø
@@ -526,8 +526,8 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //∞◊ Ω√¿€
             saveData.userInfo.mapIndex = 40;
             MapManager.Instance.ActiveMap(MapType.MAINMAP);
             transform.position = MapManager.Instance.mapCenterDict[40].position;
-            camMove.camMinPos = new Vector3(-1607, -300, -332);
-            camMove.camMaxPos = new Vector3(-610, 300, 664);
+            //camMove.camMinPos = new Vector3(-1607, -300, -332);
+            //camMove.camMaxPos = new Vector3(-610, 300, 664);
         }
         else if (Input.GetKeyDown(KeyCode.M))
         {

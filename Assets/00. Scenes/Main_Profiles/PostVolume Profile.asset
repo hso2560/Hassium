@@ -20,11 +20,11 @@ MonoBehaviour:
     overrideState: 1
     value: 10
   threshold:
-    overrideState: 0
-    value: 0.88
+    overrideState: 1
+    value: 1.1
   softKnee:
     overrideState: 0
-    value: 0.264
+    value: 0.211
   clamp:
     overrideState: 0
     value: 65292
@@ -59,19 +59,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d65e486e4de6e5448a8fbb43dc8756a0, type: 3}
   m_Name: Grain
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   enabled:
     overrideState: 1
-    value: 1
+    value: 0
   colored:
     overrideState: 1
     value: 1
   intensity:
     overrideState: 1
-    value: 0.419
+    value: 0.918
   size:
     overrideState: 1
-    value: 0.3
+    value: 0.55
   lumContrib:
     overrideState: 1
     value: 0.117
@@ -99,8 +99,8 @@ MonoBehaviour:
     value: {fileID: 0}
     defaultState: 1
   tonemapper:
-    overrideState: 0
-    value: 0
+    overrideState: 1
+    value: 1
   toneCurveToeStrength:
     overrideState: 0
     value: 0
@@ -140,7 +140,7 @@ MonoBehaviour:
     value: 0
   saturation:
     overrideState: 1
-    value: 75
+    value: 65
   brightness:
     overrideState: 0
     value: 0
@@ -149,7 +149,7 @@ MonoBehaviour:
     value: 2.17
   contrast:
     overrideState: 1
-    value: 25
+    value: 15
   mixerRedOutRedIn:
     overrideState: 0
     value: 100
@@ -1398,7 +1398,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6050e2d5de785ce4d931e4dbdbf2d755, type: 3}
   m_Name: ChromaticAberration
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   enabled:
     overrideState: 1
     value: 1
@@ -1408,7 +1408,7 @@ MonoBehaviour:
     defaultState: 1
   intensity:
     overrideState: 1
-    value: 1
+    value: 0
   fastMode:
     overrideState: 0
     value: 0
@@ -1449,10 +1449,10 @@ MonoBehaviour:
     value: 1
   focusDistance:
     overrideState: 1
-    value: 32.96
+    value: 33.81
   aperture:
     overrideState: 1
-    value: 5.4
+    value: 10.9
   focalLength:
     overrideState: 1
     value: 92

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.PostProcessing;
 
 public enum EffectType
 {
@@ -19,16 +20,53 @@ public class EffectManager : MonoSingleton<EffectManager>
     public GameObject lightningEffectPref;
     private List<GameObject> lightningEffectList;
 
+    public PostProcessVolume postProcVolume;
+    private ChromaticAberration chro;
+    private Grain grain;
+    private ColorGrading colorGra;
+    private Dictionary<PSkillType, bool> skillOnDict = new Dictionary<PSkillType, bool>();
+
+    private bool reinfChromIncr;
+
     private void Awake()
     {
         CreatePool();
+        postProcVolume.profile.TryGetSettings(out chro);
+        postProcVolume.profile.TryGetSettings(out grain);
+        postProcVolume.profile.TryGetSettings(out colorGra);
+        skillOnDict.Add(PSkillType.REINFORCE, false);
+        skillOnDict.Add(PSkillType.TIME, false);
     }
 
     private void CreatePool()
     {
         hitEffectList = FunctionGroup.CreatePoolList(hitEffect, transform, 5);
         appearanceEffectList = FunctionGroup.CreatePoolList(appearanceEffect, transform, 5);
-        lightningEffectList = FunctionGroup.CreatePoolList(lightningEffectPref, transform, 6);
+        lightningEffectList = FunctionGroup.CreatePoolList(lightningEffectPref, transform, 9);
+    }
+
+    private void Update()
+    {
+        SkillEffect();
+    }
+
+    private void SkillEffect()
+    {
+        if(skillOnDict[PSkillType.REINFORCE])
+        {
+            chro.intensity.value += reinfChromIncr ? Time.deltaTime : -Time.deltaTime;
+            if(chro.intensity.value<0.7f || chro.intensity.value>=1)
+            {
+                reinfChromIncr = !reinfChromIncr;
+            }
+        }
+        if(skillOnDict[PSkillType.TIME])
+        {
+            if(colorGra.temperature<40)
+            {
+                colorGra.temperature.value += Time.deltaTime * 2.5f;
+            }
+        }
     }
 
     public void OnHitEffect(Vector3 pos, Vector3 normal)  //쳐맞을 때의 이펙트
@@ -79,6 +117,22 @@ public class EffectManager : MonoSingleton<EffectManager>
     {
         yield return new WaitForSeconds(time);
         effect.SetActive(false);
+    }
+
+    public void SkillEffectVolume(PSkillType pst, bool on)
+    {
+        skillOnDict[pst] = on;
+        switch(pst)
+        {
+            case PSkillType.REINFORCE:
+                chro.intensity.value = on ? 0.7f : 0;
+                reinfChromIncr = on;
+                break;
+            case PSkillType.TIME:
+                colorGra.temperature.value = 0;
+                grain.enabled.value = on;
+                break;
+        }
     }
 
     /*public bool GetReadyState { get; set; }
