@@ -93,6 +93,18 @@ public class MapManager : MonoSingleton<MapManager>, ISceneDataLoad
     public void ChangeSky(int index)  //ÇÏ´Ã ±³Ã¼
     {
         RenderSettings.skybox = dayAndNight.skyMaterials[index];
-        GameManager.Instance.savedData.userInfo.skyIndex = index;
+        //GameManager.Instance.savedData.userInfo.skyIndex = index;
+        /*switch(index)
+        {
+            case 1:
+                dayAndNight.mainLight.intensity = 0.6f;
+                break;
+            case 2:
+                dayAndNight.mainLight.intensity = 0;
+                break;
+            case 3:
+                dayAndNight.mainLight.intensity = 1.3f;
+                break;
+        }*/
     }
 }

@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
+using UnityEngine.Audio;
 
 public enum SoundEffectType
 {
@@ -13,9 +15,28 @@ public enum SoundEffectType
     MOVEDOOR
 }
 
+public enum BGMSound
+{
+    RAIN,
+    NULL
+}
+
 public class SoundManager : MonoSingleton<SoundManager>, ISceneDataLoad
 {
+    [HideInInspector] public AudioSource _audio;
+
     public List<AudioClip> gameSoundEffectList;
+    public List<AudioClip> gameSoundBGMList;
+    public Light _light;
+
+    private Coroutine bgmCo = null;
+
+    public float gradualBgmSpeedRevision = 2.5f;
+    private float bgmSpeed;
+    private bool isBGM;
+
+    public AudioMixer _audioMixer;
+    
 
     public bool GetReadyState { get { return isReady; } set { isReady = value; } }
 
@@ -24,8 +45,56 @@ public class SoundManager : MonoSingleton<SoundManager>, ISceneDataLoad
         Option op = GameManager.Instance.savedData.option;
 
         if (op.masterSoundSize <= 0 || op.soundEffectSize <= 0) return;
-
+        
         PoolManager.GetItem<SoundPrefab>().SoundPlay(gameSoundEffectList[(int)set], time,op.soundEffectSize);
+    }
+    
+    public void PlayerBGM(BGMSound bgm)
+    {
+        isBGM = bgm != BGMSound.NULL;
+
+        if (isBGM) _audio.clip = gameSoundBGMList[(int)bgm];
+        if (bgmCo != null) StopCoroutine(bgmCo);
+        bgmCo = StartCoroutine(GradualBGMCo());
+    }
+
+    private IEnumerator GradualBGMCo()
+    {
+        _audio.Play();
+
+        _audioMixer.SetFloat("bgm", isBGM ? -40 : 0);
+        float time = 0f;
+        float curIntensity = _light.intensity;
+        
+        for(;time<2.5f;)
+        {
+            if(isBGM)
+            {
+                _audioMixer.SetFloat("bgm", -40 - ( -40*time/2.5f) );
+                _light.intensity = Mathf.Clamp(curIntensity + ( -0.7f * time / 2.5f),0.6f,1.3f);
+            }
+            else
+            {
+                _audioMixer.SetFloat("bgm", -40 * time / 2.5f);
+                _light.intensity = Mathf.Clamp(curIntensity + (0.7f * time / 2.5f), 0.6f, 1.3f);
+            }
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        _audioMixer.SetFloat("bgm", isBGM ? 0 : -40);
+        _light.intensity = isBGM ? 0.6f : 1.3f;
+        bgmCo = null;
+        if(!isBGM)
+        {
+            _audio.clip = null;
+            _audio.Stop();
+        }
+    }
+
+    public void OnChangeMasterSound(UnityEngine.UI.Slider slider)
+    {
+        _audioMixer.SetFloat("master", slider.value);
     }
 
     public void ManagerDataLoad(GameObject sceneObjs)
@@ -35,8 +104,9 @@ public class SoundManager : MonoSingleton<SoundManager>, ISceneDataLoad
 
         this.sceneObjs = sceneObjs.GetComponent<SceneObjects>();
 
+        _audio = GetComponent<AudioSource>();
+        bgmSpeed = Time.deltaTime / gradualBgmSpeedRevision;
+
         isReady = true;
     }
-
-    
 }

@@ -50,7 +50,7 @@ public class TrmPoint : MonoBehaviour
                 break;
 
             case -50:
-                if (other.CompareTag("Player"))
+                if (other.CompareTag("Player"))  //특정 이벤트 발생
                 {
                     gameManager.eventPointAction[eventId]();
                     SaveActive(false);
@@ -70,6 +70,22 @@ public class TrmPoint : MonoBehaviour
                     };
                     UIManager.Instance.LoadingFade(false);
                 }
+                break;
+
+            case -200:                //비
+                MapManager.Instance.ChangeSky(1);
+                SoundManager.Instance.PlayerBGM(BGMSound.RAIN);
+                break;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        switch(id)
+        {
+            case -200:
+                MapManager.Instance.ChangeSky(3);
+                SoundManager.Instance.PlayerBGM(BGMSound.NULL);
                 break;
         }
     }

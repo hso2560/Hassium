@@ -4,20 +4,20 @@ using UnityEngine;
 
 public class DayAndNight : MonoBehaviour
 {
-    Light mainLight;
+    public Light mainLight;
     private Color defaultLightColor;
     public List<Color> lightColors;
     //private bool doLightColorEffect = false;
 
-    [SerializeField] private float secondPerRealTimeSecond;  //현실 1초 == 해당 변수 (초)  (게임 속 하루(24시간) = 360도 회전)
+    //[SerializeField] private float secondPerRealTimeSecond; //60  //현실 1초 == 해당 변수 (초)  (게임 속 하루(24시간) = 360도 회전)
     [HideInInspector] public bool isNight = false;
-    private float speed;
+    //private float speed;
 
-    [SerializeField] private float fogDensityCalc;
+    //[SerializeField] private float fogDensityCalc;  //0.07
 
-    [SerializeField] private float nightFogDensity;
-    private float dayFogDensity;
-    private float currentFogDensity;
+    //[SerializeField] private float nightFogDensity;  //0.05
+    //private float dayFogDensity;
+    //private float currentFogDensity;
 
     public Material[] skyMaterials;
 
@@ -27,11 +27,11 @@ public class DayAndNight : MonoBehaviour
         defaultLightColor = mainLight.color;
     }
 
-    private void Start()
+    /*private void Start()
     {
-        dayFogDensity = RenderSettings.fogDensity;
-        speed = 1/240f*secondPerRealTimeSecond;  //1도 회전하는 시간 (86400/secondPerRealTimeSecond/360) (86400초=24시간) (360도=하루) (1도에 240초) (1초에 1/240도)
-    }
+        //dayFogDensity = RenderSettings.fogDensity;
+        //speed = 1/240f*secondPerRealTimeSecond;  //1도 회전하는 시간 (86400/secondPerRealTimeSecond/360) (86400초=24시간) (360도=하루) (1도에 240초) (1초에 1/240도)
+    }*/
 
     /*private void Update()
     {
@@ -39,7 +39,7 @@ public class DayAndNight : MonoBehaviour
         //Fog();
     }*/
 
-    private void RotateSun()
+    /*private void RotateSun()
     {
         transform.Rotate(Vector3.right, speed * Time.deltaTime);
 
@@ -53,9 +53,9 @@ public class DayAndNight : MonoBehaviour
         }
 
         //transform.RotateAround(GameManager.Instance.PlayerSc.transform.position, Vector3.right, transform.eulerAngles.x);
-    }
+    }*/
 
-    private void Fog()
+    /*private void Fog()
     {
         if (isNight)
         {
@@ -73,9 +73,9 @@ public class DayAndNight : MonoBehaviour
                 RenderSettings.fogDensity = currentFogDensity;
             }
         }
-    }
+    }*/
 
-    public void OnOffLightEffect(bool on, float time = 1f)
+    /*public void OnOffLightEffect(bool on, float time = 1f)
     {
         //doLightColorEffect = on;
         if (on)
@@ -94,5 +94,5 @@ public class DayAndNight : MonoBehaviour
             mainLight.DOKill();
             mainLight.DOColor(defaultLightColor, 1.5f);
         }
-    }
+    }*/
 }

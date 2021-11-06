@@ -7,6 +7,9 @@ public class NPCAI : ObjData
     public GameObject puzzleRuleObj;
     public EnemyBase enemy;
 
+    public ItemData[] deathItems; //뒤지면 떨구는 템들 데이터
+    public int[] dropedCnt; //떨구는 아이템 개수
+
     private void Start()
     {
         objName = info.name;
@@ -48,6 +51,16 @@ public class NPCAI : ObjData
         info.bRunaway = false;
         info.isFighting = false;
         info.dead = true;
+        for(int i=0; i<deathItems.Length; i++)
+        {
+            Item item = PoolManager.GetItem<Item>();
+            item.itemData = deathItems[i];
+            item.droppedCount = dropedCnt[i];
+            item.index = -1;
+            item.objName = string.Concat(item.itemData.name, "×", item.droppedCount);
+            item.transform.position = enemy.center.position;
+            //rigidbody로 위로 튀는 효과
+        }
         GameManager.Instance.KillNPC();
     }
 }

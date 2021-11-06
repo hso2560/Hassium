@@ -150,6 +150,8 @@ public class RopeSkill : Skill
         ropeStatePhase = 0;
 
         player.rigid.velocity = Vector3.zero;
+        EffectManager.Instance.SkillEffectVolume(PSkillType.ROPE, false);
+        trailEffect.SetActive(false);
     }
 
     private void DrawRope()
@@ -170,6 +172,8 @@ public class RopeSkill : Skill
         isMoving = true;
         player.isMovable = false;
         player.rigid.velocity = Vector3.zero;
+        EffectManager.Instance.SkillEffectVolume(PSkillType.ROPE, true);
+        trailEffect.SetActive(true);
     }
 
     public override void SetData()

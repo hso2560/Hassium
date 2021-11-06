@@ -165,7 +165,8 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //∞¡ ∏ﬁ¥∫ æ»¿
         }
 
         itemObj.gameObject.SetActive(false);
-        gameManager.savedData.saveObjDatas.Add(new SaveObjData(itemObj.index, SaveObjInfoType.ACTIVE, false));
+        if(itemObj.index != -1)
+           gameManager.savedData.saveObjDatas.Add(new SaveObjData(itemObj.index, SaveObjInfoType.ACTIVE, false));
         acquisitionEvent();
     }
 

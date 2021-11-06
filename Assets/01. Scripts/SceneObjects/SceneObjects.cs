@@ -32,7 +32,7 @@ public class SceneObjects : MonoBehaviour  //해당 씬마다 필요한 오브젝트들을 모�
     public GameObject[] gameObjs;
     public Transform[] trms;
 
-    public Slider camSlider;
+    public Slider[] gameSliders;
 
     public JoystickControl joystickCtrl;
     //public CinemachineVirtualCamera thirdPCam;

@@ -18,7 +18,7 @@ public class Option
 {
     public float masterSoundSize=0.7f;
     public float soundEffectSize=0.7f;
-    public float bgmSize=0.7f;
+    public float bgmSize=0f;      //mixer 사용,   -40 ~ 10
     public float distFromCam = -4;  //캐릭터와 카메라 사이의 거리
 }
 
@@ -31,7 +31,7 @@ public class UserInfo
     public long money;
     public short mapIndex = 0;
     public int playTime = 0;
-    public int skyIndex = 3;
+    //public int skyIndex = 3;
     public int npcKillCount = 0;
     //public int chestCount = 0;
     //public int maxItemSlotCount = 30;

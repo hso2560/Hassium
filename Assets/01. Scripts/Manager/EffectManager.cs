@@ -24,6 +24,7 @@ public class EffectManager : MonoSingleton<EffectManager>
     private ChromaticAberration chro;
     private Grain grain;
     private ColorGrading colorGra;
+    private Bloom bloom;
     private Dictionary<PSkillType, bool> skillOnDict = new Dictionary<PSkillType, bool>();
 
     private bool reinfChromIncr;
@@ -34,8 +35,10 @@ public class EffectManager : MonoSingleton<EffectManager>
         postProcVolume.profile.TryGetSettings(out chro);
         postProcVolume.profile.TryGetSettings(out grain);
         postProcVolume.profile.TryGetSettings(out colorGra);
+        postProcVolume.profile.TryGetSettings(out bloom);
         skillOnDict.Add(PSkillType.REINFORCE, false);
         skillOnDict.Add(PSkillType.TIME, false);
+        skillOnDict.Add(PSkillType.ROPE, false);
     }
 
     private void CreatePool()
@@ -60,7 +63,7 @@ public class EffectManager : MonoSingleton<EffectManager>
                 reinfChromIncr = !reinfChromIncr;
             }
         }
-        if(skillOnDict[PSkillType.TIME])
+        else if(skillOnDict[PSkillType.TIME])
         {
             if(colorGra.temperature<40)
             {
@@ -131,6 +134,10 @@ public class EffectManager : MonoSingleton<EffectManager>
             case PSkillType.TIME:
                 colorGra.temperature.value = 0;
                 grain.enabled.value = on;
+                break;
+            case PSkillType.ROPE:
+                chro.intensity.value = on ? 1 : 0;
+                bloom.threshold.value = on ? 1f : 1.1f;
                 break;
         }
     }

@@ -34,6 +34,7 @@ public class ReinforceSkill : Skill
             player.def = AbilUp_Multiple((float)player.def, def);
             skillEffect.SetActive(true);
             EffectManager.Instance.SkillEffectVolume(PSkillType.REINFORCE, true);
+            trailEffect.SetActive(true);
         }
     }
 
@@ -59,6 +60,7 @@ public class ReinforceSkill : Skill
             skillEffect.SetActive(false);
 
             EffectManager.Instance.SkillEffectVolume(PSkillType.REINFORCE, false);
+            trailEffect.SetActive(false);
         }
     }
 

@@ -125,15 +125,15 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
         eventPointAction[0] = () => { };
     }
 
-    private void Start()
+    /*private void Start()
     {
-        /*if(saveData.userInfo.camMinRange!=Vector3.zero)
+        *//*if(saveData.userInfo.camMinRange!=Vector3.zero)
         {
             camMove.camMinPos = saveData.userInfo.camMinRange;
             camMove.camMaxPos = saveData.userInfo.camMaxRange;
-        }*/
-        MapManager.Instance.ChangeSky(saveData.userInfo.skyIndex);
-    }
+        }*//*
+        //MapManager.Instance.ChangeSky(saveData.userInfo.skyIndex);
+    }*/
 
     #region 저장/로드
     public void SaveData()  //데이터를 저장
@@ -239,15 +239,6 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
                     //씬 이동
                 };
                 UIManager.Instance.LoadingFade(false);
-                break;
-
-            case 11:
-                player.transform.position= new Vector3(-1, -6, 37);  //Test
-                break;
-
-            case 15:
-                AddCharacter("DefaultPlayer3");  //Test
-                ChangeCharacter(30);
                 break;
         }
 
@@ -362,6 +353,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
             PoolManager.CreatePool<SystemTxt>(sceneObjs.prefabs[1],sceneObjs.systemMsgParent, 3);
             PoolManager.CreatePool<SoundPrefab>(sceneObjs.prefabs[2], sceneObjs.poolTrm, 10);
             PoolManager.CreatePool<HPBar>(sceneObjs.prefabs[3], sceneObjs.enemyHPParent, 5);
+            PoolManager.CreatePool<Item>(sceneObjs.prefabs[5], sceneObjs.poolTrm, 8);
         }
     }   
     
@@ -443,7 +435,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
     public void KillNPC()  //NPC죽이고 하늘 바뀌는 처리
     {
         saveData.userInfo.npcKillCount++;
-        switch (saveData.userInfo.npcKillCount)
+       /* switch (saveData.userInfo.npcKillCount)
         {
             case 3:
                 MapManager.Instance.ChangeSky(0);
@@ -454,7 +446,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
             case 9:
                 MapManager.Instance.ChangeSky(4);
                 break;
-        }
+        }*/
     }
 
     public void OnSystemMsg(string msg,float time=3f ,int size=50)  //시스템 메시지를 띄움 (개수 제한까지 해줌)
@@ -497,15 +489,15 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
 
     public void TestInput()  //개발할 때의 테스트
     {
-        if (Input.GetKeyDown(KeyCode.Alpha2))  //Test Code
+        /*if (Input.GetKeyDown(KeyCode.Alpha2))  //Test Code
         {
             ChangeCharacter(20);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha1))  //Test Code
         {
             ChangeCharacter(10);
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha4))  //Test Code
+        }*/
+        if (Input.GetKeyDown(KeyCode.Alpha4))  //Test Code
         {
             AddCharacter("DefaultPlayer2");
         }
@@ -513,7 +505,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
         {
             AddCharacter("DefaultPlayer3");
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha3))  //Test Code
+        /*else if (Input.GetKeyDown(KeyCode.Alpha3))  //Test Code
         {
             ChangeCharacter(30);
         }
@@ -528,7 +520,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작
             transform.position = MapManager.Instance.mapCenterDict[40].position;
             //camMove.camMinPos = new Vector3(-1607, -300, -332);
             //camMove.camMaxPos = new Vector3(-610, 300, 664);
-        }
+        }*/
         else if (Input.GetKeyDown(KeyCode.M))
         {
             player.transform.position = MapManager.Instance.mapCenterDict[testFastMovement].position;

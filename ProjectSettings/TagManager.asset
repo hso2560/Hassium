@@ -15,6 +15,7 @@ TagManager:
   - Attack
   - Tree
   - Magnet
+  - Rain
   layers:
   - Default
   - TransparentFX

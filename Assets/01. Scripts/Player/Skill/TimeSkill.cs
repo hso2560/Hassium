@@ -29,6 +29,7 @@ public class TimeSkill : Skill
 
             isRewind = true;
             EffectManager.Instance.SkillEffectVolume(PSkillType.TIME, true);
+            trailEffect.SetActive(true);
             //MapManager.Instance.dayAndNight.OnOffLightEffect(true);
         }
     }
@@ -39,6 +40,7 @@ public class TimeSkill : Skill
         {
             //MapManager.Instance.dayAndNight.OnOffLightEffect(false);
             EffectManager.Instance.SkillEffectVolume(PSkillType.TIME, false);
+            trailEffect.SetActive(false);
             player.isMovable = true;
             isRewind = false;
 

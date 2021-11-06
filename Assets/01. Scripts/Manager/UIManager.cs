@@ -40,7 +40,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
 
     private Canvas mainCvs, touchCvs, infoCvs;
     private CanvasGroup hpFillCvsg;
-    private Slider camSlider;
+    private Slider camSlider, bgmSlider, sndEffSlider, mSndSlider;
     private Button menuBtn;
 
     private Color noColor;
@@ -54,6 +54,8 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
     private List<GameObject> npcTalkImgs;
 
     private int ObjectLayer;
+    private SoundManager soundMng;
+    private GameManager gm;
 
     public bool GetReadyState { get { return isReady; } set { isReady = value; } }
 
@@ -246,6 +248,15 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
             case UIType.DIST_FROM_CAM:
                 camMove.Offset.z = camSlider.value;
                 break;
+            case UIType.BGM_SIZE:
+                soundMng._audio.volume = bgmSlider.value;
+                break;
+            case UIType.MASTER_SOUND:
+                gm.savedData.option.masterSoundSize = mSndSlider.value;
+                break;
+            case UIType.SOUND_EFFECT:
+                gm.savedData.option.soundEffectSize = sndEffSlider.value;
+                break;
         }
     }
     #endregion
@@ -278,7 +289,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
             }
         }
 
-        SoundManager.Instance.PlaySoundEffect(SoundEffectType.MENUCLICK);
+        soundMng.PlaySoundEffect(SoundEffectType.MENUCLICK);
     }
 
     public void UIQueue(bool enqueue=false)  //UI애니메이션 적용 중에 다른 UI처리가 가능한 것을 방지하기 위해서 uiChangeQueue가 비어있어야 처리 가능.
@@ -300,18 +311,18 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
                 Inventory.Instance.UpdateCharInfoUI();
                 break;
             case 4:
-                sceneObjs.gameTexts[0].text = GameManager.Instance.savedData.userInfo.money.ToString() + " 골드";
-                Inventory.Instance.chestCountTxtTmp.text = "× " + GameManager.Instance.savedData.userInfo.myChestList.Count.ToString();
+                sceneObjs.gameTexts[0].text = gm.savedData.userInfo.money.ToString() + " 골드";
+                Inventory.Instance.chestCountTxtTmp.text = "× " + gm.savedData.userInfo.myChestList.Count.ToString();
                 break;
             case 10:
                 Inventory.Instance.OnClickReinforceBtn();
                 sceneObjs.ui[3].SetActive(sceneObjs.ui[10].activeSelf);
                 break;
             case 12:
-                Inventory.Instance.statPointTxtInBuyPanel.text = "현재 스탯 포인트: " + GameManager.Instance.PlayerSc.StatPoint.ToString();
+                Inventory.Instance.statPointTxtInBuyPanel.text = "현재 스탯 포인트: " + gm.PlayerSc.StatPoint.ToString();
                 break;
             case 13:
-                sceneObjs.gameTexts[6].text = GameManager.Instance.PlayerSc.skill.skillExplain;
+                sceneObjs.gameTexts[6].text = gm.PlayerSc.skill.skillExplain;
                 break;
         }
     }
@@ -337,7 +348,10 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
             mainCvs = this.sceneObjs.cvses[0];
             touchCvs = this.sceneObjs.cvses[1];
             infoCvs = this.sceneObjs.cvses[2];
-            camSlider = this.sceneObjs.camSlider;
+            camSlider = this.sceneObjs.gameSliders[0];
+            mSndSlider = this.sceneObjs.gameSliders[1];
+            sndEffSlider = this.sceneObjs.gameSliders[2];
+            bgmSlider = this.sceneObjs.gameSliders[3];
             curMenuPanel = this.sceneObjs.ui[1];
 
             objExplainText = this.sceneObjs.gameTexts[1];
@@ -368,6 +382,18 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
         {
             AdjustSlider(UIType.DIST_FROM_CAM);
         });
+        mSndSlider.onValueChanged.AddListener((data) =>
+        {
+            AdjustSlider(UIType.MASTER_SOUND);
+        });
+        sndEffSlider.onValueChanged.AddListener((data) =>
+        {
+            AdjustSlider(UIType.SOUND_EFFECT);
+        });
+        bgmSlider.onValueChanged.AddListener((data) =>
+        {
+            AdjustSlider(UIType.BGM_SIZE);
+        });
 
         npcTalkImgs = FunctionGroup.CreatePoolList(sceneObjs.prefabs[4], sceneObjs.trms[0], 6);
     }
@@ -376,16 +402,22 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
     {
         if (sceneObjs.ScType == SceneType.MAIN)
         {
-            Option op = GameManager.Instance.savedData.option;
-            camSlider.value = op.distFromCam;
+            gm = GameManager.Instance;
+            soundMng = SoundManager.Instance;
 
+            Option op = gm.savedData.option;
+            camSlider.value = op.distFromCam;
+            bgmSlider.value = op.bgmSize;
+            sndEffSlider.value = op.soundEffectSize;
+            mSndSlider.value = op.masterSoundSize;
+            
             SetData();
         }
     }
 
     public void SetData()
     {
-        sceneObjs.gameTexts[0].text = GameManager.Instance.savedData.userInfo.money.ToString() + " 골드";  //돈 텍스트 업데이트
+        sceneObjs.gameTexts[0].text = gm.savedData.userInfo.money.ToString() + " 골드";  //돈 텍스트 업데이트
     }
 
     private void Update()
@@ -503,7 +535,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
         CanvasGroup cvg = msgImage.GetComponent<CanvasGroup>();
         cvg.alpha = 0;
 
-        StartCoroutine(GameManager.Instance.FuncHandlerCo(msg.time,()=>cvg.DOFade(1,0.4f),()=>
+        StartCoroutine(gm.FuncHandlerCo(msg.time,()=>cvg.DOFade(1,0.4f),()=>
         {
             msgImage.transform.position = mainCam.WorldToScreenPoint(target.position + offset);
         }, ()=> msgImage.SetActive(false)) );
@@ -511,8 +543,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
 
     public void SaveData()  //주로 옵션에서 설정한 값 저장
     {
-        Option op = new Option();
-        op.distFromCam = camSlider.value;
-        GameManager.Instance.savedData.option = op;
+        gm.savedData.option.distFromCam = camSlider.value;
+        gm.savedData.option.bgmSize = bgmSlider.value;
     }
 }
