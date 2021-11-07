@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using UnityEngine.UI;
 
-public class NetTCPClient : MonoBehaviour
+public class NetTCPClient : MonoBehaviour  //아마 안 쓸테니 나중에 삭제 ㄱ
 {
     private readonly string ip = "127.0.0.1";
     private readonly int port = 5400;

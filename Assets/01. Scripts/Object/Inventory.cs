@@ -147,7 +147,7 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //∞¡ ∏ﬁ¥∫ æ»¿
 
             items.Add(item);
             idToItem.Add(item.id, item);
-            item.count += itemObj.droppedCount;
+            item.count = itemObj.droppedCount;
 
             for(int i=0; i<itemSlots.Count; i++)
             {
@@ -240,7 +240,7 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //∞¡ ∏ﬁ¥∫ æ»¿
         {
             dragImage.sprite = i.Item_Data.sprite;
             beginSlot = i;
-            itemSlots.ForEach(x => x.slotImage.raycastTarget = true);
+            itemSlots.ForEach(x => x.GetComponent<Image>().raycastTarget = true);
         }
         else
         {

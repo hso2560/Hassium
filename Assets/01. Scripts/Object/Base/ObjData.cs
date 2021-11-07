@@ -23,7 +23,7 @@ public class ObjData : MonoBehaviour
         }
     }
 
-    public virtual void BaseStart(Action activeFunc=null, Action inactiveFunc=null)
+    public virtual void BaseStart(Action activeFunc=null, Action inactiveFunc=null)  //첨에 시작할 때 옵젝 버튼 (비)활성화 여부 저장 됐는지 확인하고 상태에 따라서 함수 실행
     {
         if (GameManager.Instance.ContainKeyActiveId(saveActiveStateId))
         {

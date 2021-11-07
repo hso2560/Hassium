@@ -104,7 +104,7 @@ public class RopeSkill : Skill
         //Debug.DrawRay(ropeStartPoint.position, cam.forward * maxDist, Color.red);
     }
 
-    private void StartGrapple()
+    private void StartGrapple() //로프를 건다
     {
         RaycastHit hit;
         Ray ray = Camera.main.ScreenPointToRay(screenCenterPos);
@@ -133,7 +133,7 @@ public class RopeSkill : Skill
             ropeStatePhase = 1;
         }
     }
-    private void StopGrapple()
+    private void StopGrapple()  //로프 해제 => 스킬 해제
     {
         Destroy(joint);
 
@@ -154,7 +154,7 @@ public class RopeSkill : Skill
         trailEffect.SetActive(false);
     }
 
-    private void DrawRope()
+    private void DrawRope()  //라인렌더러로 로프 그려줌
     {
         if (ropeStatePhase > 0)
         {
@@ -163,7 +163,7 @@ public class RopeSkill : Skill
         }
     }
 
-    private void MoveToTarget()
+    private void MoveToTarget()  //로프 방향으로 움직임 시작
     {
         dirVec = (grapplePoint - transform.position).normalized;
 

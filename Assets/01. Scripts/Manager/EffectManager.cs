@@ -41,7 +41,7 @@ public class EffectManager : MonoSingleton<EffectManager>
         skillOnDict.Add(PSkillType.ROPE, false);
     }
 
-    private void CreatePool()
+    private void CreatePool() //이펙트 풀 생성
     {
         hitEffectList = FunctionGroup.CreatePoolList(hitEffect, transform, 5);
         appearanceEffectList = FunctionGroup.CreatePoolList(appearanceEffect, transform, 5);
@@ -53,7 +53,7 @@ public class EffectManager : MonoSingleton<EffectManager>
         SkillEffect();
     }
 
-    private void SkillEffect()
+    private void SkillEffect()  //업뎃에서 돌리는 스킬 배경 이펙트
     {
         if(skillOnDict[PSkillType.REINFORCE])
         {
@@ -105,7 +105,7 @@ public class EffectManager : MonoSingleton<EffectManager>
         StartCoroutine(InactiveEffectCo(ef, time));
     }
 
-    public void OnLightningEffect(Vector3 pos, Vector3 start, Vector3 end, float time=0.35f)
+    public void OnLightningEffect(Vector3 pos, Vector3 start, Vector3 end, float time=0.35f)  //전기 이펙트 (일자 모양)
     {
         GameObject le = FunctionGroup.GetPoolItem(lightningEffectList);
         le.transform.position = pos;
@@ -122,7 +122,7 @@ public class EffectManager : MonoSingleton<EffectManager>
         effect.SetActive(false);
     }
 
-    public void SkillEffectVolume(PSkillType pst, bool on)
+    public void SkillEffectVolume(PSkillType pst, bool on)  //스킬 사용시 배경 이펙트
     {
         skillOnDict[pst] = on;
         switch(pst)

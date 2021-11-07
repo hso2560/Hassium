@@ -59,7 +59,7 @@ public class NPCAI : ObjData
             item.index = -1;
             item.objName = string.Concat(item.itemData.name, "×", item.droppedCount);
             item.transform.position = enemy.center.position;
-            //rigidbody로 위로 튀는 효과
+            item.GetComponent<Rigidbody>().AddForce(new Vector3(Random.Range(0f,0.25f),1, Random.Range(0f, 0.25f))*Random.Range(30f,45f), ForceMode.Impulse);
         }
         GameManager.Instance.KillNPC();
     }

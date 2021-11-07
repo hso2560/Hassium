@@ -224,7 +224,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
     #endregion
 
     #region UI Fill
-    public void AdjustFillAmound(UIType t, float current=0, float max=0)
+    public void AdjustFillAmound(UIType t, float current=0, float max=0)  //겜 속 fillAmount 조절
     {
         switch(t)
         {
@@ -241,7 +241,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
         }
     }
 
-    public void AdjustSlider(UIType t) 
+    public void AdjustSlider(UIType t)  //게임 속 슬라이더 UI
     {
         switch (t)
         {

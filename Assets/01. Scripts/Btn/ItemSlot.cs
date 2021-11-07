@@ -40,7 +40,8 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
     public void SetRaycastTarget()
     {
-        if(itemImg.gameObject.activeSelf)
+        if(slotImage==null) slotImage = GetComponent<Image>();
+        if (itemImg.gameObject.activeSelf)
         {
             slotImage.raycastTarget = true;
         }
