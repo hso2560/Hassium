@@ -7826,7 +7826,7 @@ MonoBehaviour:
   maxMoveSpeed: 8
   acceleration: 2.5
   gravity: 0.01
-  dist: 2
+  dist: 1.5
 --- !u!1 &2487118331048796514
 GameObject:
   m_ObjectHideFlags: 0
