@@ -82,6 +82,10 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //°× ½ÃÀÛ
             //infoSaveObjs.objDatas[idx].active = false;
         }
 
+        /*float sens = saveData.option.cameraSensitivity;
+        camMove.xSpeed += sens;
+        camMove.ySpeed += sens;*/
+
         ammWs = new WaitForSeconds(autoMoneyDelay);
     }
 

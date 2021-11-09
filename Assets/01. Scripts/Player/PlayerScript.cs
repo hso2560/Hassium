@@ -93,6 +93,7 @@ public class PlayerScript : MonoBehaviour, IDamageable, IAttackable   //부모 스�
     private WaitForSeconds hitWs = new WaitForSeconds(.3f);
     private bool jumpTry;
     private Transform joinTr;
+    public GameObject runTrail;
                                             
     private void Start() //문제점(2): 점프 애니메이션이 위치까지 가져와지면서 움직임이 어색함. 착지 애니메이션 때문에 점프하다가 가끔씩 맛나가고 점프가 짧게 실행되고 끊김.
     {                               // --> 땅 체크 레이가 발에서 나가는 것으로 반해결.             --> 제자리 점프일 때만 그래서 어색. => fixed duration을 줘서 반해결

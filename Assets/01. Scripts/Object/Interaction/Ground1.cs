@@ -7,11 +7,12 @@ public class Ground1 : ObjData
 
     private void Awake()
     {
-        rule = transform.parent.GetChild(0).GetComponent<Ground1Puzzle>();
+        rule = transform.parent.parent.GetChild(0).GetComponent<Ground1Puzzle>();
     }
 
     public override void Interaction()
     {
         rule.Move(relevantGrounds);
+        transform.parent.GetChild(0).GetComponent<Animator>().SetTrigger("move");
     }
 }

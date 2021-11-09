@@ -12,6 +12,7 @@ public class CameraMove : MonoBehaviour
     //public Vector3 camMinPos, camMaxPos;
 
     public float xSpeed = 220f, ySpeed = 100f;
+    public float defaultXSpeed, defaultYSpeed;
     [HideInInspector] public float x, y;
     public float yMinLimit = -20f, yMaxLimit = 80f;
 
@@ -56,7 +57,7 @@ public class CameraMove : MonoBehaviour
 
         return Mathf.Clamp(angle, min, max);
     }
-     
+
     private void Start()  
     {
         Vector3 angles = transform.eulerAngles;

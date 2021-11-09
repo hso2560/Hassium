@@ -47,11 +47,33 @@ public class Ground1Puzzle : ObjData, IReward
             moveCheckQueue.Enqueue(false);
             int idx = groundIndexArr[i];
             waypointList[idx].NextIndex();
+            int si = i;
             groundPathList[idx].transform.DOMove(waypointList[idx].GetCurrentItem.position, moveTime).SetEase(Ease.Linear).OnComplete(()=> 
             {
                 if (moveCheckQueue.Count > 0) moveCheckQueue.Dequeue();
+                if (si == groundIndexArr.Length - 1) CheckClear();
             });
         }
+    }
+
+    private void CheckClear()
+    {
+        for(int i=0; i< waypointList.Count; i++)
+        {
+            if (waypointList[i].targetIndex != waypointList[i].index) return;
+        }
+
+        base.Interaction();
+        active = false;
+        foreach (Ground1 g in transform.parent.GetComponentsInChildren<Ground1>())
+            g.active = false;
+
+
+        if (npc != null && !npc.info.dead && (npc.info.isFighting || npc.info.bRunaway))
+            PoolManager.GetItem<SystemTxt>().OnText(npcFightingClearMsg);
+        else
+            GetReward();
+        npc.info.talkId++;
     }
 
     public override void Interaction()
@@ -62,6 +84,7 @@ public class Ground1Puzzle : ObjData, IReward
             return;
         }
 
+        transform.GetChild(0).GetComponent<Animator>().SetTrigger("move");
         float time = moveTime + 0.25f;
         for(int i=0; i<groundPathList.Count; i++)
         {

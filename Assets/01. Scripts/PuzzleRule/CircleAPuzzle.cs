@@ -142,6 +142,7 @@ public class CircleAPuzzle : ObjData, IReward  //원래는 퍼즐 룰 이것도 부모 스크
         }
 
         IsMoving = true;
+        transform.GetChild(0).GetComponent<Animator>().SetTrigger("move");
         movingSphere.transform.DOMove(defaultPosition.position, 2.5f);
         movingMagnet.transform.DOMove(orgMagnetPos, 2.5f).OnComplete(() =>
         {

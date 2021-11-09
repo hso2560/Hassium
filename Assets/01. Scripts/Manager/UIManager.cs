@@ -11,7 +11,8 @@ public enum UIType
     MASTER_SOUND,
     BGM_SIZE,
     SOUND_EFFECT,
-    HPFILL
+    HPFILL,
+    CAM_SENSITIVITY
 }
 
 public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
@@ -40,7 +41,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
 
     private Canvas mainCvs, touchCvs, infoCvs;
     private CanvasGroup hpFillCvsg;
-    private Slider camSlider, bgmSlider, sndEffSlider, mSndSlider;
+    private Slider camSlider, bgmSlider, sndEffSlider, mSndSlider, camSensitiveSlider;
     private Button menuBtn;
 
     private Color noColor;
@@ -257,6 +258,12 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
             case UIType.SOUND_EFFECT:
                 gm.savedData.option.soundEffectSize = sndEffSlider.value;
                 break;
+            case UIType.CAM_SENSITIVITY:
+                int _value = (int)camSensitiveSlider.value;
+                gm.savedData.option.cameraSensitivity = _value;
+                camMove.xSpeed = camMove.defaultXSpeed + _value;
+                camMove.ySpeed = camMove.defaultYSpeed + _value;
+                break;
         }
     }
     #endregion
@@ -382,17 +389,21 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
         {
             AdjustSlider(UIType.DIST_FROM_CAM);
         });
-        mSndSlider.onValueChanged.AddListener((data) =>
+        mSndSlider.onValueChanged.AddListener(data =>
         {
             AdjustSlider(UIType.MASTER_SOUND);
         });
-        sndEffSlider.onValueChanged.AddListener((data) =>
+        sndEffSlider.onValueChanged.AddListener(data =>
         {
             AdjustSlider(UIType.SOUND_EFFECT);
         });
-        bgmSlider.onValueChanged.AddListener((data) =>
+        bgmSlider.onValueChanged.AddListener(data =>
         {
             AdjustSlider(UIType.BGM_SIZE);
+        });
+        camSensitiveSlider.onValueChanged.AddListener(data =>
+        {
+            AdjustSlider(UIType.CAM_SENSITIVITY);
         });
 
         npcTalkImgs = FunctionGroup.CreatePoolList(sceneObjs.prefabs[4], sceneObjs.trms[0], 6);
@@ -410,7 +421,8 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
             bgmSlider.value = op.bgmSize;
             sndEffSlider.value = op.soundEffectSize;
             mSndSlider.value = op.masterSoundSize;
-            
+            camSensitiveSlider.value = op.cameraSensitivity;
+
             SetData();
         }
     }

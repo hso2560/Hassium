@@ -92,6 +92,7 @@ public class Laser1Puzzle : ObjData, IReward
             }
         }
 
+        transform.GetChild(0).GetComponent<Animator>().SetTrigger("move");
         for (i = 0; i < laserList.Count; i++)
         {
             laserList[i].IsMoving = true;

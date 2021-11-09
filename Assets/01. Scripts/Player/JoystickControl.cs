@@ -122,8 +122,16 @@ public class JoystickControl : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     }
 
     #region 버튼 처리
-    public void OnPointerDownRunBtn() => isRun = !player.isStamina0;
-    public void OnPointerUpRunBtn() => isRun = false;
+    public void OnPointerDownRunBtn()
+    {
+        isRun = !player.isStamina0;
+        player.runTrail.SetActive(true);
+    }
+    public void OnPointerUpRunBtn()
+    {
+        isRun = false;
+        player.runTrail.SetActive(false);
+    }
 
     private void Jump()
     {

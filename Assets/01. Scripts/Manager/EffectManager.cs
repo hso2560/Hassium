@@ -46,6 +46,8 @@ public class EffectManager : MonoSingleton<EffectManager>
         hitEffectList = FunctionGroup.CreatePoolList(hitEffect, transform, 5);
         appearanceEffectList = FunctionGroup.CreatePoolList(appearanceEffect, transform, 5);
         lightningEffectList = FunctionGroup.CreatePoolList(lightningEffectPref, transform, 9);
+
+      
     }
 
     private void Update()
