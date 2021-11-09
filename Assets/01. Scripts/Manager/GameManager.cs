@@ -15,7 +15,7 @@ public enum LoadingType
 }
 
 //generate lighting 할 때는 Sky를 Default Sky로 바꾸고 하자. (그 후에 다시 원래 쓰려던 Sky로 교체 ㄱ)
-public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //겜 시작후 캐릭터 최초 변경시 카메라가 잠시동안 이상한 곳 바라보는 문제점 있음.
+public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //원래는 퍼즐옵젝들이랑 플레이어&적 스크립트에는 최상위 객체를 만들어서 그걸 상속받는 식으로 했어야 함
 {
     [SerializeField] private SaveData saveData;
     public SaveData savedData { get { return saveData; } }

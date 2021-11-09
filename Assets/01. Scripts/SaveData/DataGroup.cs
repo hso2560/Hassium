@@ -77,6 +77,20 @@ public class InfoPanelData
 }
 
 [Serializable]
+public class SpringObject
+{
+    public SpringJoint spring;
+    public LineRenderer line;
+    public LensFlare lens;
+
+    public Transform connectedTr;
+    public bool IsPressing;
+
+    public float min_springMaxDist;
+    public float max_springMaxDist;
+}
+
+/*[Serializable]
 public class EnemyMapData
 {
     public short id;
@@ -87,4 +101,4 @@ public class EnemyMapData
     public int delayH; //리스폰 대기 시간 (단위: 시간)
 
     public string lastDate;  //마지막 접속 종료 날짜
-}
+}*/

@@ -359,6 +359,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
             mSndSlider = this.sceneObjs.gameSliders[1];
             sndEffSlider = this.sceneObjs.gameSliders[2];
             bgmSlider = this.sceneObjs.gameSliders[3];
+            camSensitiveSlider = this.sceneObjs.gameSliders[4];
             curMenuPanel = this.sceneObjs.ui[1];
 
             objExplainText = this.sceneObjs.gameTexts[1];
@@ -503,7 +504,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
             if (remainingTime <= 0)
             {
                 timeOverEvent?.Invoke();
-                OnTimer(0, true);
+                OnTimer(0, true, true);
             }
         }
     }

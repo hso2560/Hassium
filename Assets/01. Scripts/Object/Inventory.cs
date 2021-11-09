@@ -40,7 +40,7 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //°Á ¸Þ´º ¾ÈÀ
     public Button[] charChangeBtns;
 
     private PlayerScript ps;
-    public event Action acquisitionEvent;
+    public event Action<int> acquisitionEvent;
 
     //º¸¹° Ã¢ °ü·Ã º¯¼ö
     public GameObject treasureUIPrefab;
@@ -61,7 +61,7 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //°Á ¸Þ´º ¾ÈÀ
     {
         btnSelectPanelPos = btnSelectPanel.GetComponent<RectTransform>();
         slotHalfWidth = itemSlots[0].GetComponent<RectTransform>().rect.width * 0.5f;
-        acquisitionEvent += () => { };
+        acquisitionEvent += (id) => { };
         throwBtn.onClick.AddListener(() => 
         {
             dumpPanelInfo.objImage.sprite = clickedSlot.Item_Data.sprite;
@@ -167,7 +167,7 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //°Á ¸Þ´º ¾ÈÀ
         itemObj.gameObject.SetActive(false);
         if(itemObj.index != -1)
            gameManager.savedData.saveObjDatas.Add(new SaveObjData(itemObj.index, SaveObjInfoType.ACTIVE, false));
-        acquisitionEvent();
+        acquisitionEvent(item.id);
     }
 
     public void GetItem(ItemData data)
