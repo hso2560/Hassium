@@ -10,6 +10,9 @@ public class NPCAI : ObjData
     public ItemData[] deathItems; //뒤지면 떨구는 템들 데이터
     public int[] dropedCnt; //떨구는 아이템 개수
 
+    [SerializeField] private bool canInactive;
+    [SerializeField] private int index;
+
     private void Start()
     {
         objName = info.name;
@@ -29,6 +32,11 @@ public class NPCAI : ObjData
             enemy.isDie = true;
             enemy.enemyState = EnemyState.DIE;
             gameObject.SetActive(false);
+        }
+
+        if(canInactive)
+        {
+            GameManager.Instance.SaveObjActiveInfo(index, true); 
         }
 
         if (info.bRunaway || info.isFighting) //공격 받은 상태 이어가기

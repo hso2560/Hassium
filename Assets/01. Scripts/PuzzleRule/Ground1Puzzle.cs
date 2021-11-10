@@ -31,6 +31,8 @@ public class Ground1Puzzle : ObjData, IReward
             {
                 groundPathList[i].transform.position = waypointList[i][waypointList[i].targetIndex].position;
             }
+
+            PuzzleReward.RequestReward(id, false);
         });
     }
 
@@ -102,7 +104,7 @@ public class Ground1Puzzle : ObjData, IReward
     {
         if (!GameManager.Instance.IsContainChest(chestId))
         {
-            PuzzleReward.RequestReward(id);
+            PuzzleReward.RequestReward(id,true);
         }
         else
         {

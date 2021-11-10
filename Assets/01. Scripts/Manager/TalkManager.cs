@@ -31,6 +31,13 @@ public class TalkManager : MonoSingleton<TalkManager>, ISceneDataLoad
     private void Awake()
     {
         closeHash = Animator.StringToHash("close");
+
+        talkEndAction.Add("22,0", () =>
+        {
+            GameManager.Instance.AddCharacter("DefaultPlayer2");
+            GameManager.Instance.SaveObjActiveInfo(28, false);
+            GameManager.Instance.infoSaveObjs.objs[28].SetActive(false);
+        });
     }
 
     public void CvsgFade(CanvasGroup cg, int target, float time)  //UIÃ³¸®
