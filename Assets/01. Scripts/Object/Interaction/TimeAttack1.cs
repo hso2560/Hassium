@@ -19,10 +19,19 @@ public class TimeAttack1 : ObjData, IReward
     private void Start()
     {
         base.BaseStart();
+        GameManager.Instance.quitEvent += () =>
+        {
+            if (Inventory.Instance.ExistItem(itemID))
+            {
+                Inventory.Instance.items.Remove(needItems[0].GetComponent<Item>().itemData);
+            }
+        };
     }
 
     public override void Interaction()
     {
+        if (UIManager.Instance.bResultTxt) return;
+
         if (UIManager.Instance.runningMission && UIManager.Instance.missionObj != gameObject)
         {
             PoolManager.GetItem<SystemTxt>().OnText("현재 다른 미션을 수행중입니다.");
@@ -39,6 +48,7 @@ public class TimeAttack1 : ObjData, IReward
         {
             for (int i = 0; i < needItems.Length; i++) needItems[i].SetActive(true);
             isTrying = true;
+            UIManager.Instance.missionObj = gameObject;
             objName = "포기";
         }
 
@@ -51,8 +61,10 @@ public class TimeAttack1 : ObjData, IReward
                 active = false;
                 base.Interaction();
                 isTrying = false;
+                current = 0;
 
-                npc.info.talkId=1;
+                if (npc != null) 
+                    npc.info.talkId=1;
 
                 if (npc != null && !npc.info.dead && (npc.info.isFighting || npc.info.bRunaway))
                     PoolManager.GetItem<SystemTxt>().OnText(npcFightingClearMsg);
@@ -71,6 +83,7 @@ public class TimeAttack1 : ObjData, IReward
                     Inventory.Instance.UseItem(itemID, Inventory.Instance.idToItem[itemID].count);
                 }
                 isTrying = false;
+                current = 0;
                 objName = "도전";
             };
         }
@@ -83,8 +96,10 @@ public class TimeAttack1 : ObjData, IReward
 
     void ItemAcquisition(int id)
     {
+        
         if(id==itemID)
         {
+            current++;
             UIManager.Instance.UpdateCountInMission(current, maxCnt);
             if(current==maxCnt)
             {

@@ -16,10 +16,11 @@ public class MapManager : MonoSingleton<MapManager>, ISceneDataLoad
     public Dictionary<short, Transform> mapCenterDict = new Dictionary<short, Transform>();
     public DayAndNight dayAndNight;
     private IEnumerator MeteorIE=null;
+    public LensFlare lightLens;
 
     public List<GameObject> mapList;
     public List<int> mapObjIndexList; //mapList의 게임 오브젝트 순서와 SceneSaveObjects의 obj에서 그 옵젝에 해당하는 인덱스 값 순서대로 한다
-    public List<EnemyBase> enemys;
+    //public List<EnemyBase> enemys;
 
     public PostProcessVolume postVolume;
     private ColorGrading colorGrading;
@@ -48,7 +49,7 @@ public class MapManager : MonoSingleton<MapManager>, ISceneDataLoad
         if (!rainLocation.activeSelf) SoundManager.Instance.PlayBGM(BGMSound.RAIN);
     }
 
-    private void SetWeather() //현실 날씨 반영
+    public void SetWeather() //현실 날씨 반영
     {
         string wt = System.IO.File.ReadAllText(string.Concat(Application.persistentDataPath, "/", "wt01"));
         string[] strs = wt.Split('$');
@@ -117,7 +118,8 @@ public class MapManager : MonoSingleton<MapManager>, ISceneDataLoad
         {
             dayAndNight.isNight = true;
             colorGrading.postExposure.value = minPostExposure * (curTime - 15) / 8f;
-            if (colorGrading.postExposure.value < -1f) ChangeSky(2);
+            lightLens.brightness = 0.2f;
+            if (colorGrading.postExposure.value < -1f) ChangeSky(0);  //or 2
         }
         else  //오전 0~ 4
         {
@@ -130,10 +132,27 @@ public class MapManager : MonoSingleton<MapManager>, ISceneDataLoad
             {
                 colorGrading.postExposure.value = minPostExposure * (5-curTime) / 6f;  //보정값으로 분모에 1을 더함
             }
-            if (colorGrading.postExposure.value < -1f) ChangeSky(2);
+            lightLens.brightness = 0.2f;
+            if (colorGrading.postExposure.value < -1f) ChangeSky(0); //or 2
         }
     }
     
+    public void ResetWeather() //날씨, 시간 상태 초기화
+    {
+        dayAndNight.isNight = false;
+        colorGrading.postExposure.value = 0;
+        colorGrading.temperature.value = 0;
+        ChangeSky(3);
+        rain.SetActive(false);
+        snow.SetActive(false);
+        lightLens.brightness = 0.7f;
+        StartCoroutine(GameManager.Instance.FuncHandlerCo(1.5f,null,null,()=> 
+        {
+            if (!rainLocation.activeSelf) SoundManager.Instance.PlayBGM(BGMSound.NULL);
+            rainLocation.SetActive(true);  //이러면 딜레이 때문에 만약 비오는 날씨일경우 첨에 약간 빗소리 들리고 꺼짐. 하지만 시간이 얼마없으니 일단 이렇게하고 넘어간다
+        }));
+    }
+
     private void InitData()
     {
         MeteorIE = MeteorCo();

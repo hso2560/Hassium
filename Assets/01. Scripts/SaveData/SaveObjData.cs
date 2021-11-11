@@ -129,7 +129,7 @@ public class NPCInfo
     public string name; 
 
     public short talkId = 0;  //무슨 대화를 할 차례인지 저장한다
-    public List<StringListClass> talkList = new List<StringListClass>();
+    public List<StringListClass> talkList = new List<StringListClass>();  //이것까지 저장할 필요는 없을 것 같다. (저장하는게 되게 많아짐)
 
     public NPCType npcType;
     public bool dead = false;

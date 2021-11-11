@@ -57,6 +57,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
     private int ObjectLayer;
     private SoundManager soundMng;
     private GameManager gm;
+    [HideInInspector] public bool bResultTxt = false;
 
     public bool GetReadyState { get { return isReady; } set { isReady = value; } }
 
@@ -503,8 +504,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
 
             if (remainingTime <= 0)
             {
-                timeOverEvent?.Invoke();
-                OnTimer(0, true, true);
+                TimeAttackMission(false);
             }
         }
     }
@@ -515,6 +515,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
         else timeOverEvent?.Invoke();
 
         {
+            bResultTxt = true;
             Text resultText = sceneObjs.gameTexts[clear ? 3 : 4];
             Color c = resultText.color;
             resultText.color = noColor;
@@ -526,7 +527,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
             .Join(resultText.transform.DOScale(Vector3.one, 0.3f))
             .AppendInterval(1)
             .Append(resultText.DOColor(noColor, 0.4f))
-            .AppendCallback(() => { resultText.color = c; resultText.gameObject.SetActive(false); runningMission = false; })
+            .AppendCallback(() => { resultText.color = c; resultText.gameObject.SetActive(false); runningMission = false; bResultTxt = false; })
             .Play();
         }
 

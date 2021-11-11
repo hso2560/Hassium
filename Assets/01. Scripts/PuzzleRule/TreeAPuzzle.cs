@@ -37,6 +37,8 @@ public class TreeAPuzzle : ObjData, IReward
 
     public override void Interaction()
     {
+        if (UIManager.Instance.bResultTxt) return;
+
         if (UIManager.Instance.runningMission && UIManager.Instance.missionObj != gameObject)
         {
             PoolManager.GetItem<SystemTxt>().OnText("현재 다른 미션을 수행중입니다.");

@@ -57,6 +57,10 @@ public class PuzzleReward : MonoBehaviour
                 objects[5].SetActive(true);
                 objects[5].transform.DOMove(vectors[0], running ? 3: 0);
                 break;
+            case 28:
+                RewardChest(7);
+                if (running) npc[2].info.talkId = 1;
+                break;
         }
     }
 

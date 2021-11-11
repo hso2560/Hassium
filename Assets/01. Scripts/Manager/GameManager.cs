@@ -129,15 +129,19 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //원래는 
         eventPointAction[0] = () => { };
     }
 
-    /*private void Start()
+    private void Start()
     {
-        *//*if(saveData.userInfo.camMinRange!=Vector3.zero)
+        if(saveData.userInfo.mapIndex<40) //아직 튜토맵이라면
+        {
+            MapManager.Instance.ResetWeather();
+        }
+        /*if(saveData.userInfo.camMinRange!=Vector3.zero)
         {
             camMove.camMinPos = saveData.userInfo.camMinRange;
             camMove.camMaxPos = saveData.userInfo.camMaxRange;
-        }*//*
+        }*/
         //MapManager.Instance.ChangeSky(saveData.userInfo.skyIndex);
-    }*/
+    }
 
     #region 저장/로드
     public void SaveData()  //데이터를 저장
@@ -600,7 +604,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //원래는 
         {
             yield return null;
             elapsed += Time.deltaTime;
-            handler();
+            handler?.Invoke();
         }
         complete?.Invoke();
     }
