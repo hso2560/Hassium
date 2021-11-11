@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DayAndNight : MonoBehaviour
 {
-    public Light mainLight;
+    [HideInInspector] public Light mainLight;
     private Color defaultLightColor;
     public List<Color> lightColors;
     //private bool doLightColorEffect = false;

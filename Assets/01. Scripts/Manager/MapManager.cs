@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.PostProcessing;
 
 public enum MapType  //mapList와 순서를 맞춘다
 {
@@ -20,14 +21,119 @@ public class MapManager : MonoSingleton<MapManager>, ISceneDataLoad
     public List<int> mapObjIndexList; //mapList의 게임 오브젝트 순서와 SceneSaveObjects의 obj에서 그 옵젝에 해당하는 인덱스 값 순서대로 한다
     public List<EnemyBase> enemys;
 
+    public PostProcessVolume postVolume;
+    private ColorGrading colorGrading;
+
+    [SerializeField] private float minPostExposure = -3f;
+    [SerializeField] private float maxPostExposure = 1.5f;
+
+    [SerializeField] private float minTemp = -7f;
+    [SerializeField] private float maxTemp = 15f;
+
+    public GameObject rain, snow;
+    public GameObject rainLocation;
+
     [SerializeField] private bool isDevMode;
     [SerializeField] GameObject testMark;
 
     private void Awake()
     {
         testMark.SetActive(isDevMode);
+        postVolume.profile.TryGetSettings(out colorGrading);
+        SetWeather();
     }
 
+    private void Start()
+    {
+        if (!rainLocation.activeSelf) SoundManager.Instance.PlayBGM(BGMSound.RAIN);
+    }
+
+    private void SetWeather() //현실 날씨 반영
+    {
+        string wt = System.IO.File.ReadAllText(string.Concat(Application.persistentDataPath, "/", "wt01"));
+        string[] strs = wt.Split('$');
+
+        if (strs[0] != "NONE")  //제대로 날씨 정보 받았다면
+        {
+            string[] strs2 = strs[0].Split('#');
+            if(strs2[0].Contains("비") || strs2[0].Contains("눈")) //구름 많거나 흐림. 그리고 비오거나 눈 오거나 비와 눈 동시에 옴
+            {
+                if(strs2[0].Contains("/"))  //눈과 비 동시에
+                {
+                    rain.SetActive(true);
+                    snow.SetActive(true);
+                    rainLocation.SetActive(false);
+                }
+                else  
+                {
+                    if(strs2[0].Contains("비"))  //비
+                    {
+                        ChangeSky(1);
+                        rain.SetActive(true);
+                        rainLocation.SetActive(false);
+                    }
+                    else  //눈
+                    {
+                        snow.SetActive(true);
+                    }
+                }
+            }
+            else
+            {
+                switch (strs2[0])
+                {
+                    case "맑음":
+                        ChangeSky(5);
+                        break;
+                    case "구름 조금":
+                        //뭐 딱히 없음
+                        break;
+                    case "구름 많음":
+                        ChangeSky(1);
+                        break;
+                    case "흐림":
+                        ChangeSky(1);
+                        break;
+                    default:
+                        //기본값
+                        break;
+                }
+            }
+
+            float avgTp = float.Parse(strs2[1]);
+            if(-90f<avgTp && avgTp<100f)
+            {
+                colorGrading.temperature.value = Mathf.Clamp(avgTp-9f , minTemp, maxTemp);  //-9f는 보정값
+            }
+        }
+
+        //현재 시간 대입 (사용자 폰 기준) 어차피 상관없음
+        int curTime = int.Parse(strs[1]);
+        if(curTime>=5 && curTime<=15) //오전 5~오후 3
+        {
+            colorGrading.postExposure.value = maxPostExposure * (curTime - 4) / 11f;  //5-1=4 , 15-5+1=11
+        }
+        else if(curTime >= 16 && curTime <= 23) //오후 4~11 
+        {
+            dayAndNight.isNight = true;
+            colorGrading.postExposure.value = minPostExposure * (curTime - 15) / 8f;
+            if (colorGrading.postExposure.value < -1f) ChangeSky(2);
+        }
+        else  //오전 0~ 4
+        {
+            dayAndNight.isNight = true;
+            if (curTime == 24)
+            {
+                colorGrading.postExposure.value = minPostExposure;
+            }
+            else
+            {
+                colorGrading.postExposure.value = minPostExposure * (5-curTime) / 6f;  //보정값으로 분모에 1을 더함
+            }
+            if (colorGrading.postExposure.value < -1f) ChangeSky(2);
+        }
+    }
+    
     private void InitData()
     {
         MeteorIE = MeteorCo();
@@ -45,10 +151,10 @@ public class MapManager : MonoSingleton<MapManager>, ISceneDataLoad
         }
     }
 
-    public void ResetLivingEnemy()  //살아있는 적들의 상태를 초기화
+    /*public void ResetLivingEnemy()  //살아있는 적들의 상태를 초기화
     {
         enemys.FindAll(x => x.NeedReset()).ForEach(a => a.ResetData());
-    }
+    }*/
 
     private IEnumerator MeteorCo()  //유성 떨어짐
     {

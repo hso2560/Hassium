@@ -75,7 +75,7 @@ public class TrmPoint : MonoBehaviour
             case -200:                //ºñ
                 if (other.CompareTag("Player"))
                 {
-                    MapManager.Instance.ChangeSky(1);
+                    //MapManager.Instance.ChangeSky(1);
                     SoundManager.Instance.PlayBGM(BGMSound.RAIN);
                 }
                 break;
@@ -89,7 +89,7 @@ public class TrmPoint : MonoBehaviour
             case -200:
                 if (other.CompareTag("Player"))
                 {
-                    MapManager.Instance.ChangeSky(3);
+                    //MapManager.Instance.ChangeSky(3);
                     SoundManager.Instance.PlayBGM(BGMSound.NULL);
                 }
                 break;

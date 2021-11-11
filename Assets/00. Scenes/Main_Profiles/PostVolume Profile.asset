@@ -136,7 +136,7 @@ MonoBehaviour:
     overrideState: 1
     value: {r: 1, g: 1, b: 1, a: 1}
   hueShift:
-    overrideState: 1
+    overrideState: 0
     value: 0
   saturation:
     overrideState: 1
@@ -145,8 +145,8 @@ MonoBehaviour:
     overrideState: 0
     value: 0
   postExposure:
-    overrideState: 0
-    value: 2.17
+    overrideState: 1
+    value: 0
   contrast:
     overrideState: 1
     value: 15

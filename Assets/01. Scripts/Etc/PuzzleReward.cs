@@ -49,8 +49,11 @@ public class PuzzleReward : MonoBehaviour
                 RewardChest(3);
                 break;
             case 24:
-                if(running)
-                   RewardChest(4);
+                if (running)
+                {
+                    RewardChest(4);
+                    objects[6].SetActive(true);
+                }
                 objects[5].SetActive(true);
                 objects[5].transform.DOMove(vectors[0], running ? 3: 0);
                 break;

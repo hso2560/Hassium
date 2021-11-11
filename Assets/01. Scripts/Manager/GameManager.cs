@@ -116,7 +116,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //¿ø·¡´Â 
                     player.transform.parent.gameObject.SetActive(false);
                     keyToVoidFunction[LoadingType.RESPAWN]();
                     player.transform.parent.gameObject.SetActive(true);
-                    MapManager.Instance.ResetLivingEnemy();
+                    //MapManager.Instance.ResetLivingEnemy();
                 };
                 UIManager.Instance.LoadingFade(false);
             }

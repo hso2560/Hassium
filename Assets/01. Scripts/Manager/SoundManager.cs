@@ -49,7 +49,7 @@ public class SoundManager : MonoSingleton<SoundManager>, ISceneDataLoad
         PoolManager.GetItem<SoundPrefab>().SoundPlay(gameSoundEffectList[(int)set], time,op.soundEffectSize);
     }
     
-    public void PlayBGM(BGMSound bgm)  //BGM 출력 or 비활
+    public void PlayBGM(BGMSound bgm)  //BGM 출력 or 비활     
     {
         if ((bgm == BGMSound.NULL && _audio.clip == null) || (bgm!=BGMSound.NULL && _audio.clip == gameSoundBGMList[(int)bgm])) return;  //(bgm!=BGMSound.NULL && _audio.clip == gameSoundBGMList[(int)bgm]) 여기에서 &&기준으로 이렇게 순서 맞춰야함. 순서 다르면 오류발생하니 오류발생하지 않는 조건을 먼저 왼쪽에 배치해서 먼저 계산하도록 한다
 
