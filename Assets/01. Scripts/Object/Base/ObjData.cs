@@ -12,7 +12,7 @@ public class ObjData : MonoBehaviour
 
     /*private void Awake()
     {
-        if (saveActiveStateId > -1) Debug.Log(saveActiveStateId); //확인용
+        if (saveActiveStateId > -1) Debug.Log(saveActiveStateId + " " + gameObject.name); //확인용
     }*/
 
     public virtual void Interaction() //버튼 클릭 시

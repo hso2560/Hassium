@@ -17,6 +17,20 @@ public class Spring1Puzzle : MonoBehaviour, IReward
     public string npcFightingClearMsg;
     public int chestId;
 
+    private bool inRange = false;
+    private float stayTime = 0;
+    public float targetTime = 2f;
+
+    private void Awake()
+    {
+        foreach(SpringObject s in springObjs) //damper spring massscale 등은 그냥 옵젝에서 바꿔준다
+        {
+            s.spring.connectedAnchor = s.connectedTr.position;
+            s.spring.minDistance = s.min_springMaxDist - 0.05f;
+            s.spring.maxDistance = s.max_springMaxDist;
+        }
+    }
+
     private void Start()
     {
         if (GameManager.Instance.ContainKeyActiveId(saveActiveStateId))
@@ -25,10 +39,15 @@ public class Spring1Puzzle : MonoBehaviour, IReward
         }
         if(IsClear)
         {
-            foreach (Spring1 s in GetComponentsInChildren<Spring1>()) s.active = false;
-            float d = (springMaxDistRangeForClear[0] + springMaxDistRangeForClear[1]) * 0.5f;
+            foreach (Spring1 s in transform.parent.GetComponentsInChildren<Spring1>())
+            {
+                s.active = false;
+                s.pressLight.gameObject.SetActive(false);
+            }
+            //float d = (springMaxDistRangeForClear[0] + springMaxDistRangeForClear[1]) * 0.5f;
 
-            springObjs.ForEach(x => x.spring.maxDistance = d);
+            //springObjs.ForEach(x => x.spring.maxDistance = d);
+            //springObjs.ForEach(sp => sp.line.SetPosition(1, sp.line.transform.InverseTransformPoint(sp.connectedTr.position)));
         }
         else
         {
@@ -58,7 +77,7 @@ public class Spring1Puzzle : MonoBehaviour, IReward
     {
         if(!IsClear)
         {
-            if(Time.time > checkTime)
+            if (Time.time > checkTime)
             {
                 checkTime = Time.time + 0.15f;
 
@@ -66,22 +85,56 @@ public class Spring1Puzzle : MonoBehaviour, IReward
                 {
                     SpringObject sp = springObjs[j];
 
-                    float m_dist = sp.spring.maxDistance + (sp.IsPressing ? -sp.interval : sp.interval);
+                    float m_dist = sp.spring.maxDistance + (sp.IsPressing ? -sp.interval : sp.interval*0.5f);
                     sp.spring.maxDistance = Mathf.Clamp(m_dist, sp.min_springMaxDist, sp.max_springMaxDist);
+
+                    if (sp.spring.maxDistance < springMaxDistRangeForClear[1]) sp.bComplete = true;
+                }
+
+                CheckInRange();
+            }
+            
+            if(inRange)
+            {
+                stayTime += Time.deltaTime;
+                if (stayTime > targetTime)
+                {
+                    PoolManager.GetItem<SystemTxt>().OnText("<color=green>성공!</color>",3,61);
+                    foreach (Spring1 s in transform.parent.GetComponentsInChildren<Spring1>())
+                    {
+                        s.active = false;
+                        s.pressLight.gameObject.SetActive(false);
+                    }
+
+                    if (npc != null) npc.info.talkId = 1;
+
+                    if (npc != null && !npc.info.dead && (npc.info.isFighting || npc.info.bRunaway))
+                        PoolManager.GetItem<SystemTxt>().OnText(npcFightingClearMsg);
+                    else
+                        GetReward();
+
+                    GameManager.Instance.savedData.objActiveInfo[saveActiveStateId] = true;
+                    IsClear = true;
                 }
             }
         }
+
+        springObjs.ForEach(sp => sp.line.SetPosition(1, sp.line.transform.InverseTransformPoint(sp.connectedTr.position)));
     }
 
-    private void LateUpdate()
+    private void CheckInRange()
     {
-        if(!IsClear)
+        for(int i=0; i<springObjs.Count; i++)
         {
-            for (int k = 0; k < springObjs.Count; ++k)
+            if (!springObjs[i].bComplete)
             {
-
+                inRange = false;
+                stayTime = 0;
+                return;
             }
         }
+
+        inRange = true;
     }
 
     public void GetReward()

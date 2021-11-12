@@ -16,6 +16,12 @@ public class SkillManager : MonoSingleton<SkillManager>, ISceneDataLoad
         {
             playerSkills.Add(GameManager.Instance.playerList[n].skill);
         }
+
+        /*foreach(ObjData o in FindObjectsOfType<ObjData>())  //확인용
+        {
+            if(o.saveActiveStateId>-1)
+               Debug.Log(o.saveActiveStateId + " " + o.gameObject.name);
+        }*/
     }
 
     private IEnumerator SkillUseManage()  //사용중인 스킬 체크하고 시간지나면 쿨타임 시작

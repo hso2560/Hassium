@@ -61,6 +61,9 @@ public class PuzzleReward : MonoBehaviour
                 RewardChest(7);
                 if (running) npc[2].info.talkId = 1;
                 break;
+            case 30:
+                RewardChest(8);
+                break;
         }
     }
 
