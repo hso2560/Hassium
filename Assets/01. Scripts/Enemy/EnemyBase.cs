@@ -195,7 +195,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         CheckHp();
     }
 
-    public void Death()
+    public void Death() //뒤짐
     {
         if (npc != null)
         {
@@ -210,12 +210,12 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         StartCoroutine(DeathCo());
     }
 
-    public virtual void Damaged()
+    public virtual void Damaged() //데미지받고 자식들이 추가로 작업할 게 있으면 이걸로
     {
         
     }
 
-    public virtual void StartEnemy()
+    public virtual void StartEnemy() 
     {
         if (npc != null)
         {
@@ -223,7 +223,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         }
     }
 
-    protected IEnumerator DeathCo()
+    protected IEnumerator DeathCo() //사망후 사라질 때까지의 딜레이
     {
         agent.enabled = false;
         yield return new WaitForSeconds(3);
@@ -234,7 +234,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         gameObject.SetActive(false);
     }
 
-    protected virtual void ShowHP()
+    protected virtual void ShowHP() //HP보여줌. 멀어지면 꺼주고
     {
         if (hpBar != null)
         {

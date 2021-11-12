@@ -48,7 +48,7 @@ public class ColumnAPuzzle : MonoBehaviour
         Invoke("ActiveCol", moveTime + 0.3f);
     }
 
-    private void ActiveCol()
+    private void ActiveCol() //약간의 딜레이 후에 실행. 모든 옵젝들 높이 같은지 체크
     {
         isMove = false;
         float h = columns[0].transform.localScale.y;
@@ -66,7 +66,7 @@ public class ColumnAPuzzle : MonoBehaviour
         PuzzleReward.RequestReward(id);
     }
 
-    public void AllColActiveState(bool active)
+    public void AllColActiveState(bool active) //모든 옵젝들 클리어 상태로
     {
         columns.ForEach(x => x.active = active);
 
@@ -85,7 +85,7 @@ public class ColumnAPuzzle : MonoBehaviour
         }
     }
 
-    public void AllMatChange(Material mat)
+    public void AllMatChange(Material mat) //모든 기둥들 메테리얼 변경
     {
         for(int i=0; i<columns.Count; i++)
         {

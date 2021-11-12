@@ -170,7 +170,7 @@ public class JoystickControl : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     #endregion
 
     #region Check
-    public void CheckJoystickState()
+    public void CheckJoystickState() //조이스틱들의 UI형태를 조금씩 변경. 플레이어 상태에 따라
     {
         //점프 버튼
         bool jumpCheck = player.isJumping;
@@ -182,7 +182,7 @@ public class JoystickControl : MonoBehaviour, IPointerDownHandler, IPointerUpHan
         attackBtn.GetComponent<CanvasGroup>().alpha = (player.isJumping || isTouch) ? 0.4f : 1;
     }
 
-    public void CheckRunBtnState(bool zero)
+    public void CheckRunBtnState(bool zero) 
     {
         if (zero) isRun = false;
 
@@ -191,7 +191,7 @@ public class JoystickControl : MonoBehaviour, IPointerDownHandler, IPointerUpHan
         runBtnCvg.interactable = !zero;
     }
 
-    public void CheckStamina(float curStamina, float maxStamina, float needStaminaMin)
+    public void CheckStamina(float curStamina, float maxStamina, float needStaminaMin) //스테미나 체크하고 조절하고 색과 애니메이션 적용
     {
         if (curStamina < maxStamina)
         {
@@ -229,7 +229,7 @@ public class JoystickControl : MonoBehaviour, IPointerDownHandler, IPointerUpHan
         }
     }
 
-    private void CheckSkillCool()
+    private void CheckSkillCool() //스킬 쿨탐에 따른 UI
     {
         if (player.skill.isUsedSkill)
         {

@@ -22,7 +22,7 @@ public class ObjPool<T> : IPool where T : MonoBehaviour
         }
     }
 
-    public T GetOrCreate()
+    public T GetOrCreate() //풀에서 옵젝 뱉고 뱉을게 없으면 생성해서 함
     {
         T t = queue.Peek();
         if (t.gameObject.activeSelf)

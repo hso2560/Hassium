@@ -38,7 +38,7 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         slotImage.raycastTarget = false;
     }
 
-    public void SetRaycastTarget()
+    public void SetRaycastTarget()  //버튼들의 레이캐스트 타겟을 꺼주거나 킨다
     {
         if(slotImage==null) slotImage = GetComponent<Image>();
         if (itemImg.gameObject.activeSelf)

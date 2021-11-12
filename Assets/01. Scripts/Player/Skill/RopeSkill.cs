@@ -188,9 +188,9 @@ public class RopeSkill : Skill
         SetAim(true);
     }
 
-    public override void Change() => GameManager.Instance.objActionHandle += ()=>SetAim(false);
+    public override void Change() => GameManager.Instance.objActionHandle += ()=>SetAim(false); 
 
-    private void SetAim(bool active)
+    private void SetAim(bool active) //에임 버튼 상태 결정
     {
         player.joystickCtrl.aimBtn.gameObject.SetActive(active);
 

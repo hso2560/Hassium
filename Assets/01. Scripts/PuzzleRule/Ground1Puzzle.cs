@@ -58,7 +58,7 @@ public class Ground1Puzzle : ObjData, IReward
         }
     }
 
-    private void CheckClear()
+    private void CheckClear() //타겟인덱스인지 확인하고 클리어 체크
     {
         for(int i=0; i< waypointList.Count; i++)
         {

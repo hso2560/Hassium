@@ -100,7 +100,7 @@ public class PlayerScript : MonoBehaviour, IDamageable, IAttackable   //ºÎ¸ð ½ºÅ
         InitData();
     }
 
-    private void InitData()
+    private void InitData() //Ã· ¼¼ÆÃ
     {
         gameObject.AddComponent<AudioListener>();
         skill = GetComponent<Skill>();
@@ -174,7 +174,7 @@ public class PlayerScript : MonoBehaviour, IDamageable, IAttackable   //ºÎ¸ð ½ºÅ
         RigidHandle();
     }
 
-    private void RigidHandle()
+    private void RigidHandle() //rigidbody Á¶ÀýÇØ¼­ ¿À¸£¸·±æ¿¡¼­ ¾È¹Ì²ø¾îÁö°Ô ÇÑ´Ù
     {
         rigid.angularVelocity = Vector3.zero;
 
@@ -190,7 +190,7 @@ public class PlayerScript : MonoBehaviour, IDamageable, IAttackable   //ºÎ¸ð ½ºÅ
         }
     }
 
-    private void Move()
+    private void Move() //¿òÁ÷ÀÓ
     {
         if (!isMovable || isDie) return;
 
@@ -200,7 +200,7 @@ public class PlayerScript : MonoBehaviour, IDamageable, IAttackable   //ºÎ¸ð ½ºÅ
             moveDir.z = joystickCtrl.isTouch ? (joystickCtrl.dirVec.y * (joystickCtrl.isRun ? runSpeed : speed)) : 0;
         }
 
-        if(joystickCtrl.PC_MoveDir!=Vector3.zero)
+        if(joystickCtrl.PC_MoveDir!=Vector3.zero) //Å×½ºÆ®¿ë ÇÇ½Ã ¸ðµå¸¦ À§ÇØ
         {
             moveDir.x = joystickCtrl.PC_MoveDir.x * (joystickCtrl.isRun ? runSpeed : speed);
             moveDir.z = joystickCtrl.PC_MoveDir.z * (joystickCtrl.isRun ? runSpeed : speed);
@@ -224,7 +224,7 @@ public class PlayerScript : MonoBehaviour, IDamageable, IAttackable   //ºÎ¸ð ½ºÅ
 
         StaminaCheck();
     }
-    private void Rotate()
+    private void Rotate() //È¸Àü
     {
         if ((!joystickCtrl.isTouch && joystickCtrl.PC_MoveDir==Vector3.zero) || isJumping || !isMovable || noControl) return;
 
@@ -261,7 +261,7 @@ public class PlayerScript : MonoBehaviour, IDamageable, IAttackable   //ºÎ¸ð ½ºÅ
         }
     }
 
-    public void Jump()
+    public void Jump() //Á¡ÇÁ
     {
         if(!isJumping && isMovable && !noControl)
         {
@@ -366,12 +366,12 @@ public class PlayerScript : MonoBehaviour, IDamageable, IAttackable   //ºÎ¸ð ½ºÅ
         }
     }
 
-    private void DelayHandling()
+    private void DelayHandling() //º¯¼ö ÃÊ±âÈ­ µô·¹ÀÌ ÁÖ±âÀ§ÇØ
     {
         jumpTry = false;
     }
 
-    private void CheckHp()
+    private void CheckHp() //HP 0ÀÌ»ó ¸Æ½º ÀÌÇÏ·Î Á¶ÀýÇÏ°í UI¿¡ Ç¥½Ã
     {
         hp = Mathf.Clamp(hp, 0, maxHp);
         if (GameManager.Instance.PlayerSc == this)
@@ -381,7 +381,7 @@ public class PlayerScript : MonoBehaviour, IDamageable, IAttackable   //ºÎ¸ð ½ºÅ
         if (hp <= 0) Death();
     }
 
-    private void CheckAttack()
+    private void CheckAttack() //°ø°Ý»óÅÂÀÏ ¶§ ¿©·¯°¡Áö Ã¼Å©ÇØÁÜ. ÀÏÁ¤ ½Ã°£ÀÌ³»·Î ÇÑ ¹øµµ °ø°ÝÇÏ¸é µÎ¹øÂ° ¸ð¼Ç. °ø°Ý ÄÝ¶óÀÌ´õ ²¨ÁÖ±â µî
     {
         if (isAttacking)
         {
@@ -471,7 +471,7 @@ public class PlayerScript : MonoBehaviour, IDamageable, IAttackable   //ºÎ¸ð ½ºÅ
         }
     }
 
-    public void RecoveryHp(int value)
+    public void RecoveryHp(int value) //ÇÇ È¸º¹
     {
         hp += value;
         CheckHp();
@@ -565,7 +565,7 @@ public class PlayerScript : MonoBehaviour, IDamageable, IAttackable   //ºÎ¸ð ½ºÅ
         GameManager.Instance.savedData.userInfo.currentChar = gameChar;
     }
 
-    public void GetExp(int exp)
+    public void GetExp(int exp) //°âÄ¡ È¹µæ
     {
         this.exp += exp;
 

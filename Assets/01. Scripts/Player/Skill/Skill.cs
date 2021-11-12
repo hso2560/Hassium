@@ -23,8 +23,8 @@ public abstract class Skill : MonoBehaviour
     public GameObject trailEffect;
     //protected SkillManager skillManager;
 
-    public abstract void UseSkill();
-    public abstract void OffSkill();
+    public abstract void UseSkill(); //스킬 사용
+    public abstract void OffSkill(); //스킬 끔
     public abstract void SetData();
     public virtual void Init(bool isFirstSkill)
     {

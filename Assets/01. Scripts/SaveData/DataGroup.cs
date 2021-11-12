@@ -86,6 +86,7 @@ public class SpringObject
     public Transform connectedTr;
     public bool IsPressing;
 
+    public float interval;
     public float min_springMaxDist;
     public float max_springMaxDist;
 }

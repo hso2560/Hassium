@@ -9,22 +9,26 @@ public class Spring1 : MonoBehaviour
 
     private void Awake()
     {
-        rule = transform.parent.GetChild(0).GetComponent<Spring1Puzzle>();
+        //rule = transform.parent.GetChild(0).GetComponent<Spring1Puzzle>();
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(active && collision.transform.CompareTag("Player"))
+        int l = 1 << collision.gameObject.layer;
+        if(active && (l == 1<<6 || l == 1<<16))
         {
-            rule.OnPressInteraction(relevantId,true);
+            Debug.Log(1);
+            //rule.OnPressInteraction(relevantId,true);
         }
     }
 
     private void OnCollisionExit(Collision collision)
     {
-        if (active && collision.transform.CompareTag("Player"))
+        int l = 1 << collision.gameObject.layer;
+        if (active && (l == 1 << 6 || l == 1 << 16))
         {
-            rule.OnPressInteraction(relevantId,false);
+            Debug.Log(2);
+            //rule.OnPressInteraction(relevantId,false);
         }
     }
 }

@@ -128,7 +128,7 @@ public class Laser1Puzzle : ObjData, IReward
         return true;
     }
 
-    private void CheckLaser()
+    private void CheckLaser() //레이저들 상태에 맞게 이것저것 해줌
     {
         laserList.ForEach(x => x.RaycastCheck());
         laserList.FindAll(x => x.bShootingLaser).ForEach(y => y.CheckPair());

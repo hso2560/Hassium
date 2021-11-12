@@ -84,7 +84,7 @@ public class CameraMove : MonoBehaviour
     }
 
 
-    private void CamMove()  
+    private void CamMove() //모바일로 할 때 여기서 움직인다 
     {
         position = rotation * Offset + target.position;
         transform.position = position;
@@ -197,7 +197,7 @@ public class CameraMove : MonoBehaviour
         this.rotTarget = rotTarget;
     }
 
-    private void FrontObject()
+    private void FrontObject() //플레이어와 카메라 사이에 벽 있으면 앞으로 가줌
     {
         Vector3 dir = (target.position - transform.position).normalized;
         if (Physics.Raycast(transform.position-transform.forward*0.5f,dir , out hit, Vector3.Distance(transform.position, target.position),cullingObj))

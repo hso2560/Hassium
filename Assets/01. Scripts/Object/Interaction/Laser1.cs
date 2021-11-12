@@ -44,7 +44,7 @@ public class Laser1 : ObjData
         rule.Rotate(relevantLasers, relevantRotateY);
     }
 
-    public void RaycastCheck()
+    public void RaycastCheck()  //옵젝 돌리고 나서 앞에 적절한 같은 오브젝트가 있는지 체크
     {
         IsComplete = false;
         if(Physics.Raycast(laserPoint.position, -transform.right, out RaycastHit hit, rule.laserDist))
@@ -57,7 +57,7 @@ public class Laser1 : ObjData
         }
     }
 
-    public void CheckPair()
+    public void CheckPair() //모든 레이저들이 쌍을 잘 이루었나 확인해준다
     {
         if(IsComplete && pair.IsComplete)
         {

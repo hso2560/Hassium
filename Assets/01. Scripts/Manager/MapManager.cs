@@ -175,7 +175,7 @@ public class MapManager : MonoSingleton<MapManager>, ISceneDataLoad
         enemys.FindAll(x => x.NeedReset()).ForEach(a => a.ResetData());
     }*/
 
-    private IEnumerator MeteorCo()  //유성 떨어짐
+    private IEnumerator MeteorCo()  //유성 떨어짐 (있거나 없거나임. 어차피 보기 힘듦)
     {
         while (true)
         {

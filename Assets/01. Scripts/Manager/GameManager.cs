@@ -62,7 +62,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //원래는 
         Load();
     }
 
-    private void InitData()
+    private void InitData()  //초기 세팅
     {
         infoSaveObjs = sceneObjs.infoSaveObjs;
         CreatePool();
@@ -89,7 +89,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //원래는 
         ammWs = new WaitForSeconds(autoMoneyDelay);
     }
 
-    private void SetKeyAndFunc()  
+    private void SetKeyAndFunc()  //dictionary 세팅
     {
         keyToVoidFunction.Add(LoadingType.RESPAWN, () => {
             if (player.IsDamageableByFall)
@@ -555,7 +555,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //원래는 
         }
     }
 
-    public void SceneChange(string name)
+    public void SceneChange(string name) //씬 교체
     {
         Save();
         sceneObjs.AllReadyFalse();

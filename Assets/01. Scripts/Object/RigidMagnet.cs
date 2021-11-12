@@ -19,7 +19,7 @@ public class RigidMagnet : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
+    private void FixedUpdate() //자석효과
     {
         for(int i=0; i<caughtRigids.Count; i++)
         {
@@ -32,7 +32,7 @@ public class RigidMagnet : MonoBehaviour
         if(other.CompareTag("Magnet"))
         {
             Rigidbody r = other.GetComponent<Rigidbody>();
-            if (caughtRigids.Count<catchMaxCount && !caughtRigids.Contains(r) && !removedRigids.Contains(r))
+            if (caughtRigids.Count<catchMaxCount && !caughtRigids.Contains(r) && !removedRigids.Contains(r)) //일정 개수 이하로 붙었고 이미 붙은거 아니고 붙은거 끝난게 아닐 경우
             {
                 r.isKinematic = false;
                 caughtRigids.Add(r);
@@ -40,7 +40,7 @@ public class RigidMagnet : MonoBehaviour
         }
     }
 
-    public void RemoveCaughtObj()
+    public void RemoveCaughtObj() //자석에 붙은것들 없애줌
     {
         for (int i = 0; i < caughtRigids.Count; i++)
         {

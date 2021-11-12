@@ -64,7 +64,10 @@ public class Spring1Puzzle : MonoBehaviour, IReward
 
                 for(int j=0; j<springObjs.Count; ++j)
                 {
+                    SpringObject sp = springObjs[j];
 
+                    float m_dist = sp.spring.maxDistance + (sp.IsPressing ? -sp.interval : sp.interval);
+                    sp.spring.maxDistance = Mathf.Clamp(m_dist, sp.min_springMaxDist, sp.max_springMaxDist);
                 }
             }
         }

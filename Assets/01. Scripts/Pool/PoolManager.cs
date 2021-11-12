@@ -6,7 +6,7 @@ public class PoolManager
 {
     private static Dictionary<string, IPool> poolDic = new Dictionary<string, IPool>();
 
-    public static void CreatePool<T>(GameObject prefab, Transform parent, int count) where T : MonoBehaviour
+    public static void CreatePool<T>(GameObject prefab, Transform parent, int count) where T : MonoBehaviour //풀 생성
     {
         Type t = typeof(T);
 
@@ -17,14 +17,14 @@ public class PoolManager
         }
     }
 
-    public static T GetItem<T>() where T : MonoBehaviour
+    public static T GetItem<T>() where T : MonoBehaviour //풀에서 받아옴
     {
         Type t = typeof(T);
         ObjPool<T> pool = (ObjPool<T>)poolDic[t.ToString()];
         return pool.GetOrCreate();
     }
 
-    public static void ClearItem<T>() where T : MonoBehaviour
+    public static void ClearItem<T>() where T : MonoBehaviour //풀 삭제
     {
         Type t = typeof(T);
         //ObjPool<T> p = (ObjPool<T>)poolDic[t.ToString()];
@@ -33,7 +33,7 @@ public class PoolManager
            poolDic.Remove(t.ToString());
     }
 
-    public static void ClearAllItem()
+    public static void ClearAllItem() //풀 전부 삭제
     {
         poolDic.Clear();
     }

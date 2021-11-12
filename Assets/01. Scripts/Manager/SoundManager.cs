@@ -60,7 +60,7 @@ public class SoundManager : MonoSingleton<SoundManager>, ISceneDataLoad
         bgmCo = StartCoroutine(GradualBGMCo());
     }
 
-    private IEnumerator GradualBGMCo()  
+    private IEnumerator GradualBGMCo()  //배경음과 라이트의 세기를 점진적으로 키우거나 줄인다
     {
         _audio.Play();
 

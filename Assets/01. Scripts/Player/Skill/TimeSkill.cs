@@ -52,7 +52,7 @@ public class TimeSkill : Skill
         }
     }
 
-    private void Record()
+    private void Record() //기록
     {
         prevInfos.Add(new PrevInfo(transform.position,player.playerModel.rotation,transform.rotation,player.hp,player.stamina));
 
@@ -62,7 +62,7 @@ public class TimeSkill : Skill
         }
     }
 
-    private void Rewind()
+    private void Rewind() //되돌림
     {
         if(prevInfos.Count>0)
         {

@@ -65,12 +65,12 @@ public class ColumnA : ObjData
         rule.Move();
     }
 
-    public void ResetMove()
+    public void ResetMove() //첨 위치로
     {
         transform.DOScaleY(startY, rule.moveTime);
     }
 
-    public void Save()
+    public void Save() //저장
     {
         base.Interaction();
         GameManager.Instance.savedData.saveObjDatas.Add(new SaveObjData(rule.objIndex[0], SaveObjInfoType.TRANSFORM, transform.position, transform.rotation, transform.localScale));

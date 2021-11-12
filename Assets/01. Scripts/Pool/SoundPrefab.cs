@@ -20,7 +20,7 @@ public class SoundPrefab : MonoBehaviour
 
     private void OnEnable() => soundStart = false;
 
-    private void Update()
+    private void Update() //사운드가 꺼지면 자동으로 옵젝도 비활
     {
         if(!_audio.isPlaying && soundStart)
         {

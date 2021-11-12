@@ -13,7 +13,7 @@ public class Tree : MonoBehaviour, IDamageable
         AddWork();
     }
 
-    public virtual void AddWork()
+    public virtual void AddWork() //데미지 받고 나서 추가작업 필요하면 이걸로
     {
 
     }

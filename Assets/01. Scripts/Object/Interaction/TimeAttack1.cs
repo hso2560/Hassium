@@ -94,7 +94,7 @@ public class TimeAttack1 : ObjData, IReward
         Inventory.Instance.acquisitionEvent += ItemAcquisition;
     }
 
-    void ItemAcquisition(int id)
+    void ItemAcquisition(int id) //æ∆¿Ã≈€ »πµÊΩ√ «‘ºˆ
     {
         
         if(id==itemID)

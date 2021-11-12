@@ -19,12 +19,12 @@ public class PuzzleReward : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public static void RequestReward(int id, bool running=true)
+    public static void RequestReward(int id, bool running=true) //다른 곳에선 이걸로 코루틴 호출
     {
         instance.StartCoroutine(instance.RewardCo(id,running));
     }
 
-    public IEnumerator RewardCo(int id, bool running)
+    public IEnumerator RewardCo(int id, bool running) //뭔가 딜레이 필요할 수도 있으니 코루틴으로 함
     {
         yield return null;
         switch (id)
@@ -64,7 +64,7 @@ public class PuzzleReward : MonoBehaviour
         }
     }
 
-    public void RewardChest(int index)
+    public void RewardChest(int index) //상자 꺼내짐. 있으면 메시지
     {
         if (objects[index].activeSelf)
         {

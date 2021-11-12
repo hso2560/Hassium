@@ -11,7 +11,7 @@ public class KinematicObj : MonoBehaviour
         rigid.isKinematic = false;
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnCollisionEnter(Collision collision) //땅에 닿으면 옵젝이 못움직이게 막음
     {
         if(collision.transform.CompareTag("Ground"))
         {

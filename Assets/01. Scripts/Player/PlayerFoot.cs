@@ -9,7 +9,7 @@ public class PlayerFoot : MonoBehaviour
         pData = GameManager.Instance.PlayerSc.pData;
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other) //발소리 내게 함
     {
         if (Physics.Raycast(transform.position, Vector3.down, 0.5f, pData.whatIsGround))
         {

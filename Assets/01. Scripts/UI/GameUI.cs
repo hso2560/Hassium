@@ -29,7 +29,7 @@ public class GameUI : MonoBehaviour
         if (startAutoInactive) gameObject.SetActive(false);
     }
 
-    private void OnEnable()
+    private void OnEnable() //활성화 되면 애니 실행
     {
         UIQueue(true);
 
@@ -127,7 +127,7 @@ public class GameUI : MonoBehaviour
         }
     }
 
-    private void UIQueue(bool enqueue=false)
+    private void UIQueue(bool enqueue=false) 
     {
         if(useUIQueue)
            UIManager.Instance.UIQueue(enqueue);

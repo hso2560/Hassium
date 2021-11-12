@@ -46,7 +46,7 @@ public class CircleAPuzzle : ObjData, IReward  //원래는 퍼즐 룰 이것도 부모 스크
         });
     }
 
-    public void MoveSphere(int id,Transform tr, Vector3 dir)
+    public void MoveSphere(int id,Transform tr, Vector3 dir) //움직이게 함
     {
         if(IsMoving)
         {

@@ -170,7 +170,7 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //°Á ¸Þ´º ¾ÈÀ
         acquisitionEvent(item.id);
     }
 
-    public void GetItem(ItemData data)
+    public void GetItem(ItemData data) //ÅÛ È¹µæ. ´Ù¸¥ Å¸ÀÔÀÇ ¸Å°³º¯¼ö·Î ¹ÞÀ½ (ÇÔ¼ö ¿À¹ö·Îµù)
     {
         if (!idToItem.ContainsKey(data.id))  
         {
@@ -271,7 +271,7 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //°Á ¸Þ´º ¾ÈÀ
         itemSlots.ForEach(x => x.SetRaycastTarget());
     }
 
-    public void SortItemList() //¾ÆÀÌÅÛ Á¤·Ä
+    public void SortItemList() //¾ÆÀÌÅÛ Á¤·Ä. °×¼Ó¿¡ ÀÌ ±â´ÉÀº ¾È³Ö¾úÀ½
     {
         itemSlots.FindAll(x => x.itemCountText.gameObject.activeSelf).ForEach(y => y.ResetData());
 
@@ -285,7 +285,7 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //°Á ¸Þ´º ¾ÈÀ
         ClickSetting(false);
     }
 
-    private int ItemSort1(ItemData x, ItemData y)
+    private int ItemSort1(ItemData x, ItemData y) //Á¤·Ä ¹æ½Ä
     {
         int a = ((int)x.itemType).CompareTo((int)y.itemType);
 
@@ -494,14 +494,14 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //°Á ¸Þ´º ¾ÈÀ
 
     #region º¸¹°Ã¢
 
-    public void AddTreasure(ChestData data)
+    public void AddTreasure(ChestData data) //³» Á¤º¸¿¡ º¸¹° Á¤º¸ Ãß°¡
     {
         GameObject o = Instantiate(treasureUIPrefab, treasureUIParent);
         o.transform.GetChild(1).GetComponent<Text>().text = data.name;
         o.transform.GetChild(2).GetComponent<Text>().text = data.date;
     }
 
-    public void LoadTreasure()
+    public void LoadTreasure() //ÀúÀåµÈ º¸¹° Á¤º¸µé ºÒ·¯¿È
     {
         List<ChestData> list = GameManager.Instance.savedData.userInfo.myChestList;
         for(int i=0; i < list.Count; ++i)
