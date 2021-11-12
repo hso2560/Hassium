@@ -92,6 +92,21 @@ public class SpringObject
     public float max_springMaxDist;
 }
 
+[Serializable]
+public class TutoArrowUI
+{
+    public int index;
+    public float rotationZ;
+    public Vector3 rectArrowPos;
+
+    public TutoArrowUI(int index, float rotationZ, Vector3 pos)
+    {
+        this.index = index;
+        this.rotationZ = rotationZ;
+        this.rectArrowPos = pos;
+    }
+}
+
 /*[Serializable]
 public class EnemyMapData
 {

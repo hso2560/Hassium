@@ -39,6 +39,8 @@ public class SceneObjects : MonoBehaviour  //해당 씬마다 필요한 오브젝트들을 모�
     public CameraMove camMove;
     public SceneSaveObjects infoSaveObjs;
 
+    public TutorialUI tutoUI;
+
     [Header("Screen Resolution")]
     public int scrWidth = 1920, scrHeight = 1080;
 
@@ -46,6 +48,7 @@ public class SceneObjects : MonoBehaviour  //해당 씬마다 필요한 오브젝트들을 모�
     {
         Screen.SetResolution(scrWidth, scrHeight, true);  //안하면 해상도 깨짐
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
+        //Application.runInBackground = true;
 
         GameManager.Instance.ManagerDataLoad(gameObject);
         UIManager.Instance.ManagerDataLoad(gameObject);

@@ -51,6 +51,8 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //원래는 
     private WaitForSeconds ammWs;
     private readonly long autoMoney = 2;
 
+    private short onTutoPanel;
+
     [SerializeField] private short testFastMovement;
 
     public string GetFilePath(string fileName) => string.Concat(Application.persistentDataPath, "/", fileName);
@@ -87,6 +89,27 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //원래는 
         camMove.ySpeed += sens;*/
 
         ammWs = new WaitForSeconds(autoMoneyDelay);
+
+        if(onTutoPanel == 1)
+        {
+            sceneObjs.tutoUI.gameObject.SetActive(true);
+            sceneObjs.tutoUI.SetData(new List<string>() {
+                "캐릭터를 조작할 수 있습니다.",
+                "누르고 있으면 달리기 상태가 됩니다.",
+                "점프를 합니다.",
+                "공격을 합니다.",
+                "스킬을 사용합니다.",
+                "설정에서 인벤토리 확인, 캐릭터 정보 확인, 획득한 보물 정보 확인, 옵션 기능 등을 사용할 수 있습니다."
+            },
+            new List<TutoArrowUI>(){
+                new TutoArrowUI(0,0,new Vector2(-716f,10f)),
+                new TutoArrowUI(1,90f,new Vector2(383f,-357f)),
+                new TutoArrowUI(2,90f,new Vector2(580.71f,-357f)),
+                new TutoArrowUI(3,0f,new Vector2(483.78f,30f)),
+                new TutoArrowUI(4,0f,new Vector2(670.95f,30f)),
+                new TutoArrowUI(5,-90,new Vector2(-619.29f, 449f))
+            },true);
+        }
     }
 
     private void SetKeyAndFunc()  //dictionary 세팅
@@ -126,7 +149,15 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //원래는 
 
     private void SetEvent_Point()  //어떤 포인트에 닿으면 어떤 이벤트를 실행시킬지 정함
     {
-        eventPointAction[0] = () => { };
+        eventPointAction[0] = () => {
+            sceneObjs.tutoUI.gameObject.SetActive(true);
+            sceneObjs.tutoUI.SetData(new List<string>() {
+                "상호작용 가능한 오브젝트 근처에 가면 상호작용 버튼이 생기고 버튼을 누르면 상호작용을 할 수 있습니다.",
+            },
+            new List<TutoArrowUI>(){
+                new TutoArrowUI(0,-90,new Vector2(262.1f,127.9f))
+            });
+        };
     }
 
     private void Start()
@@ -214,6 +245,8 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //원래는 
 
             saveData.userInfo.startDate = DateTime.Now.ToString();
             saveData.userInfo.isFirstStart = false;
+
+            onTutoPanel = 1;
         }
         else
         {
