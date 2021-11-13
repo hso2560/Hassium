@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System;
 using DG.Tweening;
 using System.Net.Http;
@@ -11,9 +12,14 @@ using System.IO;
 public class StartScript : MonoBehaviour
 {
     public Material[] skyMaterials;
+    public GameObject rain, snow;
     public Light _light;
     public Camera mainCam;
+    public Color[] lightColors;
+    public GameObject touchTrailEffect;
+    public ParticleSystem touchParticle;
 
+    #region 시간, 날씨 관련
     public int maxIndex = 3;
 
     private readonly string weatherInfoURL = "http://www.kma.go.kr/wid/queryDFSRSS.jsp?zone=4215061500";
@@ -24,9 +30,23 @@ public class StartScript : MonoBehaviour
     private List<float> temperatureAvaList = new List<float>();
     private string wtInfo = "NONE";
     private string currentTime;
+    #endregion
+
+    private WaitForSeconds ws1, ws2, ws3;
+
+    private float delayTime;
+
+    #region UI
+    public CanvasGroup loadingCvsg;
+    public RectTransform startBtnRect;
+    public Image quitImage;
+    public Image quitPanel;
+    private Text startText;
+    #endregion
 
     private async void Awake()
     {
+        Screen.SetResolution(1920, 1080, true);
         Init();
         ReflectCurrentTime();
         await ReflectCurrentWeather();
@@ -51,11 +71,21 @@ public class StartScript : MonoBehaviour
         weatherInfoDict.Add("흐리고 비/눈", 0);
         weatherInfoDict.Add("흐리고 눈/비", 0);
         weatherInfoDict.Add("흐리고 눈", 0);*/
+
+        startText = startBtnRect.GetChild(0).GetComponent<Text>();
+        ws1 = new WaitForSeconds(1);
+        ws2 = new WaitForSeconds(0.35f);
+        ws3 = new WaitForSeconds(0.17f);
+        mainCam.transform.DORotate(new Vector3(0, 0, -5), 5).SetEase(Ease.Linear).SetLoops(-1, LoopType.Yoyo);
+        StartCoroutine(LightEffectCo());
     }
 
     private void ReflectCurrentTime()  //폰 시간 기준 시간 가져온다
     {
         currentTime = DateTime.Now.ToString("HH");
+
+        int time = int.Parse(currentTime);
+        if (time > 18 || time < 5) RenderSettings.skybox = skyMaterials[0];
     }
 
     private async Task ReflectCurrentWeather()  //날씨와 온도를 가져온다
@@ -87,7 +117,7 @@ public class StartScript : MonoBehaviour
 
             foreach(XmlNode item in nodes)
             {
-                if(item.SelectSingleNode("day").InnerText=="1")  //day가 0인 것은 왜 온도가 -999냐고 ㅋㅋㅋㅋ (걍 오늘거는 안나오는 듯)
+                if(item.SelectSingleNode("day").InnerText=="1")  //day가 0인 것은 왜인지 온도가 -999임 (걍 오늘거는 안나오는 듯)
                 {
                     float tmpMin = float.Parse(item.SelectSingleNode("tmn").InnerText);
                     float tmpMax = float.Parse(item.SelectSingleNode("tmx").InnerText);
@@ -124,14 +154,115 @@ public class StartScript : MonoBehaviour
             avg /= temperatureAvaList.Count;
 
             wtInfo = string.Concat(best, "#", avg.ToString());
+
+            if (best.Contains("눈"))
+            {
+                snow.SetActive(true);
+            }
+            if (best.Contains("비"))
+            {
+                rain.SetActive(true);
+            }
         }
 
         File.WriteAllText(filePath,wtInfo + "$" + currentTime);
+
+        //시작 화면 나타남
+        //loadingCvsg.DOFade(0, 1);  --> 아래 코드를 이걸로 바꿔도 됨
+        DOTween.To(() => loadingCvsg.alpha, x => loadingCvsg.alpha = x, 0, 1).OnComplete(() => {
+            loadingCvsg.gameObject.SetActive(false);
+            startBtnRect.DOAnchorPos(new Vector2(-15.4f, -452.7f), 1.5f).SetEase(Ease.OutBack).OnComplete(() =>
+            {
+                startText.DOColor(Color.white, 0.4f).OnComplete(() =>
+                {
+                    Color c = startText.color;
+                    c.a = 0.25f;
+
+                    startText.DOColor(c, 2).SetEase(Ease.Linear).SetLoops(-1, LoopType.Yoyo);
+                    quitImage.DOFillAmount(1, 1);
+                });
+            });
+        });       
     }
 
     private void Update()
     {
-        
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            OnClickQuitBtn();
+        }
+    }
+
+    private void LateUpdate()
+    {
+        if(Input.GetMouseButtonDown(0))
+        {
+            Ray ray = mainCam.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hit, 100000))
+            {
+                touchParticle.transform.position = hit.point;
+                touchParticle.Play();
+                touchTrailEffect.SetActive(true);
+            }
+        }
+        if(Input.GetMouseButton(0))
+        {
+            Ray ray = mainCam.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hit, 100000))
+            {
+                touchTrailEffect.transform.position = hit.point;
+            }
+        }
+        if(Input.GetMouseButtonUp(0))
+        {
+            touchTrailEffect.SetActive(false);
+        }
+    }
+
+    public void OnClickQuitBtn()
+    {
+        quitPanel.gameObject.SetActive(!quitPanel.gameObject.activeSelf);
+    }
+
+    private void Quit()
+    {
+        Application.Quit(); 
+    }
+
+    private IEnumerator LightEffectCo() //타이틀 화면 빛 효과
+    {
+        while (true)
+        {
+            yield return new WaitForSecondsRealtime(UnityEngine.Random.Range(7f, 12f));
+
+            _light.cullingMask = 1<<0 | 1<<7;
+            yield return ws1;
+            for(int i=0; i<4; i++)
+            {
+                _light.cullingMask = 1 << 7;
+                yield return ws2;
+                _light.cullingMask = 1 << 0 | 1 << 7;
+                yield return ws2;
+            }
+
+            _light.cullingMask = -1;
+            yield return ws3;
+
+            Color c;
+            do
+            {
+                c = lightColors[UnityEngine.Random.Range(0, lightColors.Length)];
+            } while (c == _light.color);
+            _light.color = c;
+
+            _light.cullingMask = 1 << 0 | 1 << 7;
+            yield return ws2;
+            _light.cullingMask = 1 << 7;
+            yield return ws2;
+            _light.cullingMask = 1 << 0 | 1 << 7;
+            yield return ws3;
+            _light.cullingMask = 1 << 7;
+        }
     }
 }
 

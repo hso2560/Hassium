@@ -17,17 +17,21 @@ public class MovingObj : MonoBehaviour
     private void Start()
     {
         orgPos = transform.position;
+        Sequence seq = DOTween.Sequence();
 
         switch (id)
         {
             case 50:
-                //Vector3 orgPos = transform.position;
-                Sequence seq = DOTween.Sequence();
                 seq.AppendInterval(time[1]);
                 seq.Append(transform.DOMove(target, time[0]).SetEase(ease));
                 seq.AppendInterval(time[1]);
                 seq.Append(transform.DOMove(orgPos, time[0]).SetEase(ease));
                 seq.Play().SetLoops(-1,LoopType.Restart);
+                break;
+
+            case 100:
+                target = FunctionGroup.GetRandomDir() * Random.Range(3f, 7.7f) + orgPos;
+                transform.DOMove(target, Random.Range(4.7f, 8f)).SetEase(ease).SetLoops(-1, LoopType.Yoyo);
                 break;
         }
     }
@@ -38,6 +42,10 @@ public class MovingObj : MonoBehaviour
         {
             case 10:
                 transform.Rotate(Vector3.up * rotateSpeed * Time.deltaTime);
+                break;
+
+            case 150:
+                transform.Rotate(Vector3.up * rotateSpeed * Time.deltaTime, Space.World);
                 break;
         }
     }

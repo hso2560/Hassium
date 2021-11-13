@@ -62,9 +62,7 @@ MonoBehaviour:
   id: -50
   mapIdx: 0
   mapType: 0
-  mapCenter: {fileID: 0}
-  camMinPos: {x: 0, y: 0, z: 0}
-  camMaxPos: {x: 0, y: 0, z: 0}
+  eventId: 0
 --- !u!1 &695997573060008921
 GameObject:
   m_ObjectHideFlags: 0
@@ -76,7 +74,6 @@ GameObject:
   - component: {fileID: 695997573060008917}
   - component: {fileID: 695997573060008922}
   - component: {fileID: 695997573060008923}
-  - component: {fileID: 695997573060008920}
   m_Layer: 0
   m_Name: QuadMark
   m_TagString: Untagged
@@ -147,20 +144,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &695997573060008920
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 695997573060008921}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &6474120992502443286
 GameObject:
   m_ObjectHideFlags: 0

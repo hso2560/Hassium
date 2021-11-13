@@ -96,8 +96,8 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //원래는 
             sceneObjs.tutoUI.SetData(new List<string>() {
                 "캐릭터를 조작할 수 있습니다.",
                 "누르고 있으면 달리기 상태가 됩니다.",
-                "점프를 합니다.",
-                "공격을 합니다.",
+                "점프를 합니다. 달리기를 하는 상태에서 점프를 하면 스테미나가 소모됩니다.",
+                "공격을 합니다. 멈춘 상태에서 공격할 수 있습니다.",
                 "스킬을 사용합니다.",
                 "설정에서 인벤토리 확인, 캐릭터 정보 확인, 획득한 보물 정보 확인, 옵션 기능 등을 사용할 수 있습니다."
             },
@@ -157,6 +157,25 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //원래는 
             new List<TutoArrowUI>(){
                 new TutoArrowUI(0,-90,new Vector2(262.1f,127.9f))
             });
+        };
+
+        eventPointAction[5] = () =>
+        {
+            sceneObjs.tutoUI.gameObject.SetActive(true);
+            sceneObjs.tutoUI.SetData(new List<string>() {
+                "맵을 돌아다니다보면 퍼즐 요소들을 발견할 수 있고 그것들을 클리어하면 보물상자가 나올 수 있습니다.",
+                "보물상자를 열면 경험치, 골드, 아이템 등을 획득할 수 있으며 열쇠는 문을 여는데 중요한 아이템입니다."
+            },
+            new List<TutoArrowUI>());
+        };
+
+        eventPointAction[10] = () =>
+        {
+            sceneObjs.tutoUI.gameObject.SetActive(true);
+            sceneObjs.tutoUI.SetData(new List<string>() {
+                "맵의 중앙에는 탑이 있으며 열쇠를 이용해서 탑을 오를 수 있습니다.",
+            },
+            new List<TutoArrowUI>());
         };
     }
 
