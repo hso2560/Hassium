@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Xml;
 using System.IO;
+using UnityEngine.SceneManagement;
 
 public class StartScript : MonoBehaviour
 {
@@ -33,8 +34,6 @@ public class StartScript : MonoBehaviour
     #endregion
 
     private WaitForSeconds ws1, ws2, ws3;
-
-    private float delayTime;
 
     #region UI
     public CanvasGroup loadingCvsg;
@@ -75,7 +74,7 @@ public class StartScript : MonoBehaviour
         startText = startBtnRect.GetChild(0).GetComponent<Text>();
         ws1 = new WaitForSeconds(1);
         ws2 = new WaitForSeconds(0.35f);
-        ws3 = new WaitForSeconds(0.17f);
+        ws3 = new WaitForSeconds(0.1f);
         mainCam.transform.DORotate(new Vector3(0, 0, -5), 5).SetEase(Ease.Linear).SetLoops(-1, LoopType.Yoyo);
         StartCoroutine(LightEffectCo());
     }
@@ -85,7 +84,15 @@ public class StartScript : MonoBehaviour
         currentTime = DateTime.Now.ToString("HH");
 
         int time = int.Parse(currentTime);
-        if (time > 18 || time < 5) RenderSettings.skybox = skyMaterials[0];
+
+        if (!File.Exists(string.Concat(Application.persistentDataPath, "/", "ten")))
+        {
+            if (time > 18 || time < 5) RenderSettings.skybox = skyMaterials[0];
+        }
+        else
+        {
+            RenderSettings.skybox = skyMaterials[2];
+        }
     }
 
     private async Task ReflectCurrentWeather()  //날씨와 온도를 가져온다
@@ -168,7 +175,6 @@ public class StartScript : MonoBehaviour
         File.WriteAllText(filePath,wtInfo + "$" + currentTime);
 
         //시작 화면 나타남
-        //loadingCvsg.DOFade(0, 1);  --> 아래 코드를 이걸로 바꿔도 됨
         DOTween.To(() => loadingCvsg.alpha, x => loadingCvsg.alpha = x, 0, 1).OnComplete(() => {
             loadingCvsg.gameObject.SetActive(false);
             startBtnRect.DOAnchorPos(new Vector2(-15.4f, -452.7f), 1.5f).SetEase(Ease.OutBack).OnComplete(() =>
@@ -219,15 +225,18 @@ public class StartScript : MonoBehaviour
         }
     }
 
+    public void OnClickStart()
+    {
+        loadingCvsg.gameObject.SetActive(true);
+        loadingCvsg.DOFade(1, 1).OnComplete(() => SceneManager.LoadScene("Main"));
+    }
+
     public void OnClickQuitBtn()
     {
         quitPanel.gameObject.SetActive(!quitPanel.gameObject.activeSelf);
     }
 
-    private void Quit()
-    {
-        Application.Quit(); 
-    }
+    public void Quit() => Application.Quit();
 
     private IEnumerator LightEffectCo() //타이틀 화면 빛 효과
     {
@@ -237,16 +246,16 @@ public class StartScript : MonoBehaviour
 
             _light.cullingMask = 1<<0 | 1<<7;
             yield return ws1;
-            for(int i=0; i<4; i++)
+            for(int i=0; i<3; i++)
             {
                 _light.cullingMask = 1 << 7;
-                yield return ws2;
+                yield return ws3;
                 _light.cullingMask = 1 << 0 | 1 << 7;
-                yield return ws2;
+                yield return ws3;
             }
 
-            _light.cullingMask = -1;
-            yield return ws3;
+            _light.cullingMask = ~-1;
+            yield return ws2;
 
             Color c;
             do
@@ -255,12 +264,12 @@ public class StartScript : MonoBehaviour
             } while (c == _light.color);
             _light.color = c;
 
-            _light.cullingMask = 1 << 0 | 1 << 7;
+            /*_light.cullingMask = 1 << 0 | 1 << 7;
             yield return ws2;
             _light.cullingMask = 1 << 7;
             yield return ws2;
             _light.cullingMask = 1 << 0 | 1 << 7;
-            yield return ws3;
+            yield return ws3;*/
             _light.cullingMask = 1 << 7;
         }
     }

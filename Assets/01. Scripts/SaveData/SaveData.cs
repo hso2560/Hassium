@@ -18,7 +18,7 @@ public class Option
 {
     public float masterSoundSize=0.7f;
     public float soundEffectSize=0.7f;
-    public float bgmSize = 0.3f;      //mixer 사용,   -40 ~ 10
+    public float bgmSize = 0.3f;      //mixer 사용,   0 ~ 10  //0일 때는 audiomixer 크기를 -40으로 해준다
     public float distFromCam = -4;  //캐릭터와 카메라 사이의 거리
     public int cameraSensitivity = 30; //회전 감도   1~99
 }

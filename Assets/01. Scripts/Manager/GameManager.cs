@@ -176,6 +176,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //원래는 
                 "맵의 중앙에는 탑이 있으며 열쇠를 이용해서 탑을 오를 수 있습니다.",
             },
             new List<TutoArrowUI>());
+            GameManager.Instance.player.RecoveryHp(999);
         };
     }
 
@@ -184,6 +185,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //원래는 
         if(saveData.userInfo.mapIndex<40) //아직 튜토맵이라면
         {
             MapManager.Instance.ResetWeather();
+            sceneObjs.gameBtns[2].image.sprite = sceneObjs.gameSprites[1];
         }
         /*if(saveData.userInfo.camMinRange!=Vector3.zero)
         {

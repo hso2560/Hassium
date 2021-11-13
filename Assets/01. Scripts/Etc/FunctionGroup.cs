@@ -55,6 +55,11 @@ public class FunctionGroup
         center.rotation = Quaternion.LookRotation(lookPos);
     }
 
+    /*public static Color GetAlphaColor(Color currentColor, float targetAlpha) //색의 투명도만 바꿀 때 씀
+    {
+        currentColor.a = targetAlpha;
+        return currentColor;
+    }*/
 
     #region 따로 스크립트 붙이기 애매한 풀링 필요한 옵젝들은 일단 이렇게 처리함
     public static List<GameObject> CreatePoolList(GameObject prefab, Transform parent, int count) //풀 생성

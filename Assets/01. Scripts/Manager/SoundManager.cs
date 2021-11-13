@@ -96,7 +96,9 @@ public class SoundManager : MonoSingleton<SoundManager>, ISceneDataLoad
 
     public void OnChangeMasterSound(UnityEngine.UI.Slider slider)  //Master 사운드 크기 조절
     {
-        _audioMixer.SetFloat("master", slider.value);
+        float value = slider.value;
+        if (value == 0f) value = -40;
+        _audioMixer.SetFloat("master", value);
     }
 
     public void ManagerDataLoad(GameObject sceneObjs)

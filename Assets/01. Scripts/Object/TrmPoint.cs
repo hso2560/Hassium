@@ -68,6 +68,7 @@ public class TrmPoint : MonoBehaviour
                         //gameManager.camMove.camMaxPos = camMaxPos;
                         GameManager.Instance.keyToVoidFunction[LoadingType.RESPAWN]();
                         MapManager.Instance.SetWeather();
+                        GameManager.Instance.sceneObjs.gameBtns[2].image.sprite = GameManager.Instance.sceneObjs.gameSprites[0];
                     };
                     UIManager.Instance.LoadingFade(false);
                 }

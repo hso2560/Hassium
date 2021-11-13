@@ -39,6 +39,8 @@ public class SceneObjects : MonoBehaviour  //해당 씬마다 필요한 오브젝트들을 모�
     public CameraMove camMove;
     public SceneSaveObjects infoSaveObjs;
 
+    public Sprite[] gameSprites;
+
     public TutorialUI tutoUI;
 
     [Header("Screen Resolution")]

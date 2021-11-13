@@ -37,6 +37,8 @@ public class MapManager : MonoSingleton<MapManager>, ISceneDataLoad
     [SerializeField] private bool isDevMode;
     [SerializeField] GameObject testMark;
 
+    private int curTime;
+
     private void Awake()
     {
         testMark.SetActive(isDevMode);
@@ -109,43 +111,56 @@ public class MapManager : MonoSingleton<MapManager>, ISceneDataLoad
         }
 
         //현재 시간 대입 (사용자 폰 기준) 어차피 상관없음
-        int curTime = int.Parse(strs[1]);
-        if(curTime>=5 && curTime<=15) //오전 5~오후 3
+        curTime = int.Parse(strs[1]);
+        ApplyRealTime(true);
+    }
+
+    public void ApplyRealTime(bool on)
+    {
+        if (on)
         {
-            colorGrading.postExposure.value = maxPostExposure * (curTime - 4) / 11f;  //5-1=4 , 15-5+1=11
-        }
-        else if(curTime >= 16 && curTime <= 23) //오후 4~11 
-        {
-            dayAndNight.isNight = true;
-            colorGrading.postExposure.value = minPostExposure * (curTime - 15) / 8f;
-            lightLens.brightness = 0.2f;
-            if (colorGrading.postExposure.value < -1f) ChangeSky(0);  //or 2
-        }
-        else  //오전 0~ 4
-        {
-            dayAndNight.isNight = true;
-            if (curTime == 24)
+            if (curTime >= 5 && curTime <= 15) //오전 5~오후 3
             {
-                colorGrading.postExposure.value = minPostExposure;
+                colorGrading.postExposure.value = maxPostExposure * (curTime - 4) / 11f;  //5-1=4 , 15-5+1=11
             }
-            else
+            else if (curTime >= 16 && curTime <= 23) //오후 4~11 
             {
-                colorGrading.postExposure.value = minPostExposure * (5-curTime) / 6f;  //보정값으로 분모에 1을 더함
+                dayAndNight.isNight = true;
+                colorGrading.postExposure.value = minPostExposure * (curTime - 15) / 8f;
+                lightLens.brightness = 0.2f;
+                if (colorGrading.postExposure.value < -1f) ChangeSky(0);  //or 2
             }
-            lightLens.brightness = 0.2f;
-            if (colorGrading.postExposure.value < -1f) ChangeSky(0); //or 2
+            else  //오전 0~ 4
+            {
+                dayAndNight.isNight = true;
+                if (curTime == 24)
+                {
+                    colorGrading.postExposure.value = minPostExposure;
+                }
+                else
+                {
+                    colorGrading.postExposure.value = minPostExposure * (5 - curTime) / 6f;  //보정값으로 분모에 1을 더함
+                }
+                lightLens.brightness = 0.2f;
+                if (colorGrading.postExposure.value < -1f) ChangeSky(0); //or 2
+            }
+        }
+        else
+        {
+            if(RenderSettings.skybox == dayAndNight.skyMaterials[0]) ChangeSky(3);
+
+            dayAndNight.isNight = false;
+            colorGrading.postExposure.value = 0.9f;
+            lightLens.brightness = 0.7f;
         }
     }
     
     public void ResetWeather() //날씨, 시간 상태 초기화
     {
-        dayAndNight.isNight = false;
-        colorGrading.postExposure.value = 0;
+        ApplyRealTime(false);
         colorGrading.temperature.value = 0;
-        ChangeSky(3);
         rain.SetActive(false);
         snow.SetActive(false);
-        lightLens.brightness = 0.7f;
         StartCoroutine(GameManager.Instance.FuncHandlerCo(1.5f,null,null,()=> 
         {
             if (!rainLocation.activeSelf) SoundManager.Instance.PlayBGM(BGMSound.NULL);

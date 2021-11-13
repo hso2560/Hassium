@@ -59,6 +59,8 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
     private GameManager gm;
     [HideInInspector] public bool bResultTxt = false;
 
+    private bool isOnRealTime = true;
+
     public bool GetReadyState { get { return isReady; } set { isReady = value; } }
 
     private void Awake()
@@ -409,6 +411,19 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
         });
 
         npcTalkImgs = FunctionGroup.CreatePoolList(sceneObjs.prefabs[4], sceneObjs.trms[0], 6);
+
+        sceneObjs.gameBtns[2].onClick.AddListener(() =>
+        {
+            if (gm.savedData.userInfo.mapIndex < 40)
+            {
+                PoolManager.GetItem<SystemTxt>().OnText("해당 맵에서는 실제 시간 반영을 할 수 없습니다.");
+                return;
+            }
+
+            isOnRealTime = !isOnRealTime;
+            sceneObjs.gameBtns[2].image.sprite = sceneObjs.gameSprites[isOnRealTime?0:1];
+            MapManager.Instance.ApplyRealTime(isOnRealTime);
+        });
     }
 
     private void Start()
