@@ -138,6 +138,16 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //원래는 
                     player.RecoveryHp(player.pData.defaultRespawnHp);
                     player.transform.parent.gameObject.SetActive(false);
                     keyToVoidFunction[LoadingType.RESPAWN]();
+                    foreach(GameCharacter gc in saveData.userInfo.characters)
+                    {
+                        if(gc.id!=player.Id)
+                        {
+                            gc.isDie = false;
+                            gc.hp = player.pData.defaultRespawnHp;
+                            idToMyPlayer[gc.id].isDie = false;
+                            idToMyPlayer[gc.id].hp = player.pData.defaultRespawnHp;
+                        }
+                    }
                     player.transform.parent.gameObject.SetActive(true);
                     //MapManager.Instance.ResetLivingEnemy();
                 };
@@ -173,10 +183,21 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //원래는 
         {
             sceneObjs.tutoUI.gameObject.SetActive(true);
             sceneObjs.tutoUI.SetData(new List<string>() {
+                "NPC를 죽이면 아이템이 드랍되지만 일이 더 어려워질 수도 있어서 죽이지 않는 것이 좋습니다.",
                 "맵의 중앙에는 탑이 있으며 열쇠를 이용해서 탑을 오를 수 있습니다.",
+                "옵션을 통해서 실제시간 적용을 하지않고 플레이할 수도 있습니다."
             },
             new List<TutoArrowUI>());
-            GameManager.Instance.player.RecoveryHp(999);
+            player.RecoveryHp(999);
+        };
+
+        eventPointAction[15] = () =>
+        {
+            sceneObjs.tutoUI.gameObject.SetActive(true);
+            sceneObjs.tutoUI.SetData(new List<string>() {
+                "캐릭터가 여러명이면 한 캐릭터가 사망시 사망하지않은 다른 캐릭터로 자동으로 전환되고 모든 캐릭터가 사망시 모든 캐릭터가 부활합니다."
+            },
+            new List<TutoArrowUI>());
         };
     }
 

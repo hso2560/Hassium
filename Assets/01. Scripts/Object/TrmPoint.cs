@@ -69,6 +69,7 @@ public class TrmPoint : MonoBehaviour
                         GameManager.Instance.keyToVoidFunction[LoadingType.RESPAWN]();
                         MapManager.Instance.SetWeather();
                         GameManager.Instance.sceneObjs.gameBtns[2].image.sprite = GameManager.Instance.sceneObjs.gameSprites[0];
+                        UIManager.Instance.isOnRealTime = true;
                     };
                     UIManager.Instance.LoadingFade(false);
                 }

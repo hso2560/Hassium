@@ -59,7 +59,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
     private GameManager gm;
     [HideInInspector] public bool bResultTxt = false;
 
-    private bool isOnRealTime = true;
+    [HideInInspector] public bool isOnRealTime = true;
 
     public bool GetReadyState { get { return isReady; } set { isReady = value; } }
 
@@ -447,6 +447,7 @@ public class UIManager : MonoSingleton<UIManager>, ISceneDataLoad
     public void SetData()
     {
         sceneObjs.gameTexts[0].text = gm.savedData.userInfo.money.ToString() + " °ñµå";  //µ· ÅØ½ºÆ® ¾÷µ¥ÀÌÆ®
+        if (gm.savedData.userInfo.mapIndex < 40) isOnRealTime = false;
     }
 
     private void Update()

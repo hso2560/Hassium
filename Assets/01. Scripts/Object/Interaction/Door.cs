@@ -35,6 +35,8 @@ public class Door : ObjData  //문 열릴 때 ScaleX값을 0.003으로 바꿔야하는데(저장
     public bool needKey = false;
     public int needKeyId;
 
+    [SerializeField] private bool isNoTime = false;
+
     private void Awake()
     {
         if(isDOT)  //다트윈으로 움직일 경우 초기 위치들을 저장해둔다
@@ -47,6 +49,8 @@ public class Door : ObjData  //문 열릴 때 ScaleX값을 0.003으로 바꿔야하는데(저장
                 firstPos[i] = obj[i].transform.position;
             }
         }
+
+        
     }
 
     private void Start()
@@ -62,6 +66,12 @@ public class Door : ObjData  //문 열릴 때 ScaleX값을 0.003으로 바꿔야하는데(저장
 
     public override void Interaction()
     {
+        if(isNoTime)
+        {
+            PoolManager.GetItem<SystemTxt>().OnText("아직은 열 수 없습니다.");
+            return;
+        }
+
         if (needKey)
         {
             if (!Inventory.Instance.ExistItem(needKeyId))

@@ -92,6 +92,8 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //°Á ¸Ş´º ¾ÈÀ
 
         itemUseAction.Add(250, () => gameManager.PlayerSc.RecoveryHp(1200));
         itemUseAction.Add(300, () => gameManager.PlayerSc.RecoveryHp(3000));
+
+        itemUseAction.Add(600, () => gameManager.PlayerSc.StatPoint += 5);
     }
 
     public void GetGold(int g, int min=0, int max=0) //min°úmax»çÀÌ·Î °ñµå È¹µæÇÏ°Å³ª ÀÏÁ¤ °ñµå È¹µæ

@@ -38,6 +38,12 @@ public class TalkManager : MonoSingleton<TalkManager>, ISceneDataLoad
             GameManager.Instance.SaveObjActiveInfo(28, false);
             GameManager.Instance.infoSaveObjs.objs[28].SetActive(false);
         });
+        talkEndAction.Add("23,0", () =>
+        {
+            GameManager.Instance.AddCharacter("DefaultPlayer3");
+            GameManager.Instance.SaveObjActiveInfo(44, false);
+            GameManager.Instance.infoSaveObjs.objs[44].SetActive(false);
+        });
     }
 
     public void CvsgFade(CanvasGroup cg, int target, float time)  //UIÃ³¸®

@@ -4148,8 +4148,8 @@ LineRenderer:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0.008575439
-        value: 0.13402094
+        time: 0
+        value: 0.31644738
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -7820,7 +7820,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4736
   ropeStartPoint: {fileID: 1475087997036052629}
-  maxDist: 31
+  maxDist: 65
   spring: 6.5
   damper: 7
   massScale: 4.5
@@ -7828,7 +7828,7 @@ MonoBehaviour:
   maxMoveSpeed: 8
   acceleration: 2.5
   gravity: 0.01
-  dist: 1.5
+  dist: 2
 --- !u!1 &2487118331048796514
 GameObject:
   m_ObjectHideFlags: 0
