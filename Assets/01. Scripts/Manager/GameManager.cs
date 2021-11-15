@@ -580,14 +580,14 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //원래는 
         {
             ChangeCharacter(10);
         }*/
-        if (Input.GetKeyDown(KeyCode.Alpha4))  //Test Code
+        /*if (Input.GetKeyDown(KeyCode.Alpha4))  //Test Code
         {
             AddCharacter("DefaultPlayer2");
         }
         else if (Input.GetKeyDown(KeyCode.Alpha5))  //Test Code
         {
             AddCharacter("DefaultPlayer3");
-        }
+        }*/
         /*else if (Input.GetKeyDown(KeyCode.Alpha3))  //Test Code
         {
             ChangeCharacter(30);
@@ -604,7 +604,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //원래는 
             //camMove.camMinPos = new Vector3(-1607, -300, -332);
             //camMove.camMaxPos = new Vector3(-610, 300, 664);
         }*/
-        else if (Input.GetKeyDown(KeyCode.M))
+        if (Input.GetKeyDown(KeyCode.M))
         {
             player.transform.position = MapManager.Instance.mapCenterDict[testFastMovement].position;
         }

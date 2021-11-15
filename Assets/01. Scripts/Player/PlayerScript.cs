@@ -421,7 +421,7 @@ public class PlayerScript : MonoBehaviour, IDamageable, IAttackable   //ºÎ¸ð ½ºÅ
         }
          //ani.SetInteger(hitInt, Random.Range(1, 3));
 
-        Debug.Log(damage);
+        //Debug.Log(damage);
     }
 
     public void Attack()
