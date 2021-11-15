@@ -12,7 +12,8 @@ public enum SoundEffectType
     MENUCLICK,
     INTERACTION,
     SYSTEMINFOMSG,
-    MOVEDOOR
+    MOVEDOOR,
+    ELECTROATK
 }
 
 public enum BGMSound

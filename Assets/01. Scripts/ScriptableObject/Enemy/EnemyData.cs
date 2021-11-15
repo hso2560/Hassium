@@ -9,6 +9,7 @@ public class EnemyData : ScriptableObject
     public string enemyName;
 
     public int maxHp;
+    public bool isAoE = false;  //광역기 쓰는가
 
     public float speed;  //평소 이동 속도
     public float traceSpeed;  //추격 속도

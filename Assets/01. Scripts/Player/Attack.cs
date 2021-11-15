@@ -25,6 +25,7 @@ public class Attack : MonoBehaviour
             {
                 o = enemy.gameObject;
                 damage = enemy.Str;
+                if (enemy.enemyData.isAoE && enemy.usedSkill) damage *= 2; 
             }
 
             if (o != other.gameObject)

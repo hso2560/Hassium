@@ -18,8 +18,9 @@ MonoBehaviour:
     m_Bits: 64
   enemyName: "\uAC81\uBA39\uC740 \uBCD1\uC0AC"
   maxHp: 800
+  isAoE: 0
   speed: 3
-  traceSpeed: 8.5
+  traceSpeed: 8
   patrolRange: 0
   traceRange: 6.3
   attackRange: 0

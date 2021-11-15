@@ -125,12 +125,12 @@ public class JoystickControl : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     public void OnPointerDownRunBtn()
     {
         isRun = !player.isStamina0;
-        player.runTrail.SetActive(true);
+        //player.runTrail.SetActive(true);
     }
     public void OnPointerUpRunBtn()
     {
         isRun = false;
-        player.runTrail.SetActive(false);
+        //player.runTrail.SetActive(false);
     }
 
     private void Jump()

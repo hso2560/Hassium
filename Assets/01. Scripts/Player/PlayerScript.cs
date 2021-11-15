@@ -408,18 +408,20 @@ public class PlayerScript : MonoBehaviour, IDamageable, IAttackable   //ºÎ¸ð ½ºÅ
             hp -= FunctionGroup.GetDamageAmount(damage, def);
             EffectManager.Instance.OnHitEffect(center.position, hitNormal);
         }
-        //rigid.AddForce(hitNormal * force, ForceMode.VelocityChange);
-        //rigid.velocity = hitNormal * force;
+         //rigid.AddForce(hitNormal * force, ForceMode.VelocityChange);
+         //rigid.velocity = hitNormal * force;
         CheckHp();
 
         ani.SetTrigger("hit" + Random.Range(1, 3).ToString());
-        //StopCoroutine(IEhit);
+         //StopCoroutine(IEhit);
         if (IEhit == null)
         {
             IEhit = HitCo();
             StartCoroutine(IEhit);
         }
-        //ani.SetInteger(hitInt, Random.Range(1, 3));
+         //ani.SetInteger(hitInt, Random.Range(1, 3));
+
+        Debug.Log(damage);
     }
 
     public void Attack()

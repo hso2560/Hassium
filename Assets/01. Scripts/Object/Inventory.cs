@@ -86,14 +86,17 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //걍 메뉴 안�
         int u = 200;
         for (int i = 100; i <= 200; i += 50)
         {
-            itemUseAction.Add(i, () => gameManager.PlayerSc.RecoveryHp(u));
+            int temp = u;  //이거 안하면 아이디가 어떻든 u의 최종값으로 적용되니까 해야함
+            itemUseAction.Add(i, () => gameManager.PlayerSc.RecoveryHp(temp));
             u *= 2;
         }
 
         itemUseAction.Add(250, () => gameManager.PlayerSc.RecoveryHp(1200));
         itemUseAction.Add(300, () => gameManager.PlayerSc.RecoveryHp(3000));
 
+        itemUseAction.Add(590, () => gameManager.PlayerSc.StatPoint += 2);
         itemUseAction.Add(600, () => gameManager.PlayerSc.StatPoint += 5);
+        itemUseAction.Add(610, () => gameManager.PlayerSc.StatPoint += 8);
     }
 
     public void GetGold(int g, int min=0, int max=0) //min과max사이로 골드 획득하거나 일정 골드 획득

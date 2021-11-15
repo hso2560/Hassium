@@ -64,6 +64,12 @@ public class PuzzleReward : MonoBehaviour
             case 30:
                 RewardChest(8);
                 break;
+            case 32:
+
+                break;
+            case 34:
+                RewardChest(9);
+                break;
         }
     }
 

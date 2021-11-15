@@ -53,7 +53,15 @@ public class MapManager : MonoSingleton<MapManager>, ISceneDataLoad
 
     public void SetWeather() //현실 날씨 반영
     {
-        string wt = System.IO.File.ReadAllText(string.Concat(Application.persistentDataPath, "/", "wt01"));
+        string wt;
+        try
+        {
+            wt = System.IO.File.ReadAllText(string.Concat(Application.persistentDataPath, "/", "wt01"));
+        }
+        catch
+        {
+            wt = "NONE$" + System.DateTime.Now.ToString("HH");
+        }
         string[] strs = wt.Split('$');
 
         if (strs[0] != "NONE")  //제대로 날씨 정보 받았다면
@@ -111,7 +119,7 @@ public class MapManager : MonoSingleton<MapManager>, ISceneDataLoad
         }
 
         //현재 시간 대입 (사용자 폰 기준) 어차피 상관없음
-        curTime = int.Parse(strs[1]);
+        curTime = int.Parse(strs[1]); //System.DateTime.Now.ToString("HH"); 하면 더 정확한데 걍 저렇게 (스타트 씬 기준)
         ApplyRealTime(true);
     }
 

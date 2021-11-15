@@ -3,7 +3,7 @@ using DG.Tweening;
 
 public class Spring1 : MonoBehaviour
 {
-    private Spring1Puzzle rule;
+    [SerializeField] private Spring1Puzzle rule;
     [HideInInspector] public Light pressLight;
     private float startY; //라이트의 첨 위치의 y
 
@@ -13,7 +13,7 @@ public class Spring1 : MonoBehaviour
 
     private void Awake()
     {
-        rule = transform.parent.GetChild(0).GetComponent<Spring1Puzzle>();
+        if(rule==null) rule = transform.parent.GetChild(0).GetComponent<Spring1Puzzle>();
         pressLight = transform.GetChild(0).GetComponent<Light>();
         startY = pressLight.transform.localPosition.y;
     }

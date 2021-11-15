@@ -15,6 +15,9 @@ public class HumanEnemy : EnemyBase
     private float _atkRange;
     private float _movRange;
 
+    public Attack AoEAttack;
+    public ParticleSystem AoEEffect;
+
     protected override void Awake()
     {
         base.Awake();
@@ -138,6 +141,10 @@ public class HumanEnemy : EnemyBase
             if(Time.time>disableAtkTime && attack.gameObject.activeSelf)
             {
                 attack.gameObject.SetActive(false);
+                if(enemyData.isAoE)
+                {
+                    AoEAttack.gameObject.SetActive(false);
+                }
             }
         }
     }
@@ -150,8 +157,24 @@ public class HumanEnemy : EnemyBase
             base.SetSpeed(0);
             FunctionGroup.Look(target, transform);
             ani.SetTrigger(atkTrigger);
-            attack.gameObject.SetActive(true);
+            attack.gameObject.SetActive(!enemyData.isAoE);
             disableAtkTime = Time.time + existAtkTime;
+
+            if(enemyData.isAoE)
+            {
+                if (Random.Range(0, 100) < 33)
+                {
+                    usedSkill = true;
+                    AoEAttack.gameObject.SetActive(true);
+                    AoEEffect.Play();
+                    SoundManager.Instance.PlaySoundEffect(skillSound);
+                }
+                else
+                {
+                    usedSkill = false;
+                    attack.gameObject.SetActive(true);
+                }
+            }
         }
     }
 

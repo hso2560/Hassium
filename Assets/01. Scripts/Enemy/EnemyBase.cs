@@ -45,6 +45,8 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     protected float uiUpdateTime;
     //protected bool isStop, isPatrolling, isRunaway, isAttacking;
     //protected bool addHandler;
+    public bool usedSkill;
+    public SoundEffectType skillSound;
 
     protected virtual void Awake()
     {

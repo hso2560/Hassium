@@ -26,10 +26,10 @@ public class SceneSaveObjects : MonoBehaviour
         }
     }
 
-    /*public void QuitGame()
+    public void QuitGame()
     {
         //종료하기전에 뭐 해줄거 있으면 여기서 해주고 (겜매니저의 종료 이벤트 호출해주던가)
 
         Application.Quit();
-    }*/
+    }
 }
