@@ -14,7 +14,7 @@ public class SystemTxt : MonoBehaviour
         text = GetComponent<Text>();
     }
 
-    public void OnText(string msg,float time=3f ,int fontSize=50, Action EndAction=null)
+    public void OnText(string msg,float time=3f ,int fontSize=50, Action EndAction=null)  //화면 상단의 시스템 메시지
     {
         text.text = msg;
         text.fontSize = fontSize;

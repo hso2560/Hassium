@@ -5,7 +5,7 @@ public class PlayerScript : MonoBehaviour, IDamageable, IAttackable   //ºÎ¸ð ½ºÅ
 {
     public PSkillType skillType;
     public Rigidbody rigid;
-    [SerializeField] Animator ani;
+    public Animator ani;
     public Collider col;
     public Skill skill;
     public PlayerData pData;
@@ -244,6 +244,7 @@ public class PlayerScript : MonoBehaviour, IDamageable, IAttackable   //ºÎ¸ð ½ºÅ
                 joystickCtrl.CheckRunBtnState(true);
             }
         }
+        
     }
 
     private void StaminaRecovery()  //½ºÅ×¹Ì³ª È¸º¹
@@ -419,6 +420,8 @@ public class PlayerScript : MonoBehaviour, IDamageable, IAttackable   //ºÎ¸ð ½ºÅ
             IEhit = HitCo();
             StartCoroutine(IEhit);
         }
+
+        SoundManager.Instance.PlaySoundHitEffect();
          //ani.SetInteger(hitInt, Random.Range(1, 3));
 
         //Debug.Log(damage);

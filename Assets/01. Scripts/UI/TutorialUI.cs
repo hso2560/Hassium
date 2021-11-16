@@ -61,13 +61,13 @@ public class TutorialUI : MonoBehaviour
         CheckArrowImage();
     }
 
-    public void OnClickClose()
+    public void OnClickClose() //닫기
     {
         GameManager.Instance.PlayerSc.isMovable = true;
         gameObject.SetActive(false);
     }
 
-    private void CheckNextButton()
+    private void CheckNextButton() //다음 버튼
     {
         prevBtn.gameObject.SetActive(index != 0);
         nextBtn.gameObject.SetActive(index != tutorialStrs.Count-1);
@@ -75,7 +75,7 @@ public class TutorialUI : MonoBehaviour
         confirm.gameObject.SetActive(index == tutorialStrs.Count - 1);
     }
 
-    private void CheckArrowImage()
+    private void CheckArrowImage() //튜토 창 화살표
     {
         for(int i = 0; i<tutoArrowStateList.Count; i++)
         {

@@ -56,6 +56,7 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //∞¡ ∏ﬁ¥∫ æ»¿
 
     private GameManager gameManager;
     private Dictionary<int, Action> itemUseAction = new Dictionary<int, Action>();
+    private Dictionary<int, Action> itemGetAction = new Dictionary<int, Action>();
 
     private void Awake()
     {
@@ -97,6 +98,14 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //∞¡ ∏ﬁ¥∫ æ»¿
         itemUseAction.Add(590, () => gameManager.PlayerSc.StatPoint += 2);
         itemUseAction.Add(600, () => gameManager.PlayerSc.StatPoint += 5);
         itemUseAction.Add(610, () => gameManager.PlayerSc.StatPoint += 8);
+
+        itemUseAction.Add(700, () => {
+            UIManager.Instance.OnClickUIButton(0);
+            gameManager.LoadingFuncEvent += () => gameManager.PlayerSc.transform.position = MapManager.Instance.mapCenterDict[120].position;
+            UIManager.Instance.LoadingFade(false);
+        }); 
+
+        itemGetAction.Add(650, () => gameManager.playerList.ForEach(x => { x.skill.isUsedSkill = false; x.skill.coolTime -= 12f; }));
     }
 
     public void GetGold(int g, int min=0, int max=0) //min∞˙maxªÁ¿Ã∑Œ ∞ÒµÂ »πµÊ«œ∞≈≥™ ¿œ¡§ ∞ÒµÂ »πµÊ
@@ -134,6 +143,11 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //∞¡ ∏ﬁ¥∫ æ»¿
 
         LoadTreasure();
         ps = gameManager.PlayerSc;
+
+        if(idToItem.ContainsKey(650))
+        {
+            gameManager.playerList.ForEach(x => { x.skill.isUsedSkill = false; x.skill.coolTime -= 12f; });
+        }
     }
 
     public bool ExistItem(int id) => idToItem.ContainsKey(id);
@@ -201,6 +215,11 @@ public class Inventory : MonoSingleton<Inventory>, ISceneDataLoad  //∞¡ ∏ﬁ¥∫ æ»¿
         {
             idToItem[data.id].count += data.count;
             itemSlots.Find(x => x.Item_Data.id == data.id).itemCountText.text = idToItem[data.id].count.ToString();
+        }
+
+        if(itemGetAction.ContainsKey(data.id))
+        {
+            itemGetAction[data.id]();
         }
     }
 

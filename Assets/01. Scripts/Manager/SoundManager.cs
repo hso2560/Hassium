@@ -28,6 +28,7 @@ public class SoundManager : MonoSingleton<SoundManager>, ISceneDataLoad
 
     public List<AudioClip> gameSoundEffectList;
     public List<AudioClip> gameSoundBGMList;
+    public List<AudioClip> hitClipList;
     public Light _light;
 
     private Coroutine bgmCo = null;
@@ -50,6 +51,15 @@ public class SoundManager : MonoSingleton<SoundManager>, ISceneDataLoad
         PoolManager.GetItem<SoundPrefab>().SoundPlay(gameSoundEffectList[(int)set], time,op.soundEffectSize);
     }
     
+    public void PlaySoundHitEffect(float time = -1f) //쳐맞는 효과음 3개 중에 랜덤으로 출력
+    {
+        Option op = GameManager.Instance.savedData.option;
+
+        if (op.masterSoundSize <= 0 || op.soundEffectSize <= 0) return;
+
+        PoolManager.GetItem<SoundPrefab>().SoundPlay(hitClipList[Random.Range(0,hitClipList.Count)], time, op.soundEffectSize);
+    }
+
     public void PlayBGM(BGMSound bgm)  //BGM 출력 or 비활     
     {
         if ((bgm == BGMSound.NULL && _audio.clip == null) || (bgm!=BGMSound.NULL && _audio.clip == gameSoundBGMList[(int)bgm])) return;  //(bgm!=BGMSound.NULL && _audio.clip == gameSoundBGMList[(int)bgm]) 여기에서 &&기준으로 이렇게 순서 맞춰야함. 순서 다르면 오류발생하니 오류발생하지 않는 조건을 먼저 왼쪽에 배치해서 먼저 계산하도록 한다

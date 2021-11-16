@@ -136,7 +136,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //원래는 
                 LoadingFuncEvent += () =>
                 {
                     player.RecoveryHp(player.pData.defaultRespawnHp);
-                    player.transform.parent.gameObject.SetActive(false);
+                    //player.transform.parent.gameObject.SetActive(false);
                     keyToVoidFunction[LoadingType.RESPAWN]();
                     foreach(GameCharacter gc in saveData.userInfo.characters)
                     {
@@ -148,7 +148,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //원래는 
                             idToMyPlayer[gc.id].hp = player.pData.defaultRespawnHp;
                         }
                     }
-                    player.transform.parent.gameObject.SetActive(true);
+                    //player.transform.parent.gameObject.SetActive(true);
                     //MapManager.Instance.ResetLivingEnemy();
                 };
                 UIManager.Instance.LoadingFade(false);
@@ -300,7 +300,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //원래는 
         }
     }
 
-    public void ResetData(short n) // 0: All, 1: UserInfo, 2: Option
+    public void ResetData(short n) // 0: All, 1: UserInfo, 2: Option  테스트용
     {
         switch(n)
         {
@@ -412,7 +412,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //원래는 
         return null;
     }
 
-    public bool IsExistCharac(short id) => idToMyPlayer.ContainsKey(id);
+    public bool IsExistCharac(short id) => idToMyPlayer.ContainsKey(id); //해당 id 캐 있는지
    
     private void ActiveCharacter(short idx)  //비활성화된 캐릭터를 활성화한다.
     {
@@ -515,7 +515,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //원래는 
         PoolManager.GetItem<SystemTxt>().OnText(sb.ToString());
     }
 
-    public void KillNPC()  //NPC죽이고 하늘 바뀌는 처리
+    public void KillNPC()  //안씀
     {
         saveData.userInfo.npcKillCount++;
        /* switch (saveData.userInfo.npcKillCount)
@@ -566,7 +566,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //원래는 
 
     private void Update()  
     {
-        TestInput();
+        //TestInput();
         playTime += Time.deltaTime;
     }
 
@@ -583,8 +583,8 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //원래는 
         /*if (Input.GetKeyDown(KeyCode.Alpha4))  //Test Code
         {
             AddCharacter("DefaultPlayer2");
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha5))  //Test Code
+        }*/
+        /*else if (Input.GetKeyDown(KeyCode.Alpha5))  //Test Code
         {
             AddCharacter("DefaultPlayer3");
         }*/

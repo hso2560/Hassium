@@ -65,7 +65,7 @@ public class PuzzleReward : MonoBehaviour
                 RewardChest(8);
                 break;
             case 32:
-
+                RewardChest(10);
                 break;
             case 34:
                 RewardChest(9);

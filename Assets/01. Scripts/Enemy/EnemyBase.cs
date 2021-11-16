@@ -193,6 +193,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
             npcHPLowMsg.RemoveAt(0);
         }
 
+        SoundManager.Instance.PlaySoundHitEffect();
         Damaged();
         CheckHp();
     }

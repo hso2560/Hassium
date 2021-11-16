@@ -115,7 +115,7 @@ public class TreeAPuzzle : ObjData, IReward
         }
     }
 
-    public void CheckCount()
+    public void CheckCount() //카운트를 세고 UI에 표시
     {
         currentCatchCount++;
         UIManager.Instance.UpdateCountInMission(currentCatchCount, catchMaxCount);

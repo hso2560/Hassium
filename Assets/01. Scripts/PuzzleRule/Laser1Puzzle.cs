@@ -64,7 +64,7 @@ public class Laser1Puzzle : ObjData, IReward
                         else
                             GetReward();
 
-                        npc.info.talkId++;
+                        npc.info.talkId=1;
                         base.Interaction();
                         active = false;
 

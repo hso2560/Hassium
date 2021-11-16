@@ -6,7 +6,7 @@ public class SoundPrefab : MonoBehaviour
     [SerializeField] private AudioSource _audio;
     private bool soundStart;
 
-    public void SoundPlay(AudioClip _clip, float time=-1f, float volume = 0.7f)
+    public void SoundPlay(AudioClip _clip, float time=-1f, float volume = 0.7f) //효과음 출력
     {
         _audio.clip = _clip;
         _audio.volume = volume;

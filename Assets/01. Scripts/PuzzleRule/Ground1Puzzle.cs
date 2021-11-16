@@ -44,12 +44,12 @@ public class Ground1Puzzle : ObjData, IReward
             return;
         }
 
-        for(int i=0; i<groundIndexArr.Length; i++)
+        for(int i=0; i<groundIndexArr.Length; i++)  //각 옵젝들 다음 인덱스로 움직임
         {
             moveCheckQueue.Enqueue(false);
             int idx = groundIndexArr[i];
             waypointList[idx].NextIndex();
-            int si = i;
+            int si = i;  //안하면 버그
             groundPathList[idx].transform.DOMove(waypointList[idx].GetCurrentItem.position, moveTime).SetEase(Ease.Linear).OnComplete(()=> 
             {
                 if (moveCheckQueue.Count > 0) moveCheckQueue.Dequeue();

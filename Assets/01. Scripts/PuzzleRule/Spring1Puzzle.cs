@@ -55,7 +55,7 @@ public class Spring1Puzzle : MonoBehaviour, IReward
         }
     }
 
-    public void OnPressInteraction(int[] idx, bool press)
+    public void OnPressInteraction(int[] idx, bool press) //발판을 누르거나 뗐을 때
     {
         if (!IsClear)
         {
@@ -122,7 +122,7 @@ public class Spring1Puzzle : MonoBehaviour, IReward
         springObjs.ForEach(sp => sp.line.SetPosition(1, sp.line.transform.InverseTransformPoint(sp.connectedTr.position)));
     }
 
-    private void CheckInRange()
+    private void CheckInRange() //모든 구체가 범위 안에 들어왔는지 체크
     {
         for(int i=0; i<springObjs.Count; i++)
         {

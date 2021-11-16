@@ -182,7 +182,7 @@ public class JoystickControl : MonoBehaviour, IPointerDownHandler, IPointerUpHan
         attackBtn.GetComponent<CanvasGroup>().alpha = (player.isJumping || isTouch) ? 0.4f : 1;
     }
 
-    public void CheckRunBtnState(bool zero) 
+    public void CheckRunBtnState(bool zero)  //달리기 버튼 UI 밝기 처리
     {
         if (zero) isRun = false;
 
