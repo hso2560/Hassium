@@ -44,7 +44,7 @@ public class HumanEnemy : EnemyBase
         }
     }
 
-    private void Sight()
+    private void Sight()  //시야 범위 내에 적 있는지 체크 후에 행동
     {
         Collider[] cols = Physics.OverlapSphere(transform.position, enemyData.traceRange, enemyData.playerLayer);
 
@@ -94,7 +94,7 @@ public class HumanEnemy : EnemyBase
         }
     }  //end of Sight
 
-    private void StopOrPatrol(int range)
+    private void StopOrPatrol(int range) //멈추거나 계속 패트롤함
     {
         if (isTrace)
         {
@@ -117,7 +117,7 @@ public class HumanEnemy : EnemyBase
         }
     }
 
-    private void TraceOrAttack(Transform tr)
+    private void TraceOrAttack(Transform tr)  //추격하거나 공격 실행
     {
         isTrace = true;
         if ((tr.position - transform.position).sqrMagnitude < _atkRange)

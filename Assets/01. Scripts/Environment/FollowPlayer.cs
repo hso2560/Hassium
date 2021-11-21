@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class FollowPlayer : MonoBehaviour
+public class FollowPlayer : MonoBehaviour  //플레이어 따라다니는 옵젝 (x,z만)
 {
     private GameManager gm;
 

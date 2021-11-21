@@ -32,18 +32,21 @@ public class TalkManager : MonoSingleton<TalkManager>, ISceneDataLoad
     {
         closeHash = Animator.StringToHash("close");
 
-        talkEndAction.Add("22,0", () =>
+        //대화 끝나고 뭔 이벤트 발생할 거 있으면 딕셔너리에 추가
         {
-            GameManager.Instance.AddCharacter("DefaultPlayer2");
-            GameManager.Instance.SaveObjActiveInfo(28, false);
-            GameManager.Instance.infoSaveObjs.objs[28].SetActive(false);
-        });
-        talkEndAction.Add("23,0", () =>
-        {
-            GameManager.Instance.AddCharacter("DefaultPlayer3");
-            GameManager.Instance.SaveObjActiveInfo(44, false);
-            GameManager.Instance.infoSaveObjs.objs[44].SetActive(false);
-        });
+            talkEndAction.Add("22,0", () =>
+            {
+                GameManager.Instance.AddCharacter("DefaultPlayer2");
+                GameManager.Instance.SaveObjActiveInfo(28, false);
+                GameManager.Instance.infoSaveObjs.objs[28].SetActive(false);
+            });
+            talkEndAction.Add("23,0", () =>
+            {
+                GameManager.Instance.AddCharacter("DefaultPlayer3");
+                GameManager.Instance.SaveObjActiveInfo(44, false);
+                GameManager.Instance.infoSaveObjs.objs[44].SetActive(false);
+            });
+        }
     }
 
     public void CvsgFade(CanvasGroup cg, int target, float time)  //UI처리

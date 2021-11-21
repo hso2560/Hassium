@@ -2,7 +2,7 @@ using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DayAndNight : MonoBehaviour
+public class DayAndNight : MonoBehaviour  //그냥 거의 안쓰는 스크립트라 보면 될듯
 {
     [HideInInspector] public Light mainLight;
     private Color defaultLightColor;

@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Loading : MonoBehaviour
+public class Loading : MonoBehaviour  //타이틀에서 검은 화면(로딩 화면)에만 뜸
 {
     private Image loadingImg;
 

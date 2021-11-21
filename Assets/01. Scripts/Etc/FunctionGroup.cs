@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FunctionGroup
+public class FunctionGroup  //여러 스크립트에서 쓸만한 함수들 모음
 {
     public const float defCriteria = 250f;
     public static Vector3 GetRandomVector(Vector3 a, Vector3 b) => new Vector3(Random.Range(a.x, b.x), Random.Range(a.y, b.y), Random.Range(a.z, b.z)); //두 벡터 사이의 랜덤값

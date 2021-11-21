@@ -566,7 +566,7 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //원래는 
 
     private void Update()  
     {
-        //TestInput();
+        TestInput();
         playTime += Time.deltaTime;
     }
 
@@ -580,14 +580,14 @@ public class GameManager : MonoSingleton<GameManager>, ISceneDataLoad  //원래는 
         {
             ChangeCharacter(10);
         }*/
-        /*if (Input.GetKeyDown(KeyCode.Alpha4))  //Test Code
+        if (Input.GetKeyDown(KeyCode.Alpha4))  //Test Code
         {
             AddCharacter("DefaultPlayer2");
-        }*/
-        /*else if (Input.GetKeyDown(KeyCode.Alpha5))  //Test Code
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha5))  //Test Code
         {
             AddCharacter("DefaultPlayer3");
-        }*/
+        }
         /*else if (Input.GetKeyDown(KeyCode.Alpha3))  //Test Code
         {
             ChangeCharacter(30);

@@ -87,7 +87,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         agent.SetDestination(GameManager.Instance.PlayerSc.transform.position);
     }*/
 
-    public virtual void ResetData()  //리셋
+    public virtual void ResetData()  //리셋      (이 함수가 호출될 일은 없음)
     {
         currentHp = enemyData.maxHp;
         CheckHp();
@@ -115,7 +115,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         }
     }
 
-    public virtual void SetSpeed(float s)
+    public virtual void SetSpeed(float s) //네비게이션 스피드 맞추고 0이면 velocity도 zero로
     {
         agent.speed = s;
         agent.isStopped = s == 0;

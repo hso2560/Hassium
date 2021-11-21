@@ -10,6 +10,7 @@ using System.Xml;
 using System.IO;
 using UnityEngine.SceneManagement;
 
+//타이틀에서 쓰이는 스크립트 (다른 매니저 스크립트들은 스타트씬에 없음.)
 public class StartScript : MonoBehaviour
 {
     public Material[] skyMaterials;

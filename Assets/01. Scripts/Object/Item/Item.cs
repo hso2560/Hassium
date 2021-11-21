@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Item : ObjData
+public class Item : ObjData  //아이템들 얘 상속 받고 할 수도 있겠지만 어차피 아이템 별로 없어서 걍 함
 {
     public int index;
     public int droppedCount = 1;  //떨어진 아이템 수

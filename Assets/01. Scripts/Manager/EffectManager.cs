@@ -41,7 +41,7 @@ public class EffectManager : MonoSingleton<EffectManager>
         skillOnDict.Add(PSkillType.ROPE, false);
     }
 
-    private void CreatePool() //이펙트 풀 생성
+    private void CreatePool() //이펙트 풀 생성 (얘네는 제네릭 풀로 안함)
     {
         hitEffectList = FunctionGroup.CreatePoolList(hitEffect, transform, 5);
         appearanceEffectList = FunctionGroup.CreatePoolList(appearanceEffect, transform, 5);

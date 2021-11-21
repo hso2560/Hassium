@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Meteor : MonoBehaviour
+public class Meteor : MonoBehaviour //쓰긴 하지만 딱히 필요는 없는 스크립트(할거 없을 때 걍 한거)
 {
     [SerializeField] private MeteorData data;
     [SerializeField] private ParticleSystem effect;
